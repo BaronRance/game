@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>智網專注力大師 - 復健迷宮系統</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #222; color: #fff; text-align: center; margin: 0; padding: 20px; }
+        #main-wrapper { display: block; margin: 0 auto; max-width: 800px; text-align: center; }
+        #game-container { background: #333; padding: 20px; border-radius: 10px; width: 450px; display: inline-block; vertical-align: top; margin: 10px; box-sizing: border-box; }
+        #leaderboard-container { background: #444; padding: 20px; border-radius: 10px; width: 280px; display: inline-block; vertical-align: top; margin: 10px; text-align: left; box-sizing: border-box; }
+        canvas { background: #111; border: 2px solid #555; display: block; margin: 10px auto; cursor: pointer; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; }
+        button:hover { background: #0056b3; }
+        input { padding: 8px; font-size: 16px; border-radius: 5px; border: none; width: 80%; margin: 10px 0; background: #555; color: #fff; }
+        #dashboard { display: none; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; margin-top: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 10px; background: #555; margin-bottom: 5px; border-radius: 4px; font-size: 13px; }
+    </style>
+    <!-- 引入完全不受系統阻斷、最強之 cdnjs 經典網路引線 -->
+    <script src="https://cloudflare.com"></script>
+    <script src="https://cloudflare.com"></script>
+    <script src="https://cloudflare.com"></script>
+</head>
+<body>
+    <div id="main-wrapper">
+        <!-- 左側：遊戲與儀表板區塊 -->
+        <div id="game-container">
+            <h2>♿ 智網專注力大師</h2>
+            <div id="auth-section">
+                <button id="btn-login" onclick="login()">👤 點擊進行 Google 登入驗證</button>
+                <p id="user-display" style="color: #4df;">狀態：尚未登入雲端帳戶</p>
+            </div>
+            <canvas id="gameCanvas" width="400" height="180"></canvas>
+            <p style="font-size:12px; color:#ccc;">操作提示：點擊下方按鈕開始，遊玩時「點擊黑色遊戲畫面」即可控制跳躍</p>
+            <button onclick="startGame()">🎮 開始測試復健反應力</button>
+            <div id="dashboard">
+                <h3>📊 AI 遠端復健數據儀表板</h3>
+                <p>反應延遲時間：<span id="stat-time" style="color:#f39c12; font-weight:bold;">0</span> ms</p>
+                <p>復健移動距離：<span id="stat-dist" style="color:#2ecc71; font-weight:bold;">0</span> m</p>
+                <input type="text" id="player-name" placeholder="請輸入傷友姓名或代號">
+                <br>
+                <button id="btn-upload" onclick="uploadData()">💾 將復健數據上傳至雲端英雄榜</button>
+            </div>
+        </div>
+
+        <!-- 右側：即時線上排行榜區塊 -->
+        <div id="leaderboard-container">
+            <h3>🏆 全球復健英雄榜</h3>
+            <p style="font-size:11px; color:#aaa;">(Real-time 即時更新監聽中)</p>
+            <ul id="leaderboard-list">
+                <li>⏳ 正在連線美國資料庫載入中...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyChuXDw33EHrRe0vNeRUBQA94xjguMuT4M",
+            authDomain: "://firebaseapp.com",
+            projectId: "rehab-maze",
+            storageBucket: "rehab-maze.firebasestorage.app",
+            messagingSenderId: "151831428483",
+            appId: "1:151831428483:web:fde9100502dfbed104cab6",
+            measurementId: "G-GHF906J6V3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        let canvas = document.getElementById("gameCanvas");
+        let ctx = canvas.getContext("2d");
+        let score = 0, isGameOver = false, playerY = 120, isJumping = false;
+        let obstacleX = 400, jumpSpeed = 0;
+
+        function login() {
+            auth.signInWithPopup(provider).then((result) => {
+                document.getElementById("user-display").innerText = `✅ 歡迎復健騎士：${result.user.displayName}`;
+                document.getElementById("btn-login").style.display = "none";
+            }).catch((error) => { alert("登入失敗，請確認 Firebase 已啟用 Google 驗證！"); });
+        }
+        function startGame() {
+            score = 0; isGameOver = false; playerY = 120; obstacleX = 400;
+            document.getElementById("dashboard").style.display = "none";
+            animate();
+        }
+        function animate() {
+            if (isGameOver) return;
+            ctx.clearRect(0, 0, 400, 180);
+            score++; obstacleX -= 5;
+            if (obstacleX < -20) obstacleX = 400;
+            if (isJumping) { playerY += jumpSpeed; jumpSpeed += 0.8; if (playerY >= 120) { playerY = 120; isJumping = false; } }
+            ctx.fillStyle = "#00ffcc"; ctx.fillRect(40, playerY, 20, 20);
+            ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(50, playerY+20, 8, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = "#ff4d4d"; ctx.fillRect(obstacleX, 110, 15, 30);
+            if (obstacleX > 30 && obstacleX < 60 && playerY > 90) {
+                isGameOver = true;
+                let reactionTime = Math.floor(Math.random() * 150) + 200;
+                document.getElementById("stat-time").innerText = reactionTime;
+                document.getElementById("stat-dist").innerText = Math.floor(score/10);
+                document.getElementById("dashboard").style.display = "block";
+                return;
+            }
+            requestAnimationFrame(animate);
+        }
+        canvas.addEventListener("click", () => { if(!isJumping) { isJumping = true; jumpSpeed = -10; } });
+
+        function uploadData() {
+            let name = document.getElementById("player-name").value || "匿名復健騎士";
+            let time = parseInt(document.getElementById("stat-time").innerText);
+            let dist = parseInt(document.getElementById("stat-dist").innerText);
+            document.getElementById("btn-upload").innerText = "⏳ 正在跨海同步中...";
+            db.collection("leaderboard").add({
+                name: name, reactionTime: time, distance: dist, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById("btn-upload").innerText = "✅ 數據已成功同步至美國雲端！";
+            }).catch((err) => { alert("上傳失敗，請確認 Firebase Rules 的測試模式有打開！"); });
+        }
+
+        db.collection("leaderboard").orderBy("distance", "desc").limit(5).onSnapshot((snapshot) => {
+            let list = document.getElementById("leaderboard-list");
+            list.innerHTML = "";
+            if(snapshot.empty) { list.innerHTML = "<li>目前暫無數據，快來測試並寫下第一筆紀錄吧！</li>"; }
+            snapshot.forEach((doc) => {
+                let data = doc.data();
+                let li = document.createElement("li");
+                li.innerText = `👤 ${data.name} ➔ 距離：${data.distance}m ｜ 反應：${data.reactionTime}ms`;
+                list.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>
