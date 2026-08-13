@@ -720,10 +720,8 @@
 
     function handleSingleKeyAction() {
       if (controlMode !== 'modeB' || gameState !== 'PLAYING') return;
-      // 若玩家尚未放開過按鍵，則直接阻擋，不允許執行動作
       if (!spaceHasBeenReleased) return;
       
-      // 動作執行後立即鎖定，必須等下次放開按鍵才能再觸發
       spaceHasBeenReleased = false;
 
       let nearestObs = null;
@@ -790,7 +788,7 @@
       if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = false;
       if (e.code === 'Space') {
         keys.Space = false;
-        spaceHasBeenReleased = true; // 放開空白鍵，重設解鎖狀態
+        spaceHasBeenReleased = true;
       }
     });
 
@@ -802,7 +800,7 @@
 
     canvas.addEventListener('pointerup', () => {
       if (controlMode === 'modeB') {
-        spaceHasBeenReleased = true; // 放開點擊，重設解鎖狀態
+        spaceHasBeenReleased = true;
       }
     });
 
@@ -882,9 +880,10 @@
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
+        // 站立牌位置調整：y 設定得較低（距離地面更近），但底部仍在蹲高之上
         obstacles.push({
-          type: 'overhang', x: canvas.width + 50, y: player.groundY - 100,
-          width: 120, height: 35, cleared: false, hint: '⚠️ 站立牌！請按住向下蹲下通過'
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 85,
+          width: 120, height: 40, cleared: false, hint: '⚠️ 站立牌！請按住向下蹲下通過'
         });
       } else if (rand < 0.70) {
         obstacles.push({
@@ -1099,7 +1098,7 @@
           ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('⚠️ 站立牌 (需蹲下)', obs.x + 10, obs.y + 22);
+          ctx.fillText('⚠️ 站立牌 (需蹲下)', obs.x + 10, obs.y + 24);
         } else if (obs.type === 'ground') {
           ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
