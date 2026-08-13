@@ -366,12 +366,12 @@
         </div>
         <div class="option-card" onclick="selectMode('modeB', this)">
           <div class="card-title" id="ui-modb-title">單鍵模式</div>
-          <div class="card-desc" id="ui-modb-desc">自動前進，每次動作後必須先放開按鍵才能執行下一個動作</div>
+          <div class="card-desc" id="ui-modb-desc">自動前進；遇站立牌需「按住空白鍵」蹲下通過</div>
         </div>
       </div>
 
       <div class="info-box" id="ui-mode-desc">
-        提示：站立時高度高於站立牌（會碰撞）；按住 ↓ 蹲下時高度低於站立牌（可安全通過）！
+        提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！
       </div>
 
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
@@ -435,8 +435,8 @@
         login: "👤 Google 帳戶登入", logout: "登出帳戶", unlogged: "狀態：未登入雲端帳戶", logged: "已登入：", langLabel: "🌍 語言：",
         title: "復健迷宮", subtitle: "身心障礙者的遠距體感復健與都市適應系統",
         diffTitle: "請選擇關卡難度", easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少", medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練", hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
-        modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進，每次動作後必須先放開按鍵才能執行下一個動作",
-        modeDesc: "提示：站立時高度高於站立牌（會碰撞）；按住 ↓ 蹲下時高度低於站立牌（可安全通過）！",
+        modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過",
+        modeDesc: "提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
         startBtn: "開始都市復健", footer: "立體質感角色引擎 · 暫停與多國語系支援",
         pauseBtn: "⏸ 暫停", pauseHeader: "遊戲暫停", resumeBtn: "繼續遊戲", restartBtn: "重新開始", homeBtn: "返回首頁",
         dashHeader: "📊 AI 臨床復健數據分析", mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
@@ -446,8 +446,8 @@
         login: "👤 Google 账户登录", logout: "登出账户", unlogged: "状态：未登录云端账户", logged: "已登录：", langLabel: "🌍 语言：",
         title: "康复迷宫", subtitle: "身心障碍者远程体感康复与城市适应系统",
         diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
-        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进，每次动作后必须先松开按键才能执行下一个动作",
-        modeDesc: "提示：站立时高度高于站牌（会碰撞）；按住 ↓ 下蹲时高度低于站牌（可安全通过）！",
+        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需「按住空格」下蹲通过",
+        modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须「按住下蹲」让高度低于站牌才能安全通过！",
         startBtn: "开始城市康复", footer: "立体质感角色引擎 · 暂停与多语言支持",
         pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
         dashHeader: "📊 AI 临床康复数据分析", mDist: "移动总距离", mClear: "成功通行", mFail: "碰撞次数", mScore: "适应指数",
@@ -457,8 +457,8 @@
         login: "👤 Google Login", logout: "Logout", unlogged: "Status: Not logged in", logged: "Logged in: ", langLabel: "🌍 Language: ",
         title: "Rehab Maze", subtitle: "Remote Tele-rehab & Urban Adaptation System",
         diffTitle: "Select Difficulty", easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles", medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training", hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
-        modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance, release key before next action",
-        modeDesc: "Tip: Standing is higher than the sign (hits it); hold ↓ to crouch lower than the sign to pass!",
+        modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs",
+        modeDesc: "Tip: In both modes, standing hits the sign. You must hold crouch to pass safely!",
         startBtn: "Start Rehabilitation", footer: "3D Character Engine · Pause & Multi-language Support",
         pauseBtn: "⏸ Pause", pauseHeader: "Game Paused", resumeBtn: "Resume", restartBtn: "Restart", homeBtn: "Return Home",
         dashHeader: "📊 AI Clinical Rehabilitation Analytics", mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
@@ -468,8 +468,8 @@
         login: "👤 Google ログイン", logout: "ログアウト", unlogged: "ステータス：未ログイン", logged: "ログイン中：", langLabel: "🌍 言語：",
         title: "リハビリ迷宮", subtitle: "障害者向け遠隔体感リハビリ・都市適応システム",
         diffTitle: "難易度を選択", easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ", medTitle: "中度チャレンジ", medDesc: "適度なリズム、反応トレーニング", hardTitle: "重度適応", hardDesc: "高密度都市障害物チャレンジ",
-        modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進、次のアクションの前にキーを離してください",
-        modeDesc: "ヒント：立っていると看板より高く衝突します。↓ を押して屈むと看板より低くなり安全に通過できます！",
+        modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける",
+        modeDesc: "ヒント：どちらのモードでも立っていると衝突します。しゃがんで通過してください！",
         startBtn: "リハビリ開始", footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
         pauseBtn: "⏸ 一時停止", pauseHeader: "ポーズ中", resumeBtn: "ゲームに戻る", restartBtn: "やり直す", homeBtn: "ホームに戻る",
         dashHeader: "📊 AI臨床リハビリデータ分析", mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
@@ -479,8 +479,8 @@
         login: "👤 구글 로그인", logout: "로그아웃", unlogged: "상태: 로그인되지 않음", logged: "로그인됨: ", langLabel: "🌍 언어: ",
         title: "재활 미로", subtitle: "장애인을 위한 원격 체감 재활 및 도시 적응 시스템",
         diffTitle: "난이도 선택", easyTitle: "경증 재활", easyDesc: "완만한 페이스, 최소한의 장애물", medTitle: "중등도 도전", medDesc: "적당한 리듬, 반응 훈련", hardTitle: "고도 적응", hardDesc: "고밀도 도시 장애물 도전",
-        modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진, 다음 동작 전에 키를 떼어야 함",
-        modeDesc: "팁: 서 있을 때는 표지판보다 높아 충돌합니다. ↓를 눌러 숙이면 표지판보다 낮아져 안전하게 통과할 수 있습니다!",
+        modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기",
+        modeDesc: "팁: 두 모드 모두 서 있으면 충돌합니다. 숙여서 통과하세요!",
         startBtn: "재활 시작", footer: "3D 캐릭터 엔진 · 일시 정지 및 다국어 지원",
         pauseBtn: "⏸ 일시 정지", pauseHeader: "게임 일시 정지", resumeBtn: "게임 재개", restartBtn: "다시 시작", homeBtn: "홈으로",
         dashHeader: "📊 AI 임상 재활 데이터 분석", mDist: "이동 거리", mClear: "통과 수", mFail: "충돌 횟수", mScore: "적응 지수",
@@ -490,8 +490,8 @@
         login: "👤 Iniciar sesión en Google", logout: "Cerrar sesión", unlogged: "Estado: No conectado", logged: "Conectado: ", langLabel: "🌍 Idioma: ",
         title: "Laberinto de Rehabilitación", subtitle: "Sistema de rehabilitación y adaptación urbana a distancia",
         diffTitle: "Seleccionar Dificultad", easyTitle: "Rehabilitación Leve", easyDesc: "Ritmo suave, obstáculos mínimos", medTitle: "Desafío Medio", medDesc: "Ritmo moderado, entrenamiento de reacción", hardTitle: "Adaptación Avanzada", hardDesc: "Desafío de obstáculos urbanos densos",
-        modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático, suelta la tecla antes de la siguiente acción",
-        modeDesc: "Consejo: Estar de pie es más alto que el cartel (colisión); mantén ↓ para agacharte y pasar con seguridad.",
+        modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte",
+        modeDesc: "Consejo: En ambos modos, estar de pie colisiona con el cartel. ¡Debes agacharte para pasar!",
         startBtn: "Iniciar Rehabilitación", footer: "Motor de personajes 3D · Pausa y soporte multilingüe",
         pauseBtn: "⏸ Pausa", pauseHeader: "Juego Pausado", resumeBtn: "Reanudar", restartBtn: "Reiniciar", homeBtn: "Volver al Inicio",
         dashHeader: "📊 Análisis AI de Rehabilitación Clínica", mDist: "Distancia Total", mClear: "Superados", mFail: "Fallos", mScore: "Índice de Adaptación",
@@ -738,20 +738,6 @@
           player.vy = player.jumpForce;
           player.isGrounded = false;
           playSound('jump');
-        } else if (nearestObs.type === 'overhang') {
-          player.isCrouching = true;
-          player.height = CROUCH_HEIGHT;
-          if (player.isGrounded) {
-            player.y = player.groundY - CROUCH_HEIGHT;
-          }
-          setTimeout(() => { 
-            player.isCrouching = false; 
-            player.height = NORMAL_HEIGHT; 
-            if (player.isGrounded) {
-              player.y = player.groundY - NORMAL_HEIGHT;
-            }
-          }, 1000);
-          playSound('jump');
         } else if (nearestObs.type === 'traffic_light') {
           singleKeyStopTimer = 55;
           playSound('jump');
@@ -794,12 +780,14 @@
 
     canvas.addEventListener('pointerdown', () => {
       if (controlMode === 'modeB' && gameState === 'PLAYING') {
+        keys.Space = true;
         handleSingleKeyAction();
       }
     });
 
     canvas.addEventListener('pointerup', () => {
       if (controlMode === 'modeB') {
+        keys.Space = false;
         spaceHasBeenReleased = true;
       }
     });
@@ -880,10 +868,9 @@
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
-        // 站立牌位置下放：底部懸空高度適中，站立高於此高度會撞到，蹲下低於此高度可過
         obstacles.push({
           type: 'overhang', x: canvas.width + 50, y: player.groundY - 65,
-          width: 120, height: 35, cleared: false, hint: '⚠️ 站立牌！請按住向下蹲下通過'
+          width: 120, height: 35, cleared: false, hint: '⚠️ 站立牌！請按住向下(或單鍵模式按住空白鍵)蹲下通過'
         });
       } else if (rand < 0.70) {
         obstacles.push({
@@ -922,8 +909,37 @@
 
       player.distance += currentSpeed * 0.05;
 
+      // 動作控制邏輯：不管哪種模式，遇到站立牌都必須處於按住蹲下狀態
       if (controlMode === 'modeA') {
         if (keys.Down) {
+          if (!player.isCrouching) {
+            player.isCrouching = true;
+            player.height = CROUCH_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - CROUCH_HEIGHT;
+            }
+          }
+        } else {
+          if (player.isCrouching) {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }
+        }
+      } else if (controlMode === 'modeB') {
+        // 單鍵模式：如果按住空白鍵，且前方有站立牌，則判定為蹲下
+        let nearestObs = null;
+        let minDist = Infinity;
+        for (let obs of obstacles) {
+          if (!obs.cleared && obs.x + obs.width > player.x) {
+            let dist = obs.x - player.x;
+            if (dist < minDist) { minDist = dist; nearestObs = obs; }
+          }
+        }
+
+        if (keys.Space && nearestObs && nearestObs.type === 'overhang' && minDist < 380) {
           if (!player.isCrouching) {
             player.isCrouching = true;
             player.height = CROUCH_HEIGHT;
@@ -995,7 +1011,7 @@
         return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
       }
       
-      // 站立牌嚴格碰撞檢測：若蹲下則安全過關，站立時觸發碰撞
+      // 站立牌碰撞檢測：若正在蹲下則安全過關，站立時觸發碰撞
       if (o.type === 'overhang') {
         if (p.isCrouching) {
           return false; 
@@ -1099,7 +1115,7 @@
           ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('⚠️ 站立牌 (需蹲下)', obs.x + 10, obs.y + 22);
+          ctx.fillText('⚠️ 站立牌 (需按住蹲下)', obs.x + 6, obs.y + 22);
         } else if (obs.type === 'ground') {
           ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
@@ -1130,10 +1146,10 @@
       if (nearestPrompt && gameState === 'PLAYING') {
         ctx.fillStyle = 'rgba(2, 132, 199, 0.9)';
         ctx.beginPath();
-        ctx.roundRect(canvas.width / 2 - 175, 14, 350, 34, 17);
+        ctx.roundRect(canvas.width / 2 - 190, 14, 380, 34, 17);
         ctx.fill();
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = 'bold 13px sans-serif';
+        ctx.font = 'bold 12px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(nearestPrompt, canvas.width / 2, 36);
         ctx.textAlign = 'left';
