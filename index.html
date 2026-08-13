@@ -50,12 +50,14 @@
       justify-content: space-between;
       align-items: center;
       z-index: 30;
+      pointer-events: none;
     }
 
     .top-left-group {
       display: flex;
       gap: 10px;
       align-items: center;
+      pointer-events: auto;
     }
 
     .btn-auth, .btn-pause {
@@ -84,6 +86,7 @@
       padding: 6px 14px;
       border-radius: 16px;
       border: 1px solid #BAE6FD;
+      pointer-events: auto;
     }
 
     #menu-screen {
@@ -94,7 +97,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      z-index: 10;
+      z-index: 20;
       overflow-y: auto;
     }
 
@@ -108,16 +111,20 @@
       font-size: 13px;
       font-weight: bold;
       color: #0369A1;
+      z-index: 50;
+      pointer-events: auto;
     }
 
     .lang-select {
       padding: 6px 12px;
       border-radius: 12px;
-      border: 1px solid #0284C7;
+      border: 2px solid #0284C7;
       background: #FFFFFF;
       color: #0F172A;
       cursor: pointer;
       font-size: 13px;
+      font-weight: bold;
+      pointer-events: auto;
     }
 
     .icon-header {
@@ -354,7 +361,7 @@
       </div>
 
       <div class="info-box" id="ui-mode-desc">
-        提示：傳統模式下按住 ↓ 鍵即可安全蹲下，放開 ↓ 鍵就會自動恢復站立！
+        提示：站立時高度高於站立牌（會碰撞）；按住 ↓ 蹲下時高度低於站立牌（可安全通過）！
       </div>
 
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
@@ -429,7 +436,7 @@
         modeTitle: "選擇操作方式",
         modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速",
         modbTitle: "單鍵模式", modbDesc: "自動前進，每次動作後必須先放開空白鍵",
-        modeDesc: "提示：傳統模式下按住 ↓ 鍵即可安全蹲下，放開 ↓ 鍵就會自動恢復站立！",
+        modeDesc: "提示：站立時高度高於站立牌（會碰撞）；按住 ↓ 蹲下時高度低於站立牌（可安全通過）！",
         startBtn: "開始都市復健",
         footer: "立體質感角色引擎 · 暫停與多國語系支援",
         pauseBtn: "⏸ 暫停",
@@ -458,7 +465,7 @@
         modeTitle: "Select Control Mode",
         modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up",
         modbTitle: "Single-Key", modbDesc: "Auto-advance, release space to trigger actions",
-        modeDesc: "Tip: Hold ↓ to crouch safely, release to stand up!",
+        modeDesc: "Tip: Standing is higher than the sign (hits it); hold ↓ to crouch lower than the sign to pass!",
         startBtn: "Start Rehabilitation",
         footer: "3D Character Engine · Pause & Multi-language Support",
         pauseBtn: "⏸ Pause",
@@ -487,7 +494,7 @@
         modeTitle: "操作方法を選択",
         modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速",
         modbTitle: "単一キーモード", modbDesc: "自動前進、スペースキーを離して次のアクション",
-        modeDesc: "ヒント：↓ を押し続けると安全に屈み、離すと立ち上がります！",
+        modeDesc: "ヒント：立っていると看板より高く衝突します。↓ を押して屈むと看板より低くなり安全に通過できます！",
         startBtn: "リハビリ開始",
         footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
         pauseBtn: "⏸ 一時停止",
@@ -709,7 +716,7 @@
     let animationFrameId = null;
 
     const NORMAL_HEIGHT = 65;
-    const CROUCH_HEIGHT = 28;
+    const CROUCH_HEIGHT = 30;
 
     const player = {
       x: 100, y: 0, width: 52, height: NORMAL_HEIGHT,
@@ -884,9 +891,10 @@
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
+        // 站立牌 / 上方懸掛標示（精準對應：站立高度高於此牌會碰撞，蹲下高度低於此牌可安全通過）
         obstacles.push({
-          type: 'overhang', x: canvas.width + 50, y: player.groundY - 115,
-          width: 140, height: 50, cleared: false, hint: '⚠️ 遮雨棚！請按住向下蹲下'
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 78,
+          width: 130, height: 36, cleared: false, hint: '⚠️ 站立牌！請按住向下蹲下通過'
         });
       } else if (rand < 0.70) {
         obstacles.push({
@@ -999,6 +1007,7 @@
       }
       
       if (o.type === 'overhang') {
+        // 核心邏輯：若角色正在蹲下（高度低於站立牌），則安全通過不碰撞
         if (p.isCrouching) {
           return false;
         }
@@ -1088,15 +1097,16 @@
       let nearestPrompt = null;
       for (let obs of obstacles) {
         if (obs.type === 'overhang') {
+          // 繪製懸掛站立牌與支架
           ctx.fillStyle = '#64748B';
-          ctx.fillRect(obs.x, 0, 10, obs.y + 10);
-          ctx.fillStyle = '#F59E0B';
+          ctx.fillRect(obs.x + 10, 0, 8, obs.y + 6);
+          ctx.fillStyle = '#0284C7';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-          ctx.fillStyle = '#DC2626';
-          ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, 24);
+          ctx.fillStyle = '#F59E0B';
+          ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('⚠️ 遮雨棚 (需蹲下)', obs.x + 14, obs.y + 24);
+          ctx.fillText('⚠️ 站立牌 (需蹲下)', obs.x + 12, obs.y + 23);
         } else if (obs.type === 'ground') {
           ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
