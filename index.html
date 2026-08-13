@@ -77,18 +77,23 @@
       border: 1px solid #1A4250;
     }
 
-    /* 1. 開始前選單介面 */
+    /* 1. 開始前選單介面（支援滑鼠滾輪往下滑動） */
     #menu-screen {
       position: absolute;
       inset: 0;
       background: #0B2B36;
-      padding: 60px 40px 32px 40px;
+      padding: 60px 40px 40px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
       z-index: 10;
       overflow-y: auto;
+      scroll-behavior: smooth;
     }
+
+    #menu-screen::-webkit-scrollbar { width: 8px; }
+    #menu-screen::-webkit-scrollbar-track { background: rgba(11, 43, 54, 0.5); }
+    #menu-screen::-webkit-scrollbar-thumb { background: #00F2FE; border-radius: 4px; }
 
     .icon-header {
       width: 64px;
@@ -100,6 +105,7 @@
       align-items: center;
       margin-bottom: 10px;
       border: 2px solid #00F2FE;
+      flex-shrink: 0;
     }
 
     .icon-header svg { width: 34px; height: 34px; fill: #00F2FE; }
@@ -167,15 +173,16 @@
       cursor: pointer;
       box-shadow: 0 6px 16px rgba(245, 124, 0, 0.4);
       transition: transform 0.1s, box-shadow 0.2s;
+      flex-shrink: 0;
     }
     .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 124, 0, 0.6); }
 
-    .footer-text { margin-top: 10px; font-size: 12px; color: #64748B; }
+    .footer-text { margin-top: 14px; font-size: 12px; color: #64748B; margin-bottom: 20px; }
 
     /* 2. 遊戲主畫布 */
     #gameCanvas { width: 100%; height: 100%; display: block; background: #081B24; }
 
-    /* 3. AI 復健數據儀表板 (彈出視窗) */
+    /* 3. AI 復健數據儀表板 */
     #dashboard-overlay {
       position: absolute;
       inset: 0;
@@ -253,13 +260,12 @@
 <body>
 
   <div id="app-container">
-    <!-- 頂部 Google 登入驗證列 -->
     <div id="top-bar">
       <button class="btn-auth" onclick="loginGoogle()">👤 Google 帳戶登入</button>
       <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
     </div>
 
-    <!-- 1. 開始前選單 UI -->
+    <!-- 1. 開始前選單 UI（支援滑鼠滾輪滾動） -->
     <div id="menu-screen">
       <div class="icon-header">
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
@@ -271,15 +277,15 @@
       <div class="grid-container">
         <div class="option-card active" onclick="selectDifficulty('easy', this)">
           <div class="card-title">輕度復健</div>
-          <div class="card-desc">步調平緩、障礙少</div>
+          <div class="card-desc">都市車流平緩、障礙少</div>
         </div>
         <div class="option-card" onclick="selectDifficulty('medium', this)">
           <div class="card-title">中度挑戰</div>
-          <div class="card-desc">節奏適中、反應訓練</div>
+          <div class="card-desc">都市步調適中、反應訓練</div>
         </div>
         <div class="option-card" onclick="selectDifficulty('hard', this)">
           <div class="card-title">重度適應</div>
-          <div class="card-desc">高密度、進階適應</div>
+          <div class="card-desc">高密度都市障礙與道路施工</div>
         </div>
       </div>
 
@@ -287,7 +293,7 @@
       <div class="grid-container-2">
         <div class="option-card active" onclick="selectMode('modeA', this)">
           <div class="card-title">傳統鍵盤</div>
-          <div class="card-desc">↑跳躍 ↓下蹲 ←煞車 →加速</div>
+          <div class="card-desc">↑ 跳躍 ↓ 蹲下 ← 停止/減速 → 加速</div>
         </div>
         <div class="option-card" onclick="selectMode('modeB', this)">
           <div class="card-title">單鍵模式</div>
@@ -296,11 +302,11 @@
       </div>
 
       <div class="info-box" id="mode-desc">
-        傳統模式：使用方向鍵完整操控輪椅移動與轉向避障。
+        傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！
       </div>
 
-      <button class="btn-start" onclick="startGame()">開始復健</button>
-      <div class="footer-text">無障礙設計 · 高對比配色 · 支援單鍵開關 (Switch Access)</div>
+      <button class="btn-start" onclick="startGame()">開始都市復健</button>
+      <div class="footer-text">無障礙設計 · 都市街景主題 · 輪椅角色 · 滾輪選單 · 智慧語音診斷</div>
     </div>
 
     <!-- 2D 遊戲 Canvas -->
@@ -412,14 +418,22 @@
       });
     }
 
-    // --- Web Audio 背景音樂音效 ---
+    // --- 音效與語音系統 ---
     let audioCtx = null;
     let isBgmPlaying = false;
     let bgmTimer = null;
 
+    function initAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
     function startBgm() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      initAudioContext();
       if (isBgmPlaying) return;
 
       isBgmPlaying = true;
@@ -427,12 +441,12 @@
       let step = 0;
 
       bgmTimer = setInterval(() => {
-        if (!isBgmPlaying) return;
+        if (!isBgmPlaying || !audioCtx) return;
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -440,6 +454,50 @@
         osc.stop(audioCtx.currentTime + 0.3);
         step++;
       }, 350);
+    }
+
+    // 1. 瑪利歐風格跳躍/過關音效
+    function playMarioJumpSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
+    }
+
+    // 2. 失敗時 "Oh~" 下降音效
+    function playFailOhSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(320, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.6);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.6);
+    }
+
+    // 3. 失敗數據 AI 語音朗讀
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-TW';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
     }
 
     // --- 遊戲邏輯與組態 ---
@@ -454,12 +512,12 @@
     let animationFrameId = null;
 
     const NORMAL_HEIGHT = 64;
-    const CROUCH_HEIGHT = 26;
+    const CROUCH_HEIGHT = 32;
 
     const player = {
       x: 100,
       y: 0,
-      width: 48,
+      width: 52,
       height: NORMAL_HEIGHT,
       groundY: 480,
       vy: 0,
@@ -467,7 +525,7 @@
       jumpForce: -13,
       isGrounded: true,
       isCrouching: false,
-      speed: 4,
+      baseSpeed: 4,
       distance: 0,
       clearedObstacles: 0,
       invincibleTimer: 0
@@ -488,6 +546,7 @@
         if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded) {
           player.vy = player.jumpForce;
           player.isGrounded = false;
+          playMarioJumpSound();
         }
       }
     });
@@ -504,6 +563,7 @@
       if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded) {
         player.vy = player.jumpForce;
         player.isGrounded = false;
+        playMarioJumpSound();
       }
     });
 
@@ -520,13 +580,14 @@
 
       const descBox = document.getElementById('mode-desc');
       if (mode === 'modeA') {
-        descBox.innerText = '傳統模式：使用方向鍵完整操控輪椅移動與轉向避障。';
+        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
       } else {
-        descBox.innerText = '單鍵模式：角色自動前進。遇到「低廊」與「高低差」時按一下進行應變跳躍。';
+        descBox.innerText = '單鍵模式：輪椅自動前進。請在接近都市障礙物時按下單鍵觸發應變！';
       }
     }
 
     function startGame() {
+      initAudioContext();
       startBgm();
       document.getElementById('menu-screen').style.display = 'none';
       totalFails = 0;
@@ -551,30 +612,47 @@
       obstacles = [];
       obstacleSpawnTimer = 0;
 
-      if (difficulty === 'easy') player.speed = 3.5;
-      else if (difficulty === 'medium') player.speed = 4.8;
-      else if (difficulty === 'hard') player.speed = 6.2;
+      if (difficulty === 'easy') player.baseSpeed = 3.5;
+      else if (difficulty === 'medium') player.baseSpeed = 4.8;
+      else if (difficulty === 'hard') player.baseSpeed = 6.2;
     }
 
+    // 隨機生成都市專屬障礙物（都市低矮遮雨棚/限高桿、道路施工護欄、都市行人紅綠燈）
     function spawnObstacle() {
-      const isOverhang = Math.random() > 0.45;
-      if (isOverhang) {
+      const rand = Math.random();
+      if (rand < 0.35) {
+        // 都市低矮遮雨棚 / 限高警示桿 (按 ↓ 蹲下)
         obstacles.push({
           type: 'overhang',
           x: canvas.width + 50,
           y: player.groundY - 110,
-          width: 140,
-          height: 60,
-          cleared: false
+          width: 150,
+          height: 50,
+          cleared: false,
+          hint: '⚠️ 低矮遮雨棚/限高桿！【按 ↓ 蹲下】'
         });
-      } else {
+      } else if (rand < 0.70) {
+        // 道路施工護欄 / 警示錐 (按 ↑ 跳躍)
         obstacles.push({
           type: 'ground',
           x: canvas.width + 50,
-          y: player.groundY - 36,
-          width: 32,
-          height: 36,
-          cleared: false
+          y: player.groundY - 42,
+          width: 50,
+          height: 42,
+          cleared: false,
+          hint: '🚧 道路施工護欄！【按 ↑ 跳躍】'
+        });
+      } else {
+        // 都市行人紅綠燈 (按 ← 停止)
+        obstacles.push({
+          type: 'traffic_light',
+          x: canvas.width + 50,
+          y: player.groundY - 140,
+          width: 24,
+          height: 140,
+          isRed: true,
+          cleared: false,
+          hint: '🚦 都市行人紅綠燈！【按 ← 停止】'
         });
       }
     }
@@ -590,11 +668,15 @@
     function update() {
       if (player.invincibleTimer > 0) player.invincibleTimer--;
 
-      let currentSpeed = player.speed;
+      let currentSpeed = player.baseSpeed;
       if (controlMode === 'modeA') {
-        if (keys.Right) currentSpeed += 1.5;
-        if (keys.Left) currentSpeed = Math.max(1.5, currentSpeed - 1.5);
+        if (keys.Left) {
+          currentSpeed = 0; // ← 按住即完全停止或減速避讓
+        } else if (keys.Right) {
+          currentSpeed += 2.8; // → 加速
+        }
       }
+
       player.distance += currentSpeed * 0.05;
 
       let shouldCrouch = false;
@@ -611,6 +693,7 @@
       if (controlMode === 'modeA' && keys.Up && player.isGrounded) {
         player.vy = player.jumpForce;
         player.isGrounded = false;
+        playMarioJumpSound();
       }
 
       player.vy += player.gravity;
@@ -624,7 +707,7 @@
       }
 
       obstacleSpawnTimer++;
-      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 75);
+      const spawnInterval = difficulty === 'easy' ? 150 : (difficulty === 'medium' ? 110 : 80);
       if (obstacleSpawnTimer > spawnInterval) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
@@ -634,18 +717,25 @@
         const obs = obstacles[i];
         obs.x -= currentSpeed;
 
+        if (obs.type === 'traffic_light') {
+          if (obs.isRed && obs.x - player.x < 100 && currentSpeed === 0) {
+            obs.isRed = false; // 停車等待後紅燈變綠燈
+          }
+        }
+
         if (!obs.cleared && obs.x + obs.width < player.x) {
           obs.cleared = true;
           player.clearedObstacles++;
+          playMarioJumpSound();
         }
 
-        if (obs.x + obs.width < -50) {
+        if (obs.x + obs.width < -60) {
           obstacles.splice(i, 1);
           continue;
         }
 
         if (player.invincibleTimer <= 0) {
-          if (checkCollision(player, obs)) {
+          if (checkCollision(player, obs, currentSpeed)) {
             triggerFail();
             return;
           }
@@ -653,7 +743,13 @@
       }
     }
 
-    function checkCollision(p, o) {
+    function checkCollision(p, o, speed) {
+      if (o.type === 'traffic_light') {
+        if (o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5) {
+          return true; // 闖紅燈判定
+        }
+        return false;
+      }
       return (
         p.x < o.x + o.width &&
         p.x + p.width > o.x &&
@@ -666,6 +762,8 @@
       gameState = 'GAMEOVER';
       totalFails++;
 
+      playFailOhSound();
+
       const distMeters = Math.floor(player.distance);
       const score = Math.min(100, Math.max(40, distMeters * 2 + player.clearedObstacles * 5 - totalFails * 10));
 
@@ -674,101 +772,271 @@
       document.getElementById('res-fails').innerText = `${totalFails} 次`;
       document.getElementById('res-score').innerText = `${score} 分`;
 
-      const evalBox = document.getElementById('ai-eval-text');
+      let textDiagnosis = "";
       if (score >= 80) {
-        evalBox.innerHTML = `<strong>💡 AI 復健診斷：</strong> 避障反應速度非常敏捷！關節肌肉協調流暢。建議挑戰更高難度。`;
+        textDiagnosis = "AI 診斷：都市街道應變極佳！紅綠燈與施工避障反應敏捷，肢體協調度優異。";
       } else if (score >= 60) {
-        evalBox.innerHTML = `<strong>💡 AI 復健診斷：</strong> 表現良好。穿越低廊時肢體控制時間精準，請維持節奏。`;
+        textDiagnosis = "AI 診斷：表現良好。注意靠近低矮遮雨棚時提前下蹲，並遵守都市紅綠燈訊號。";
       } else {
-        evalBox.innerHTML = `<strong>💡 AI 復健診斷：</strong> 建議切換至「單鍵模式」加強基礎應變速度訓練。`;
+        textDiagnosis = "AI 診斷：建議多利用方向鍵左鍵於紅綠燈前完全停止，以提升都市適應能力。";
       }
+
+      document.getElementById('ai-eval-text').innerHTML = `<strong>💡 ${textDiagnosis}</strong>`;
+
+      const readSpeech = `都市復健結束。移動總距離 ${distMeters} 公尺，成功通行 ${player.clearedObstacles} 個都市障礙，總得分 ${score} 分。${textDiagnosis}`;
+      speakText(readSpeech);
 
       saveScoreToFirebase(score);
       document.getElementById('dashboard-overlay').style.display = 'flex';
     }
 
     function restartGame() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       document.getElementById('dashboard-overlay').style.display = 'none';
       initGameVars();
       gameState = 'PLAYING';
     }
 
+    // --- 畫布繪製：都市夜景與都市障礙物 ---
     function render() {
-      ctx.fillStyle = '#081B24';
+      // 1. 都市夜晚天空漸層 (Urban Night Sky)
+      let skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      skyGrad.addColorStop(0, '#0A121D');
+      skyGrad.addColorStop(1, '#1A2B3C');
+      ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = '#0E3746';
-      ctx.lineWidth = 1;
-      for (let i = 0; i < canvas.width; i += 40) {
-        ctx.beginPath();
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i, canvas.height);
-        ctx.stroke();
-      }
+      // 2. 遠景都市大樓天際線 (City Skyline & Windows)
+      const buildings = [
+        { x: 0, w: 90, h: 220 }, { x: 90, w: 110, h: 280 }, { x: 200, w: 85, h: 210 },
+        { x: 285, w: 120, h: 320 }, { x: 405, w: 95, h: 190 }, { x: 500, w: 110, h: 290 },
+        { x: 610, w: 100, h: 240 }, { x: 710, w: 90, h: 310 }, { x: 800, w: 100, h: 230 }
+      ];
 
-      ctx.fillStyle = '#103947';
-      ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
+      for (let b of buildings) {
+        let bx = (b.x - (player.distance * 12) % 900 + 900) % 900;
+        let by = player.groundY - b.h;
 
-      ctx.strokeStyle = '#00F2FE';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(0, player.groundY);
-      ctx.lineTo(canvas.width, player.groundY);
-      ctx.stroke();
+        // 大樓外觀
+        ctx.fillStyle = '#0E1E2E';
+        ctx.fillRect(bx, by, b.w, b.h);
 
-      ctx.save();
-      if (player.invincibleTimer > 0 && Math.floor(player.invincibleTimer / 6) % 2 === 0) {
-        ctx.globalAlpha = 0.4;
-      }
-
-      if (player.isCrouching) {
-        ctx.fillStyle = '#00F2FE';
-        ctx.beginPath();
-        ctx.roundRect(player.x, player.y, player.width, player.height, 8);
-        ctx.fill();
-      } else {
-        ctx.fillStyle = '#38BDF8';
-        ctx.beginPath();
-        ctx.roundRect(player.x, player.y, player.width, player.height, 10);
-        ctx.fill();
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.beginPath();
-        ctx.arc(player.x + 24, player.y + 16, 8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-
-      for (let obs of obstacles) {
-        if (obs.type === 'overhang') {
-          ctx.fillStyle = '#F59E0B';
-          ctx.beginPath();
-          ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 6);
-          ctx.fill();
-
-          ctx.fillStyle = '#78350F';
-          ctx.font = 'bold 12px sans-serif';
-          ctx.fillText('▼ 低廊請下蹲', obs.x + 24, obs.y + 34);
-        } else {
-          ctx.fillStyle = '#EF4444';
-          ctx.beginPath();
-          ctx.moveTo(obs.x, obs.y + obs.height);
-          ctx.lineTo(obs.x + obs.width / 2, obs.y);
-          ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
-          ctx.closePath();
-          ctx.fill();
+        // 大樓發光窗戶
+        ctx.fillStyle = '#FCE83A';
+        for (let wx = bx + 12; wx < bx + b.w - 15; wx += 22) {
+          for (let wy = by + 20; wy < player.groundY - 30; wy += 38) {
+            if ((wx + wy) % 5 !== 0) {
+              ctx.fillRect(wx, wy, 8, 12);
+            }
+          }
         }
       }
 
+      // 3. 都市柏油路面與人行道 (Asphalt Road & Lane Lines)
+      ctx.fillStyle = '#1E293B'; // 柏油路
+      ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
+
+      // 人行道邊界石
+      ctx.fillStyle = '#475569';
+      ctx.fillRect(0, player.groundY - 6, canvas.width, 6);
+
+      // 動態都市白道虛線 (隨著距離滾動)
+      ctx.fillStyle = '#F8FAFC';
+      let dashOffset = (player.distance * 24) % 70;
+      for (let lx = -dashOffset; lx < canvas.width; lx += 70) {
+        ctx.fillRect(lx, player.groundY + 40, 40, 6);
+      }
+
+      // 4. 繪製坐輪椅的角色
+      drawWheelchairUser(player.x, player.y, player.width, player.height, player.isCrouching, player.invincibleTimer > 0);
+
+      // 5. 繪製都市障礙物
+      let nearestPrompt = null;
+      for (let obs of obstacles) {
+        if (obs.type === 'overhang') {
+          // 【都市低矮遮雨棚 / 限高桿】
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obs.x, obs.y - 120, 12, obs.y + obs.height); // 支撐金屬桿
+          ctx.fillRect(obs.x + obs.width - 12, obs.y - 120, 12, obs.y + obs.height);
+
+          // 黃黑相間警示遮雨條
+          ctx.fillStyle = '#FACC15';
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.fillStyle = '#0F172A';
+          for (let stripe = obs.x; stripe < obs.x + obs.width; stripe += 24) {
+            ctx.beginPath();
+            ctx.moveTo(stripe, obs.y);
+            ctx.lineTo(stripe + 12, obs.y);
+            ctx.lineTo(stripe, obs.y + obs.height);
+            ctx.lineTo(stripe - 12, obs.y + obs.height);
+            ctx.fill();
+          }
+
+          // 限高警示標示牌
+          ctx.fillStyle = '#DC2626';
+          ctx.fillRect(obs.x + 15, obs.y + 10, obs.width - 30, 30);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillText('⚠️ 都市低矮通道 (按↓蹲下)', obs.x + 18, obs.y + 30);
+
+        } else if (obs.type === 'ground') {
+          // 【道路施工護欄】
+          ctx.fillStyle = '#EA580C'; // 施工橘
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+
+          // 白反光條
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(obs.x, obs.y + 10, obs.width, 8);
+          ctx.fillRect(obs.x, obs.y + 26, obs.width, 8);
+
+          // 頂部施工警示閃燈
+          ctx.fillStyle = '#FACC15';
+          ctx.beginPath();
+          ctx.arc(obs.x + obs.width / 2, obs.y - 6, 7, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText('施工', obs.x + 12, obs.y + 24);
+
+        } else if (obs.type === 'traffic_light') {
+          // 【都市行人紅綠燈】
+          ctx.fillStyle = '#64748B';
+          ctx.fillRect(obs.x + 8, obs.y, 8, obs.height); // 金屬立燈桿
+
+          ctx.fillStyle = '#0F172A';
+          ctx.fillRect(obs.x - 6, obs.y, 36, 65); // 燈箱
+
+          // 紅燈 (帶發光外光暈)
+          if (obs.isRed) {
+            ctx.shadowColor = '#EF4444';
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = '#EF4444';
+          } else {
+            ctx.fillStyle = '#334155';
+          }
+          ctx.beginPath();
+          ctx.arc(obs.x + 12, obs.y + 18, 10, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // 綠燈
+          if (!obs.isRed) {
+            ctx.shadowColor = '#22C55E';
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = '#22C55E';
+          } else {
+            ctx.fillStyle = '#334155';
+          }
+          ctx.beginPath();
+          ctx.arc(obs.x + 12, obs.y + 46, 10, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        // 智慧智導提示（前方 280 像素內）
+        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 280) {
+          if (!nearestPrompt) nearestPrompt = obs.hint;
+        }
+      }
+
+      // 6. 即時都市前方智導提示面板
+      if (nearestPrompt) {
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.92)';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 160, 16, 320, 38, 19);
+        ctx.fill();
+
+        ctx.fillStyle = '#0F172A';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(nearestPrompt, canvas.width / 2, 41);
+        ctx.textAlign = 'left';
+      }
+
+      // HUD 數據面板
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 36);
-      ctx.fillText(`通過數量: ${player.clearedObstacles}`, 180, 36);
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText(`都市移動: ${Math.floor(player.distance)} m`, 20, 36);
+      ctx.fillText(`避障數量: ${player.clearedObstacles}`, 180, 36);
 
       if (player.invincibleTimer > 0) {
         ctx.fillStyle = '#00F2FE';
-        ctx.fillText('🛡️ 開局無敵保護中', 320, 36);
+        ctx.fillText('🛡️ 都市安全防護中', 300, 36);
       }
+    }
+
+    // 專屬 Canvas 繪製坐輪椅的身心障礙者角色
+    function drawWheelchairUser(x, y, w, h, isCrouch, isInvincible) {
+      ctx.save();
+      if (isInvincible && Math.floor(player.invincibleTimer / 6) % 2 === 0) {
+        ctx.globalAlpha = 0.4;
+      }
+
+      // 輪椅大輪
+      ctx.strokeStyle = '#00F2FE';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(x + 16, y + h - 14, 14, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + 16, y + h - 28); ctx.lineTo(x + 16, y + h);
+      ctx.moveTo(x + 2, y + h - 14); ctx.lineTo(x + 30, y + h - 14);
+      ctx.stroke();
+
+      // 輪椅小輪
+      ctx.beginPath();
+      ctx.arc(x + w - 8, y + h - 6, 6, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 輪椅金屬架
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      if (isCrouch) {
+        ctx.moveTo(x + 8, y + h - 22);
+        ctx.lineTo(x + 20, y + h - 12);
+        ctx.lineTo(x + w - 8, y + h - 12);
+      } else {
+        ctx.moveTo(x + 8, y + 16);
+        ctx.lineTo(x + 16, y + h - 14);
+        ctx.lineTo(x + w - 10, y + h - 14);
+      }
+      ctx.stroke();
+
+      // 身心障礙學員角色（頭與軀幹）
+      ctx.fillStyle = '#FFFFFF';
+      if (isCrouch) {
+        ctx.beginPath();
+        ctx.arc(x + w - 14, y + 12, 7, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(x + 12, y + h - 16);
+        ctx.lineTo(x + w - 18, y + 15);
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(x + 20, y + 8, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(x + 12, y + 20);
+        ctx.lineTo(x + 20, y + h - 16);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x + 20, y + 22);
+        ctx.lineTo(x + 16, y + h - 14);
+        ctx.stroke();
+      }
+
+      ctx.restore();
     }
   </script>
 </body>
