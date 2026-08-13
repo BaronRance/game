@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>復健迷宮 - 身心障礙者遠距體感與都市適應系統</title>
   
-  <!-- 引入 Firebase SDK (美國伺服器資料庫與驗證) -->
+  <!-- 引入 Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -15,7 +15,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       user-select: none;
     }
 
@@ -42,7 +42,6 @@
       flex-direction: column;
     }
 
-    /* 頂部 Google 驗證與狀態列 */
     #top-bar {
       position: absolute;
       top: 16px;
@@ -77,7 +76,6 @@
       border: 1px solid #1A4250;
     }
 
-    /* 1. 開始前選單介面 */
     #menu-screen {
       position: absolute;
       inset: 0;
@@ -88,7 +86,6 @@
       align-items: center;
       z-index: 10;
       overflow-y: auto;
-      scroll-behavior: smooth;
     }
 
     #menu-screen::-webkit-scrollbar { width: 8px; }
@@ -172,17 +169,15 @@
       border-radius: 25px;
       cursor: pointer;
       box-shadow: 0 6px 16px rgba(245, 124, 0, 0.4);
-      transition: transform 0.1s, box-shadow 0.2s;
+      transition: transform 0.1s;
       flex-shrink: 0;
     }
-    .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 124, 0, 0.6); }
+    .btn-start:hover { transform: translateY(-2px); }
 
     .footer-text { margin-top: 14px; font-size: 12px; color: #64748B; margin-bottom: 20px; }
 
-    /* 2. 遊戲主畫布 */
     #gameCanvas { width: 100%; height: 100%; display: block; background: #081B24; }
 
-    /* 3. AI 復健數據儀表板 */
     #dashboard-overlay {
       position: absolute;
       inset: 0;
@@ -252,9 +247,7 @@
       border-radius: 23px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
-      transition: all 0.2s;
     }
-    .btn-restart:hover { box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5); transform: translateY(-1px); }
   </style>
 </head>
 <body>
@@ -265,7 +258,6 @@
       <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
     </div>
 
-    <!-- 1. 開始前選單 UI -->
     <div id="menu-screen">
       <div class="icon-header">
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
@@ -302,17 +294,15 @@
       </div>
 
       <div class="info-box" id="mode-desc">
-        傳統模式：按 ← 停止避讓紅綠燈（停住時立即變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！
+        傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍小型施工護欄，↓ 蹲下通過遮雨棚。障礙物已縮小並優化繪圖效能！
       </div>
 
       <button class="btn-start" onclick="startGame()">開始都市復健</button>
-      <div class="footer-text">無障礙設計 · 都市街景主題 · 輪椅角色 · 背景音樂 · 智慧語音診斷</div>
+      <div class="footer-text">高效能極速流暢版 · 無障礙設計</div>
     </div>
 
-    <!-- 2D 遊戲 Canvas -->
     <canvas id="gameCanvas" width="900" height="600"></canvas>
 
-    <!-- 繁體中文 AI 復健數據儀表板 -->
     <div id="dashboard-overlay">
       <div class="dashboard-card">
         <div class="dash-header">📊 AI 臨床復健數據分析</div>
@@ -339,7 +329,7 @@
         <div class="ai-eval-box" id="ai-eval-text">AI 診斷數據生成中...</div>
 
         <div class="leaderboard-box">
-          <h4>🏆 美國伺服器即時排行榜 Top 3</h4>
+          <h4>🏆 伺服器即時排行榜 Top 3</h4>
           <ul id="leaderboard-list" class="leaderboard-list">
             <li>尚未載入數據</li>
           </ul>
@@ -351,7 +341,6 @@
   </div>
 
   <script>
-    // --- Firebase 雲端資料庫設定 ---
     const firebaseConfig = {
       apiKey: "AIzaSyB_yVtrLHKEVPuWVXk6OQqnzDbhel0yKWM",
       authDomain: "rehab-maze-cc483.firebaseapp.com",
@@ -370,7 +359,6 @@
       firebase.initializeApp(firebaseConfig);
       auth = firebase.auth();
       db = firebase.firestore();
-
       auth.onAuthStateChanged(user => {
         const statusEl = document.getElementById('user-status-text');
         if (user) {
@@ -418,28 +406,21 @@
       });
     }
 
-    // --- 音效與背景音樂系統 ---
     let audioCtx = null;
     let isBgmPlaying = false;
     let bgmTimer = null;
 
     function initAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function startBgm() {
       initAudioContext();
       stopBgm();
-
       isBgmPlaying = true;
-      const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63, 440.00, 493.88];
+      const notes = [261.63, 329.63, 392.00, 523.25];
       let step = 0;
-
       bgmTimer = setInterval(() => {
         if (!isBgmPlaying || !audioCtx || gameState !== 'PLAYING') return;
         try {
@@ -447,35 +428,30 @@
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+          gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start();
-          osc.stop(audioCtx.currentTime + 0.28);
+          osc.stop(audioCtx.currentTime + 0.2);
           step++;
-        } catch (e) {
-          console.warn("BGM 播放中斷:", e);
-        }
-      }, 300);
+        } catch (e) {}
+      }, 350);
     }
 
     function stopBgm() {
       isBgmPlaying = false;
-      if (bgmTimer) {
-        clearInterval(bgmTimer);
-        bgmTimer = null;
-      }
+      if (bgmTimer) { clearInterval(bgmTimer); bgmTimer = null; }
     }
 
-    function playMarioJumpSound() {
+    function playSound(type) {
       if (!audioCtx) return;
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(160, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(650, audioCtx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      osc.type = type === 'jump' ? 'square' : 'sawtooth';
+      osc.frequency.setValueAtTime(type === 'jump' ? 180 : 300, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(type === 'jump' ? 600 : 100, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
@@ -483,33 +459,16 @@
       osc.stop(audioCtx.currentTime + 0.15);
     }
 
-    function playFailOhSound() {
-      if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(320, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.6);
-      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.6);
-    }
-
     function speakText(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'zh-TW';
-        utterance.rate = 0.95;
-        utterance.pitch = 1.0;
+        utterance.rate = 1.0;
         window.speechSynthesis.speak(utterance);
       }
     }
 
-    // --- 遊戲邏輯與組態 ---
     let difficulty = 'easy';
     let controlMode = 'modeA';
     let totalFails = 0;
@@ -521,32 +480,21 @@
     let gameState = 'MENU';
     let animationFrameId = null;
 
-    const NORMAL_HEIGHT = 64;
-    const CROUCH_HEIGHT = 32;
+    const NORMAL_HEIGHT = 60;
+    const CROUCH_HEIGHT = 30;
 
     const player = {
-      x: 100,
-      y: 0,
-      width: 52,
-      height: NORMAL_HEIGHT,
-      groundY: 480,
-      vy: 0,
-      gravity: 0.65,
-      jumpForce: -13,
-      isGrounded: true,
-      isCrouching: false,
-      baseSpeed: 4,
-      distance: 0,
-      clearedObstacles: 0,
-      invincibleTimer: 0
+      x: 100, y: 0, width: 48, height: NORMAL_HEIGHT,
+      groundY: 480, vy: 0, gravity: 0.65, jumpForce: -12.5,
+      isGrounded: true, isCrouching: false, baseSpeed: 4,
+      distance: 0, clearedObstacles: 0, invincibleTimer: 0
     };
 
     let obstacles = [];
     let obstacleSpawnTimer = 0;
     const keys = { Up: false, Down: false, Left: false, Right: false, Space: false };
-
-    // --- 快取漸層以提升繪製效能 ---
     let skyGrad = null;
+
     function initGradients() {
       skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
       skyGrad.addColorStop(0, '#0A121D');
@@ -555,44 +503,33 @@
 
     function handleSingleKeyAction() {
       if (controlMode !== 'modeB' || gameState !== 'PLAYING') return;
-
       let nearestObs = null;
       let minDist = Infinity;
       for (let obs of obstacles) {
         if (!obs.cleared && obs.x + obs.width > player.x) {
           let dist = obs.x - player.x;
-          if (dist < minDist) {
-            minDist = dist;
-            nearestObs = obs;
-          }
+          if (dist < minDist) { minDist = dist; nearestObs = obs; }
         }
       }
 
-      if (nearestObs && minDist < 380) {
-        if (nearestObs.type === 'ground') {
-          if (player.isGrounded) {
-            player.vy = player.jumpForce;
-            player.isGrounded = false;
-            playMarioJumpSound();
-          }
+      if (nearestObs && minDist < 350) {
+        if (nearestObs.type === 'ground' && player.isGrounded) {
+          player.vy = player.jumpForce;
+          player.isGrounded = false;
+          playSound('jump');
         } else if (nearestObs.type === 'overhang') {
           player.isCrouching = true;
           player.height = CROUCH_HEIGHT;
-          setTimeout(() => {
-            player.isCrouching = false;
-            player.height = NORMAL_HEIGHT;
-          }, 650);
-          playMarioJumpSound();
+          setTimeout(() => { player.isCrouching = false; player.height = NORMAL_HEIGHT; }, 600);
+          playSound('jump');
         } else if (nearestObs.type === 'traffic_light') {
-          singleKeyStopTimer = 65;
-          playMarioJumpSound();
+          singleKeyStopTimer = 60;
+          playSound('jump');
         }
-      } else {
-        if (player.isGrounded) {
-          player.vy = player.jumpForce;
-          player.isGrounded = false;
-          playMarioJumpSound();
-        }
+      } else if (player.isGrounded) {
+        player.vy = player.jumpForce;
+        player.isGrounded = false;
+        playSound('jump');
       }
     }
 
@@ -603,9 +540,7 @@
       if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = true;
       if (e.code === 'Space') {
         keys.Space = true;
-        if (controlMode === 'modeB' && gameState === 'PLAYING') {
-          handleSingleKeyAction();
-        }
+        if (controlMode === 'modeB' && gameState === 'PLAYING') handleSingleKeyAction();
       }
     });
 
@@ -618,9 +553,7 @@
     });
 
     canvas.addEventListener('pointerdown', () => {
-      if (controlMode === 'modeB' && gameState === 'PLAYING') {
-        handleSingleKeyAction();
-      }
+      if (controlMode === 'modeB' && gameState === 'PLAYING') handleSingleKeyAction();
     });
 
     function selectDifficulty(diff, elem) {
@@ -633,12 +566,11 @@
       controlMode = mode;
       document.querySelectorAll('.grid-container-2 .option-card').forEach(c => c.classList.remove('active'));
       elem.classList.add('active');
-
       const descBox = document.getElementById('mode-desc');
       if (mode === 'modeA') {
-        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈（停住時立即變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
+        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍小型施工護欄，↓ 蹲下通過遮雨棚。障礙物已縮小並優化繪圖效能！';
       } else {
-        descBox.innerText = '單鍵模式：輪椅自動前進。按空白鍵或點擊畫面，系統會自動根據最近的障礙物判斷並執行對應的跳躍、蹲下或停住動作！';
+        descBox.innerText = '單鍵模式：自動前進，按空白鍵依最近縮小版障礙自動對應動作！';
       }
     }
 
@@ -650,7 +582,6 @@
       initGameVars();
       gameState = 'PLAYING';
       startBgm();
-
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       gameLoop();
     }
@@ -664,49 +595,32 @@
       player.isCrouching = false;
       player.distance = 0;
       player.clearedObstacles = 0;
-      player.invincibleTimer = 120;
+      player.invincibleTimer = 100;
       singleKeyStopTimer = 0;
-
       obstacles = [];
       obstacleSpawnTimer = 0;
-
-      if (difficulty === 'easy') player.baseSpeed = 3.5;
-      else if (difficulty === 'medium') player.baseSpeed = 4.8;
-      else if (difficulty === 'hard') player.baseSpeed = 6.2;
+      player.baseSpeed = difficulty === 'easy' ? 3.8 : (difficulty === 'medium' ? 5.0 : 6.2);
     }
 
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
+        // 低矮通道 (遮雨棚)
         obstacles.push({
-          type: 'overhang',
-          x: canvas.width + 50,
-          y: player.groundY - 110,
-          width: 150,
-          height: 50,
-          cleared: false,
-          hint: '⚠️ 低矮遮雨棚/限高桿！【單鍵自動對應蹲下】'
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 100,
+          width: 130, height: 45, cleared: false, hint: '⚠️ 低矮遮雨棚！請蹲下'
         });
       } else if (rand < 0.70) {
+        // 施工護欄 (體積縮小，更容易跳過)
         obstacles.push({
-          type: 'ground',
-          x: canvas.width + 50,
-          y: player.groundY - 42,
-          width: 50,
-          height: 42,
-          cleared: false,
-          hint: '🚧 道路施工護欄！【單鍵自動對應跳躍】'
+          type: 'ground', x: canvas.width + 50, y: player.groundY - 30,
+          width: 36, height: 30, cleared: false, hint: '🚧 施工護欄！請跳躍'
         });
       } else {
+        // 紅綠燈
         obstacles.push({
-          type: 'traffic_light',
-          x: canvas.width + 50,
-          y: player.groundY - 140,
-          width: 24,
-          height: 140,
-          isRed: true,
-          cleared: false,
-          hint: '🚦 行人紅綠燈！【單鍵自動停住並立即變綠燈】'
+          type: 'traffic_light', x: canvas.width + 50, y: player.groundY - 130,
+          width: 20, height: 130, isRed: true, cleared: false, hint: '🚦 紅燈！請按左鍵停止'
         });
       }
     }
@@ -724,32 +638,27 @@
 
       let currentSpeed = player.baseSpeed;
       if (controlMode === 'modeA') {
-        if (keys.Left) {
-          currentSpeed = 0;
-        } else if (keys.Right) {
-          currentSpeed += 2.8;
-        }
-      } else if (controlMode === 'modeB') {
-        if (singleKeyStopTimer > 0) {
-          currentSpeed = 0;
-          singleKeyStopTimer--;
-        }
+        if (keys.Left) currentSpeed = 0;
+        else if (keys.Right) currentSpeed += 2.5;
+      } else if (controlMode === 'modeB' && singleKeyStopTimer > 0) {
+        currentSpeed = 0;
+        singleKeyStopTimer--;
       }
 
       player.distance += currentSpeed * 0.05;
 
-      let shouldCrouch = false;
-      if (controlMode === 'modeA' && keys.Down) shouldCrouch = true;
-
+      let shouldCrouch = (controlMode === 'modeA' && keys.Down);
       if (shouldCrouch) {
         player.isCrouching = true;
         player.height = CROUCH_HEIGHT;
+      } else if (!player.isCrouching && player.height !== NORMAL_HEIGHT && controlMode === 'modeA') {
+        player.height = NORMAL_HEIGHT;
       }
 
       if (controlMode === 'modeA' && keys.Up && player.isGrounded) {
         player.vy = player.jumpForce;
         player.isGrounded = false;
-        playMarioJumpSound();
+        playSound('jump');
       }
 
       player.vy += player.gravity;
@@ -763,20 +672,8 @@
       }
 
       obstacleSpawnTimer++;
-      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 70);
-      const minDistanceBetweenObstacles = 340; 
-
-      let canSpawn = false;
-      if (obstacles.length === 0) {
-        canSpawn = true;
-      } else {
-        const lastObstacle = obstacles[obstacles.length - 1];
-        if ((canvas.width + 50 - lastObstacle.x) >= minDistanceBetweenObstacles) {
-          canSpawn = true;
-        }
-      }
-
-      if (obstacleSpawnTimer > spawnInterval && canSpawn) {
+      const spawnInterval = difficulty === 'easy' ? 150 : (difficulty === 'medium' ? 110 : 80);
+      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 320)) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
       }
@@ -785,38 +682,30 @@
         const obs = obstacles[i];
         obs.x -= currentSpeed;
 
-        if (obs.type === 'traffic_light') {
-          if (obs.isRed && (obs.x - player.x < 240) && (obs.x + obs.width > player.x - 20) && currentSpeed === 0) {
-            obs.isRed = false;
-          }
+        if (obs.type === 'traffic_light' && obs.isRed && (obs.x - player.x < 220) && currentSpeed === 0) {
+          obs.isRed = false;
         }
 
         if (!obs.cleared && obs.x + obs.width < player.x) {
           obs.cleared = true;
           player.clearedObstacles++;
-          playMarioJumpSound();
         }
 
-        if (obs.x + obs.width < -60) {
+        if (obs.x + obs.width < -50) {
           obstacles.splice(i, 1);
           continue;
         }
 
-        if (player.invincibleTimer <= 0) {
-          if (checkCollision(player, obs, currentSpeed)) {
-            triggerFail();
-            return;
-          }
+        if (player.invincibleTimer <= 0 && checkCollision(player, obs, currentSpeed)) {
+          triggerFail();
+          return;
         }
       }
     }
 
     function checkCollision(p, o, speed) {
       if (o.type === 'traffic_light') {
-        if (o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5) {
-          return true;
-        }
-        return false;
+        return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
       }
       return (
         p.x < o.x + o.width &&
@@ -830,8 +719,7 @@
       gameState = 'GAMEOVER';
       stopBgm();
       totalFails++;
-
-      playFailOhSound();
+      playSound('fail');
 
       const distMeters = Math.floor(player.distance);
       const score = Math.min(100, Math.max(40, distMeters * 2 + player.clearedObstacles * 5 - totalFails * 10));
@@ -841,20 +729,9 @@
       document.getElementById('res-fails').innerText = `${totalFails} 次`;
       document.getElementById('res-score').innerText = `${score} 分`;
 
-      let textDiagnosis = "";
-      if (score >= 80) {
-        textDiagnosis = "AI 診斷：都市街道應變極佳！障礙避讓與紅綠燈停等反應即時，肢體協調度優異。";
-      } else if (score >= 60) {
-        textDiagnosis = "AI 診斷：表現良好。注意單鍵模式或傳統操作的時機點，保持專注即可順利通關。";
-      } else {
-        textDiagnosis = "AI 診斷：建議熟悉障礙物距離，在接近時即時按下按鍵進行對應防避。";
-      }
-
+      let textDiagnosis = score >= 80 ? "AI 診斷：都市街道應變極佳！障礙避讓反應即時。" : "AI 診斷：表現良好，建議抓準縮小障礙的跳躍時機。";
       document.getElementById('ai-eval-text').innerHTML = `<strong>💡 ${textDiagnosis}</strong>`;
-
-      const readSpeech = `都市復健結束。移動總距離 ${distMeters} 公尺，成功通行 ${player.clearedObstacles} 個都市障礙，總得分 ${score} 分。${textDiagnosis}`;
-      speakText(readSpeech);
-
+      speakText(`復健結束。移動 ${distMeters} 公尺，得分 ${score} 分。`);
       saveScoreToFirebase(score);
       document.getElementById('dashboard-overlay').style.display = 'flex';
     }
@@ -874,183 +751,117 @@
     ];
 
     function render() {
-      // 1. 使用快取的漸層背景以優化效能
       if (skyGrad) {
         ctx.fillStyle = skyGrad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      // 2. 遠景都市大樓天際線
       for (let b of buildings) {
-        let bx = (b.x - (player.distance * 12) % 900 + 900) % 900;
+        let bx = (b.x - (player.distance * 8) % 900 + 900) % 900;
         let by = player.groundY - b.h;
-
         ctx.fillStyle = '#0E1E2E';
         ctx.fillRect(bx, by, b.w, b.h);
-
-        ctx.fillStyle = '#FCE83A';
-        for (let wx = bx + 12; wx < bx + b.w - 15; wx += 22) {
-          for (let wy = by + 20; wy < player.groundY - 30; wy += 38) {
-            if ((wx + wy) % 5 !== 0) {
-              ctx.fillRect(wx, wy, 8, 12);
-            }
-          }
-        }
       }
 
-      // 3. 都市柏油路面與動態白線
       ctx.fillStyle = '#1E293B';
       ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
-
       ctx.fillStyle = '#475569';
-      ctx.fillRect(0, player.groundY - 6, canvas.width, 6);
+      ctx.fillRect(0, player.groundY - 4, canvas.width, 4);
 
       ctx.fillStyle = '#F8FAFC';
-      let dashOffset = (player.distance * 24) % 70;
-      for (let lx = -dashOffset; lx < canvas.width; lx += 70) {
-        ctx.fillRect(lx, player.groundY + 40, 40, 6);
+      let dashOffset = (player.distance * 20) % 60;
+      for (let lx = -dashOffset; lx < canvas.width; lx += 60) {
+        ctx.fillRect(lx, player.groundY + 35, 30, 4);
       }
 
-      // 4. 繪製輪椅角色
       drawWheelchairUser(player.x, player.y, player.width, player.height, player.isCrouching, player.invincibleTimer > 0);
 
-      // 5. 繪製都市障礙物
       let nearestPrompt = null;
       for (let obs of obstacles) {
         if (obs.type === 'overhang') {
           ctx.fillStyle = '#475569';
-          ctx.fillRect(obs.x, obs.y - 120, 12, obs.y + obs.height);
-          ctx.fillRect(obs.x + obs.width - 12, obs.y - 120, 12, obs.y + obs.height);
-
+          ctx.fillRect(obs.x, obs.y - 80, 10, obs.y + obs.height);
           ctx.fillStyle = '#FACC15';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-          ctx.fillStyle = '#0F172A';
-          for (let stripe = obs.x; stripe < obs.x + obs.width; stripe += 24) {
-            ctx.beginPath();
-            ctx.moveTo(stripe, obs.y);
-            ctx.lineTo(stripe + 12, obs.y);
-            ctx.lineTo(stripe, obs.y + obs.height);
-            ctx.lineTo(stripe - 12, obs.y + obs.height);
-            ctx.fill();
-          }
-
           ctx.fillStyle = '#DC2626';
-          ctx.fillRect(obs.x + 15, obs.y + 10, obs.width - 30, 30);
-          ctx.fillStyle = '#FFFFFF';
-          ctx.font = 'bold 12px sans-serif';
-          ctx.fillText('⚠️ 都市低矮通道 (需蹲下)', obs.x + 18, obs.y + 30);
-
-        } else if (obs.type === 'ground') {
-          ctx.fillStyle = '#EA580C';
-          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(obs.x, obs.y + 10, obs.width, 8);
-          ctx.fillRect(obs.x, obs.y + 26, obs.width, 8);
-
-          ctx.fillStyle = '#FACC15';
-          ctx.beginPath();
-          ctx.arc(obs.x + obs.width / 2, obs.y - 6, 7, 0, Math.PI * 2);
-          ctx.fill();
-
+          ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, 24);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('施工', obs.x + 12, obs.y + 24);
-
+          ctx.fillText('⚠️ 遮雨棚 (需蹲下)', obs.x + 14, obs.y + 24);
+        } else if (obs.type === 'ground') {
+          // 縮小後的施工護欄繪製
+          ctx.fillStyle = '#EA580C';
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(obs.x, obs.y + 8, obs.width, 6);
+          ctx.fillStyle = '#FACC15';
+          ctx.beginPath();
+          ctx.arc(obs.x + obs.width / 2, obs.y - 4, 5, 0, Math.PI * 2);
+          ctx.fill();
         } else if (obs.type === 'traffic_light') {
           ctx.fillStyle = '#64748B';
-          ctx.fillRect(obs.x + 8, obs.y, 8, obs.height);
-
+          ctx.fillRect(obs.x + 6, obs.y, 8, obs.height);
           ctx.fillStyle = '#0F172A';
-          ctx.fillRect(obs.x - 6, obs.y, 36, 65);
+          ctx.fillRect(obs.x - 4, obs.y, 28, 55);
 
-          if (obs.isRed) {
-            ctx.shadowColor = '#EF4444';
-            ctx.shadowBlur = 12;
-            ctx.fillStyle = '#EF4444';
-          } else {
-            ctx.fillStyle = '#334155';
-          }
+          ctx.fillStyle = obs.isRed ? '#EF4444' : '#334155';
           ctx.beginPath();
-          ctx.arc(obs.x + 12, obs.y + 18, 10, 0, Math.PI * 2);
+          ctx.arc(obs.x + 10, obs.y + 14, 8, 0, Math.PI * 2);
           ctx.fill();
-          ctx.shadowBlur = 0;
 
-          if (!obs.isRed) {
-            ctx.shadowColor = '#22C55E';
-            ctx.shadowBlur = 12;
-            ctx.fillStyle = '#22C55E';
-          } else {
-            ctx.fillStyle = '#334155';
-          }
+          ctx.fillStyle = !obs.isRed ? '#22C55E' : '#334155';
           ctx.beginPath();
-          ctx.arc(obs.x + 12, obs.y + 46, 10, 0, Math.PI * 2);
+          ctx.arc(obs.x + 10, obs.y + 38, 8, 0, Math.PI * 2);
           ctx.fill();
-          ctx.shadowBlur = 0;
         }
 
-        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 280) {
+        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 260) {
           if (!nearestPrompt) nearestPrompt = obs.hint;
         }
       }
 
-      // 6. 即時智導提示面板
       if (nearestPrompt) {
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.92)';
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.9)';
         ctx.beginPath();
-        ctx.roundRect(canvas.width / 2 - 180, 16, 360, 38, 19);
+        ctx.roundRect(canvas.width / 2 - 160, 14, 320, 34, 17);
         ctx.fill();
-
         ctx.fillStyle = '#0F172A';
-        ctx.font = 'bold 15px sans-serif';
+        ctx.font = 'bold 14px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(nearestPrompt, canvas.width / 2, 41);
+        ctx.fillText(nearestPrompt, canvas.width / 2, 36);
         ctx.textAlign = 'left';
       }
 
-      // 7. 畫面上方即時數據顯示
       ctx.fillStyle = '#00F2FE';
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 24, 30);
-      ctx.fillText(`成功通關: ${player.clearedObstacles} 個`, 24, 52);
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 28);
+      ctx.fillText(`成功通關: ${player.clearedObstacles} 個`, 20, 48);
     }
 
-    // --- 繪製輪椅角色與身心障礙者本體函式 ---
     function drawWheelchairUser(x, y, w, h, isCrouching, isInvincible) {
       ctx.save();
-      if (isInvincible) {
-        ctx.globalAlpha = 0.6 + Math.sin(Date.now() / 50) * 0.4;
-      }
+      if (isInvincible) ctx.globalAlpha = 0.6;
 
       ctx.strokeStyle = '#00F2FE';
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(x + 14, y + h - 12, 14, 0, Math.PI * 2);
+      ctx.arc(x + 12, y + h - 10, 12, 0, Math.PI * 2);
       ctx.stroke();
       ctx.fillStyle = '#113847';
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(x + w - 10, y + h - 6, 6, 0, Math.PI * 2);
+      ctx.arc(x + w - 8, y + h - 5, 5, 0, Math.PI * 2);
       ctx.stroke();
       ctx.fill();
-
-      ctx.strokeStyle = '#38BDF8';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(x + 14, y + h - 12);
-      ctx.lineTo(x + w - 10, y + h - 6);
-      ctx.lineTo(x + w / 2, y + 20);
-      ctx.closePath();
-      ctx.stroke();
 
       ctx.fillStyle = '#00F2FE';
       ctx.beginPath();
-      ctx.arc(x + w / 2 - 2, y + (isCrouching ? 12 : 18), isCrouching ? 8 : 10, 0, Math.PI * 2);
+      ctx.arc(x + w / 2, y + (isCrouching ? 10 : 16), isCrouching ? 7 : 9, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = '#38BDF8';
-      ctx.fillRect(x + w / 2 - 8, y + (isCrouching ? 20 : 28), 12, isCrouching ? 14 : 22);
+      ctx.fillRect(x + w / 2 - 6, y + (isCrouching ? 17 : 25), 10, isCrouching ? 12 : 20);
 
       ctx.restore();
     }
