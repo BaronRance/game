@@ -297,7 +297,7 @@
         </div>
         <div class="option-card" onclick="selectMode('modeB', this)">
           <div class="card-title">單鍵模式</div>
-          <div class="card-desc">自動前進，只按一個鍵</div>
+          <div class="card-desc">自動前進，按空白鍵依最近障礙自動對應動作</div>
         </div>
       </div>
 
@@ -517,6 +517,7 @@
     let difficulty = 'easy';
     let controlMode = 'modeA';
     let totalFails = 0;
+    let singleKeyStopTimer = 0; // 單鍵模式下的暫停計時器
 
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -549,6 +550,56 @@
 
     const keys = { Up: false, Down: false, Left: false, Right: false, Space: false };
 
+    // --- 單鍵模式智慧適應處理函式 ---
+    function handleSingleKeyAction() {
+      if (controlMode !== 'modeB' || gameState !== 'PLAYING') return;
+
+      // 尋找前方最近未通行的障礙物
+      let nearestObs = null;
+      let minDist = Infinity;
+      for (let obs of obstacles) {
+        if (!obs.cleared && obs.x + obs.width > player.x) {
+          let dist = obs.x - player.x;
+          if (dist < minDist) {
+            minDist = dist;
+            nearestObs = obs;
+          }
+        }
+      }
+
+      // 如果有接近的障礙物且距離合理（小於 380 像素），依據類型自動執行對應動作
+      if (nearestObs && minDist < 380) {
+        if (nearestObs.type === 'ground') {
+          // 施工護欄 ➔ 自動跳躍
+          if (player.isGrounded) {
+            player.vy = player.jumpForce;
+            player.isGrounded = false;
+            playMarioJumpSound();
+          }
+        } else if (nearestObs.type === 'overhang') {
+          // 低矮遮雨棚 ➔ 自動蹲下
+          player.isCrouching = true;
+          player.height = CROUCH_HEIGHT;
+          setTimeout(() => {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+          }, 650);
+          playMarioJumpSound();
+        } else if (nearestObs.type === 'traffic_light') {
+          // 紅綠燈 ➔ 自動停住（速度歸零，立即觸發綠燈）
+          singleKeyStopTimer = 65;
+          playMarioJumpSound();
+        }
+      } else {
+        // 若前方無障礙物，預設為跳躍
+        if (player.isGrounded) {
+          player.vy = player.jumpForce;
+          player.isGrounded = false;
+          playMarioJumpSound();
+        }
+      }
+    }
+
     window.addEventListener('keydown', (e) => {
       if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.Up = true;
       if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.Down = true;
@@ -556,10 +607,8 @@
       if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = true;
       if (e.code === 'Space') {
         keys.Space = true;
-        if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded) {
-          player.vy = player.jumpForce;
-          player.isGrounded = false;
-          playMarioJumpSound();
+        if (controlMode === 'modeB' && gameState === 'PLAYING') {
+          handleSingleKeyAction();
         }
       }
     });
@@ -573,10 +622,8 @@
     });
 
     canvas.addEventListener('pointerdown', () => {
-      if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded) {
-        player.vy = player.jumpForce;
-        player.isGrounded = false;
-        playMarioJumpSound();
+      if (controlMode === 'modeB' && gameState === 'PLAYING') {
+        handleSingleKeyAction();
       }
     });
 
@@ -595,7 +642,7 @@
       if (mode === 'modeA') {
         descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈（停住時立即變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
       } else {
-        descBox.innerText = '單鍵模式：輪椅自動前進。請在接近都市障礙物時按下單鍵觸發應變！';
+        descBox.innerText = '單鍵模式：輪椅自動前進。按空白鍵或點擊畫面，系統會自動根據最近的障礙物判斷並執行對應的跳躍、蹲下或停住動作！';
       }
     }
 
@@ -621,6 +668,7 @@
       player.distance = 0;
       player.clearedObstacles = 0;
       player.invincibleTimer = 120;
+      singleKeyStopTimer = 0;
 
       obstacles = [];
       obstacleSpawnTimer = 0;
@@ -634,7 +682,7 @@
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
-        // 都市低矮遮雨棚 / 限高桿 (按 ↓ 蹲下)
+        // 都市低矮遮雨棚 / 限高桿
         obstacles.push({
           type: 'overhang',
           x: canvas.width + 50,
@@ -642,10 +690,10 @@
           width: 150,
           height: 50,
           cleared: false,
-          hint: '⚠️ 低矮遮雨棚/限高桿！【按 ↓ 蹲下】'
+          hint: '⚠️ 低矮遮雨棚/限高桿！【單鍵自動對應蹲下】'
         });
       } else if (rand < 0.70) {
-        // 道路施工護欄 (按 ↑ 跳躍)
+        // 道路施工護欄
         obstacles.push({
           type: 'ground',
           x: canvas.width + 50,
@@ -653,10 +701,10 @@
           width: 50,
           height: 42,
           cleared: false,
-          hint: '🚧 道路施工護欄！【按 ↑ 跳躍】'
+          hint: '🚧 道路施工護欄！【單鍵自動對應跳躍】'
         });
       } else {
-        // 都市行人紅綠燈 (按 ← 停住時應立即變綠燈)
+        // 都市行人紅綠燈
         obstacles.push({
           type: 'traffic_light',
           x: canvas.width + 50,
@@ -665,7 +713,7 @@
           height: 140,
           isRed: true,
           cleared: false,
-          hint: '🚦 行人紅綠燈！【按 ← 停住立即變綠燈】'
+          hint: '🚦 行人紅綠燈！【單鍵自動停住並立即變綠燈】'
         });
       }
     }
@@ -688,6 +736,11 @@
         } else if (keys.Right) {
           currentSpeed += 2.8; // → 加速
         }
+      } else if (controlMode === 'modeB') {
+        if (singleKeyStopTimer > 0) {
+          currentSpeed = 0; // 單鍵觸發停住
+          singleKeyStopTimer--;
+        }
       }
 
       player.distance += currentSpeed * 0.05;
@@ -699,8 +752,12 @@
         player.isCrouching = true;
         player.height = CROUCH_HEIGHT;
       } else {
-        player.isCrouching = false;
-        player.height = NORMAL_HEIGHT;
+        // 若非手動蹲下且非單鍵暫時蹲下，保持正常高度
+        if (controlMode === 'modeA' || !player.isCrouching) {
+          if (!player.isCrouching) {
+            // 維持現狀
+          }
+        }
       }
 
       if (controlMode === 'modeA' && keys.Up && player.isGrounded) {
@@ -802,11 +859,11 @@
 
       let textDiagnosis = "";
       if (score >= 80) {
-        textDiagnosis = "AI 診斷：都市街道應變極佳！紅綠燈停等反應即時，肢體協調度優異。";
+        textDiagnosis = "AI 診斷：都市街道應變極佳！障礙避讓與紅綠燈停等反應即時，肢體協調度優異。";
       } else if (score >= 60) {
-        textDiagnosis = "AI 診斷：表現良好。注意靠近紅綠燈時及時按 ← 停住，即可立即變為綠燈。";
+        textDiagnosis = "AI 診斷：表現良好。注意單鍵模式或傳統操作的時機點，保持專注即可順利通關。";
       } else {
-        textDiagnosis = "AI 診斷：建議多利用方向鍵左鍵於紅綠燈前完全停止，以提升都市適應能力。";
+        textDiagnosis = "AI 診斷：建議熟悉障礙物距離，在接近時即時按下按鍵進行對應防避。";
       }
 
       document.getElementById('ai-eval-text').innerHTML = `<strong>💡 ${textDiagnosis}</strong>`;
@@ -900,7 +957,7 @@
           ctx.fillRect(obs.x + 15, obs.y + 10, obs.width - 30, 30);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 12px sans-serif';
-          ctx.fillText('⚠️ 都市低矮通道 (按↓蹲下)', obs.x + 18, obs.y + 30);
+          ctx.fillText('⚠️ 都市低矮通道 (需蹲下)', obs.x + 18, obs.y + 30);
 
         } else if (obs.type === 'ground') {
           // 【道路施工護欄】
