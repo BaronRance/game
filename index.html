@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>復健迷宮 - 身心障礙者遠距體感與都市適應系統</title>
   
-  <!-- 引入 Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -20,8 +19,8 @@
     }
 
     body {
-      background-color: #06151C;
-      color: #E2E8F0;
+      background-color: #0F172A;
+      color: #1E293B;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -33,10 +32,10 @@
       position: relative;
       width: 900px;
       height: 600px;
-      background: #0B2B36;
-      border: 2px solid #00F2FE;
+      background: #F8FAFC;
+      border: 3px solid #0284C7;
       border-radius: 24px;
-      box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+      box-shadow: 0 10px 30px rgba(2, 132, 199, 0.2);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -54,7 +53,7 @@
     }
 
     .btn-auth {
-      background: #1A73E8;
+      background: #0284C7;
       color: white;
       border: none;
       padding: 8px 16px;
@@ -62,24 +61,23 @@
       font-size: 13px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .btn-auth:hover { background: #1557B0; }
+    .btn-auth:hover { background: #0369A1; }
 
     .user-status {
       font-size: 13px;
-      color: #00F2FE;
-      background: rgba(11, 43, 54, 0.8);
+      color: #0369A1;
+      background: rgba(255, 255, 255, 0.9);
       padding: 6px 14px;
       border-radius: 16px;
-      border: 1px solid #1A4250;
+      border: 1px solid #BAE6FD;
     }
 
     #menu-screen {
       position: absolute;
       inset: 0;
-      background: #0B2B36;
+      background: #F0F9FF;
       padding: 60px 40px 40px 40px;
       display: flex;
       flex-direction: column;
@@ -88,28 +86,24 @@
       overflow-y: auto;
     }
 
-    #menu-screen::-webkit-scrollbar { width: 8px; }
-    #menu-screen::-webkit-scrollbar-track { background: rgba(11, 43, 54, 0.5); }
-    #menu-screen::-webkit-scrollbar-thumb { background: #00F2FE; border-radius: 4px; }
-
     .icon-header {
       width: 64px;
       height: 64px;
-      background: #144958;
+      background: #E0F2FE;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       margin-bottom: 10px;
-      border: 2px solid #00F2FE;
+      border: 2px solid #0284C7;
       flex-shrink: 0;
     }
 
-    .icon-header svg { width: 34px; height: 34px; fill: #00F2FE; }
+    .icon-header svg { width: 34px; height: 34px; fill: #0284C7; }
 
-    h1 { font-size: 30px; color: #FFFFFF; letter-spacing: 2px; margin-bottom: 4px; }
-    .subtitle { font-size: 14px; color: #94A3B8; margin-bottom: 20px; }
-    .section-title { width: 100%; font-size: 14px; color: #E2E8F0; margin-bottom: 10px; text-align: left; }
+    h1 { font-size: 30px; color: #0F172A; letter-spacing: 2px; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #64748B; margin-bottom: 20px; }
+    .section-title { width: 100%; font-size: 14px; color: #334155; margin-bottom: 10px; text-align: left; font-weight: bold; }
 
     .grid-container {
       display: grid;
@@ -128,32 +122,32 @@
     }
 
     .option-card {
-      background: rgba(15, 45, 56, 0.8);
-      border: 2px solid #1A4250;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
       border-radius: 16px;
       padding: 14px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
 
-    .option-card:hover { border-color: #00D2FF; background: #113847; }
+    .option-card:hover { border-color: #0284C7; background: #F8FAFC; }
     .option-card.active {
-      border-color: #00F2FE;
-      background: #0E3B4C;
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+      border-color: #0284C7;
+      background: #E0F2FE;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
     }
 
-    .card-title { font-size: 16px; font-weight: bold; color: #FFFFFF; margin-bottom: 4px; }
-    .card-desc { font-size: 12px; color: #94A3B8; line-height: 1.4; }
+    .card-title { font-size: 16px; font-weight: bold; color: #0F172A; margin-bottom: 4px; }
+    .card-desc { font-size: 12px; color: #64748B; line-height: 1.4; }
 
     .info-box {
       width: 100%;
-      background: rgba(255, 160, 0, 0.08);
-      border-left: 4px solid #FFA000;
+      background: #FEF3C7;
+      border-left: 4px solid #F59E0B;
       border-radius: 6px;
       padding: 10px 14px;
       font-size: 13px;
-      color: #CBD5E1;
+      color: #92400E;
       margin-bottom: 18px;
       line-height: 1.4;
     }
@@ -161,28 +155,28 @@
     .btn-start {
       width: 260px;
       height: 50px;
-      background: linear-gradient(180deg, #FFB300 0%, #F57C00 100%);
-      color: #1A0D00;
+      background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+      color: white;
       font-size: 19px;
       font-weight: bold;
       border: none;
       border-radius: 25px;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(245, 124, 0, 0.4);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
       transition: transform 0.1s;
       flex-shrink: 0;
     }
     .btn-start:hover { transform: translateY(-2px); }
 
-    .footer-text { margin-top: 14px; font-size: 12px; color: #64748B; margin-bottom: 20px; }
+    .footer-text { margin-top: 14px; font-size: 12px; color: #94A3B8; margin-bottom: 20px; }
 
-    #gameCanvas { width: 100%; height: 100%; display: block; background: #081B24; }
+    #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
 
     #dashboard-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(6, 21, 28, 0.88);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
       display: none;
       justify-content: center;
       align-items: center;
@@ -191,15 +185,15 @@
 
     .dashboard-card {
       width: 560px;
-      background: #0B2B36;
-      border: 2px solid #00F2FE;
+      background: #FFFFFF;
+      border: 3px solid #0284C7;
       border-radius: 20px;
       padding: 28px;
-      box-shadow: 0 0 40px rgba(0, 242, 254, 0.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       text-align: center;
     }
 
-    .dash-header { font-size: 22px; font-weight: bold; color: #00F2FE; margin-bottom: 16px; }
+    .dash-header { font-size: 22px; font-weight: bold; color: #0F172A; margin-bottom: 16px; }
 
     .metrics-grid {
       display: grid;
@@ -208,45 +202,46 @@
       margin-bottom: 16px;
     }
 
-    .metric-item { background: #113847; border: 1px solid #1A4250; border-radius: 10px; padding: 10px; }
-    .metric-value { font-size: 18px; font-weight: bold; color: #38BDF8; }
-    .metric-label { font-size: 11px; color: #94A3B8; margin-top: 2px; }
+    .metric-item { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 10px; padding: 10px; }
+    .metric-value { font-size: 18px; font-weight: bold; color: #0284C7; }
+    .metric-label { font-size: 11px; color: #64748B; margin-top: 2px; }
 
     .ai-eval-box {
-      background: rgba(0, 242, 254, 0.05);
-      border: 1px dashed #00D2FF;
+      background: #F0FDF4;
+      border: 1px dashed #22C55E;
       border-radius: 10px;
       padding: 12px;
       text-align: left;
       font-size: 13px;
-      color: #E2E8F0;
+      color: #166534;
       line-height: 1.5;
       margin-bottom: 16px;
     }
 
     .leaderboard-box {
-      background: #081B24;
+      background: #F8FAFC;
       border-radius: 10px;
       padding: 10px 14px;
       margin-bottom: 18px;
       text-align: left;
+      border: 1px solid #E2E8F0;
     }
 
-    .leaderboard-box h4 { font-size: 13px; color: #00F2FE; margin-bottom: 6px; }
-    .leaderboard-list { list-style: none; font-size: 12px; color: #CBD5E1; }
-    .leaderboard-list li { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #1A4250; }
+    .leaderboard-box h4 { font-size: 13px; color: #0F172A; margin-bottom: 6px; }
+    .leaderboard-list { list-style: none; font-size: 12px; color: #334155; }
+    .leaderboard-list li { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #E2E8F0; }
 
     .btn-restart {
       width: 100%;
       height: 46px;
-      background: linear-gradient(180deg, #00F2FE 0%, #0088FF 100%);
-      color: #04121A;
+      background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+      color: white;
       font-size: 17px;
       font-weight: bold;
       border: none;
       border-radius: 23px;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
     }
   </style>
 </head>
@@ -263,21 +258,21 @@
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
       </div>
       <h1>復健迷宮</h1>
-      <p class="subtitle">身心障礙者的遠距體感復健與都市適應迷宮</p>
+      <p class="subtitle">身心障礙者的遠距體感復健與都市適應系統（明亮流暢版）</p>
 
       <div class="section-title">請選擇關卡難度</div>
       <div class="grid-container">
         <div class="option-card active" onclick="selectDifficulty('easy', this)">
           <div class="card-title">輕度復健</div>
-          <div class="card-desc">都市車流平緩、障礙少</div>
+          <div class="card-desc">平緩步調、障礙極少</div>
         </div>
         <div class="option-card" onclick="selectDifficulty('medium', this)">
           <div class="card-title">中度挑戰</div>
-          <div class="card-desc">都市步調適中、反應訓練</div>
+          <div class="card-desc">適中節奏、反應訓練</div>
         </div>
         <div class="option-card" onclick="selectDifficulty('hard', this)">
           <div class="card-title">重度適應</div>
-          <div class="card-desc">高密度都市障礙與道路施工</div>
+          <div class="card-desc">高密度都市障礙挑戰</div>
         </div>
       </div>
 
@@ -294,11 +289,11 @@
       </div>
 
       <div class="info-box" id="mode-desc">
-        傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍小型施工護欄，↓ 蹲下通過遮雨棚。障礙物已縮小並優化繪圖效能！
+        提示：跳躍障礙物體積已大幅縮小（極易閃過），背景已更換為明亮清晰的白天都市！
       </div>
 
       <button class="btn-start" onclick="startGame()">開始都市復健</button>
-      <div class="footer-text">高效能極速流暢版 · 無障礙設計</div>
+      <div class="footer-text">極致流暢輕量化引擎 · 明亮都市風格</div>
     </div>
 
     <canvas id="gameCanvas" width="900" height="600"></canvas>
@@ -364,17 +359,15 @@
         if (user) {
           currentUser = user;
           statusEl.innerText = `已登入：${user.displayName || user.email}`;
-          statusEl.style.color = '#4CAF50';
+          statusEl.style.color = '#16A34A';
           loadLeaderboard();
         } else {
           currentUser = null;
           statusEl.innerText = '狀態：未登入雲端帳戶';
-          statusEl.style.color = '#00F2FE';
+          statusEl.style.color = '#0284C7';
         }
       });
-    } catch (e) {
-      console.warn("Firebase 未初始化");
-    }
+    } catch (e) {}
 
     function loginGoogle() {
       if (!auth) return;
@@ -426,17 +419,17 @@
         try {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
-          osc.type = 'triangle';
+          osc.type = 'sine';
           osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.025, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start();
-          osc.stop(audioCtx.currentTime + 0.2);
+          osc.stop(audioCtx.currentTime + 0.15);
           step++;
         } catch (e) {}
-      }, 350);
+      }, 400);
     }
 
     function stopBgm() {
@@ -448,15 +441,15 @@
       if (!audioCtx) return;
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.type = type === 'jump' ? 'square' : 'sawtooth';
-      osc.frequency.setValueAtTime(type === 'jump' ? 180 : 300, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(type === 'jump' ? 600 : 100, audioCtx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+      osc.type = type === 'jump' ? 'triangle' : 'sawtooth';
+      osc.frequency.setValueAtTime(type === 'jump' ? 200 : 250, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(type === 'jump' ? 500 : 80, audioCtx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
       osc.start();
-      osc.stop(audioCtx.currentTime + 0.15);
+      osc.stop(audioCtx.currentTime + 0.12);
     }
 
     function speakText(text) {
@@ -485,7 +478,7 @@
 
     const player = {
       x: 100, y: 0, width: 48, height: NORMAL_HEIGHT,
-      groundY: 480, vy: 0, gravity: 0.65, jumpForce: -12.5,
+      groundY: 480, vy: 0, gravity: 0.6, jumpForce: -12,
       isGrounded: true, isCrouching: false, baseSpeed: 4,
       distance: 0, clearedObstacles: 0, invincibleTimer: 0
     };
@@ -493,13 +486,6 @@
     let obstacles = [];
     let obstacleSpawnTimer = 0;
     const keys = { Up: false, Down: false, Left: false, Right: false, Space: false };
-    let skyGrad = null;
-
-    function initGradients() {
-      skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      skyGrad.addColorStop(0, '#0A121D');
-      skyGrad.addColorStop(1, '#1A2B3C');
-    }
 
     function handleSingleKeyAction() {
       if (controlMode !== 'modeB' || gameState !== 'PLAYING') return;
@@ -520,10 +506,10 @@
         } else if (nearestObs.type === 'overhang') {
           player.isCrouching = true;
           player.height = CROUCH_HEIGHT;
-          setTimeout(() => { player.isCrouching = false; player.height = NORMAL_HEIGHT; }, 600);
+          setTimeout(() => { player.isCrouching = false; player.height = NORMAL_HEIGHT; }, 550);
           playSound('jump');
         } else if (nearestObs.type === 'traffic_light') {
-          singleKeyStopTimer = 60;
+          singleKeyStopTimer = 55;
           playSound('jump');
         }
       } else if (player.isGrounded) {
@@ -568,15 +554,14 @@
       elem.classList.add('active');
       const descBox = document.getElementById('mode-desc');
       if (mode === 'modeA') {
-        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍小型施工護欄，↓ 蹲下通過遮雨棚。障礙物已縮小並優化繪圖效能！';
+        descBox.innerText = '傳統模式：按 ← 停止，→ 加速，↑ 跳躍極小化施工障礙，↓ 蹲下通過遮雨棚。畫面極速流暢！';
       } else {
-        descBox.innerText = '單鍵模式：自動前進，按空白鍵依最近縮小版障礙自動對應動作！';
+        descBox.innerText = '單鍵模式：自動前進，按空白鍵依最近微型障礙自動對應動作！';
       }
     }
 
     function startGame() {
       initAudioContext();
-      initGradients();
       document.getElementById('menu-screen').style.display = 'none';
       totalFails = 0;
       initGameVars();
@@ -595,32 +580,30 @@
       player.isCrouching = false;
       player.distance = 0;
       player.clearedObstacles = 0;
-      player.invincibleTimer = 100;
+      player.invincibleTimer = 80;
       singleKeyStopTimer = 0;
       obstacles = [];
       obstacleSpawnTimer = 0;
-      player.baseSpeed = difficulty === 'easy' ? 3.8 : (difficulty === 'medium' ? 5.0 : 6.2);
+      player.baseSpeed = difficulty === 'easy' ? 4 : (difficulty === 'medium' ? 5.2 : 6.4);
     }
 
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
-        // 低矮通道 (遮雨棚)
         obstacles.push({
           type: 'overhang', x: canvas.width + 50, y: player.groundY - 100,
-          width: 130, height: 45, cleared: false, hint: '⚠️ 低矮遮雨棚！請蹲下'
+          width: 120, height: 40, cleared: false, hint: '⚠️ 遮雨棚！請按向下鍵蹲下'
         });
       } else if (rand < 0.70) {
-        // 施工護欄 (體積縮小，更容易跳過)
+        // 【已大幅縮小體積】寬 24、高 20，極其容易跳過去
         obstacles.push({
-          type: 'ground', x: canvas.width + 50, y: player.groundY - 30,
-          width: 36, height: 30, cleared: false, hint: '🚧 施工護欄！請跳躍'
+          type: 'ground', x: canvas.width + 50, y: player.groundY - 20,
+          width: 24, height: 20, cleared: false, hint: '🚧 微型護欄！請按向上鍵跳躍'
         });
       } else {
-        // 紅綠燈
         obstacles.push({
-          type: 'traffic_light', x: canvas.width + 50, y: player.groundY - 130,
-          width: 20, height: 130, isRed: true, cleared: false, hint: '🚦 紅燈！請按左鍵停止'
+          type: 'traffic_light', x: canvas.width + 50, y: player.groundY - 120,
+          width: 18, height: 120, isRed: true, cleared: false, hint: '🚦 紅燈！請按向左鍵停止'
         });
       }
     }
@@ -672,8 +655,8 @@
       }
 
       obstacleSpawnTimer++;
-      const spawnInterval = difficulty === 'easy' ? 150 : (difficulty === 'medium' ? 110 : 80);
-      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 320)) {
+      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 75);
+      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 300)) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
       }
@@ -682,7 +665,7 @@
         const obs = obstacles[i];
         obs.x -= currentSpeed;
 
-        if (obs.type === 'traffic_light' && obs.isRed && (obs.x - player.x < 220) && currentSpeed === 0) {
+        if (obs.type === 'traffic_light' && obs.isRed && (obs.x - player.x < 200) && currentSpeed === 0) {
           obs.isRed = false;
         }
 
@@ -729,7 +712,7 @@
       document.getElementById('res-fails').innerText = `${totalFails} 次`;
       document.getElementById('res-score').innerText = `${score} 分`;
 
-      let textDiagnosis = score >= 80 ? "AI 診斷：都市街道應變極佳！障礙避讓反應即時。" : "AI 診斷：表現良好，建議抓準縮小障礙的跳躍時機。";
+      let textDiagnosis = score >= 80 ? "AI 診斷：反應流暢，障礙閃避表現極佳！" : "AI 診斷：表現良好，微型護欄體積已縮小，抓準時機即可輕鬆跳過。";
       document.getElementById('ai-eval-text').innerHTML = `<strong>💡 ${textDiagnosis}</strong>`;
       speakText(`復健結束。移動 ${distMeters} 公尺，得分 ${score} 分。`);
       saveScoreToFirebase(score);
@@ -744,74 +727,80 @@
       startBgm();
     }
 
+    // 簡化且高效能的明亮背景建築群
     const buildings = [
-      { x: 0, w: 90, h: 220 }, { x: 90, w: 110, h: 280 }, { x: 200, w: 85, h: 210 },
-      { x: 285, w: 120, h: 320 }, { x: 405, w: 95, h: 190 }, { x: 500, w: 110, h: 290 },
-      { x: 610, w: 100, h: 240 }, { x: 710, w: 90, h: 310 }, { x: 800, w: 100, h: 230 }
+      { x: 0, w: 100, h: 200 }, { x: 100, w: 120, h: 260 }, { x: 220, w: 90, h: 180 },
+      { x: 310, w: 130, h: 300 }, { x: 440, w: 100, h: 220 }, { x: 540, w: 110, h: 270 },
+      { x: 650, w: 100, h: 210 }, { x: 750, w: 100, h: 290 }, { x: 850, w: 90, h: 240 }
     ];
 
     function render() {
-      if (skyGrad) {
-        ctx.fillStyle = skyGrad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      // 1. 清爽明亮的白天天空背景
+      ctx.fillStyle = '#E0F2FE';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // 2. 畫布上的雲朵（輕量化）
+      ctx.fillStyle = '#FFFFFF';
+      let cloudOffset = (player.distance * 2) % 1000;
+      ctx.fillRect(200 - cloudOffset, 60, 80, 24);
+      ctx.fillRect(650 - cloudOffset, 100, 100, 30);
+
+      // 3. 明亮的遠景都市大樓
       for (let b of buildings) {
-        let bx = (b.x - (player.distance * 8) % 900 + 900) % 900;
+        let bx = (b.x - (player.distance * 6) % 900 + 900) % 900;
         let by = player.groundY - b.h;
-        ctx.fillStyle = '#0E1E2E';
+        ctx.fillStyle = '#BAE6FD';
         ctx.fillRect(bx, by, b.w, b.h);
       }
 
-      ctx.fillStyle = '#1E293B';
+      // 4. 地面道路
+      ctx.fillStyle = '#64748B';
       ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
-      ctx.fillStyle = '#475569';
-      ctx.fillRect(0, player.groundY - 4, canvas.width, 4);
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(0, player.groundY, canvas.width, 4);
 
-      ctx.fillStyle = '#F8FAFC';
+      ctx.fillStyle = '#FFFFFF';
       let dashOffset = (player.distance * 20) % 60;
       for (let lx = -dashOffset; lx < canvas.width; lx += 60) {
         ctx.fillRect(lx, player.groundY + 35, 30, 4);
       }
 
+      // 5. 輪椅角色
       drawWheelchairUser(player.x, player.y, player.width, player.height, player.isCrouching, player.invincibleTimer > 0);
 
+      // 6. 障礙物繪製
       let nearestPrompt = null;
       for (let obs of obstacles) {
         if (obs.type === 'overhang') {
-          ctx.fillStyle = '#475569';
+          ctx.fillStyle = '#64748B';
           ctx.fillRect(obs.x, obs.y - 80, 10, obs.y + obs.height);
-          ctx.fillStyle = '#FACC15';
+          ctx.fillStyle = '#F59E0B';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
           ctx.fillStyle = '#DC2626';
-          ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, 24);
+          ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, 22);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('⚠️ 遮雨棚 (需蹲下)', obs.x + 14, obs.y + 24);
+          ctx.fillText('⚠️ 遮雨棚 (需蹲下)', obs.x + 14, obs.y + 23);
         } else if (obs.type === 'ground') {
-          // 縮小後的施工護欄繪製
+          // 【已極度縮小】微型施工護欄
           ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
           ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(obs.x, obs.y + 8, obs.width, 6);
-          ctx.fillStyle = '#FACC15';
-          ctx.beginPath();
-          ctx.arc(obs.x + obs.width / 2, obs.y - 4, 5, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(obs.x, obs.y + 6, obs.width, 4);
         } else if (obs.type === 'traffic_light') {
-          ctx.fillStyle = '#64748B';
-          ctx.fillRect(obs.x + 6, obs.y, 8, obs.height);
-          ctx.fillStyle = '#0F172A';
-          ctx.fillRect(obs.x - 4, obs.y, 28, 55);
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obs.x + 5, obs.y, 8, obs.height);
+          ctx.fillStyle = '#1E293B';
+          ctx.fillRect(obs.x - 3, obs.y, 24, 50);
 
-          ctx.fillStyle = obs.isRed ? '#EF4444' : '#334155';
+          ctx.fillStyle = obs.isRed ? '#EF4444' : '#CBD5E1';
           ctx.beginPath();
-          ctx.arc(obs.x + 10, obs.y + 14, 8, 0, Math.PI * 2);
+          ctx.arc(obs.x + 9, obs.y + 13, 7, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = !obs.isRed ? '#22C55E' : '#334155';
+          ctx.fillStyle = !obs.isRed ? '#22C55E' : '#CBD5E1';
           ctx.beginPath();
-          ctx.arc(obs.x + 10, obs.y + 38, 8, 0, Math.PI * 2);
+          ctx.arc(obs.x + 9, obs.y + 35, 7, 0, Math.PI * 2);
           ctx.fill();
         }
 
@@ -821,18 +810,18 @@
       }
 
       if (nearestPrompt) {
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.9)';
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.9)';
         ctx.beginPath();
         ctx.roundRect(canvas.width / 2 - 160, 14, 320, 34, 17);
         ctx.fill();
-        ctx.fillStyle = '#0F172A';
+        ctx.fillStyle = '#FFFFFF';
         ctx.font = 'bold 14px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(nearestPrompt, canvas.width / 2, 36);
         ctx.textAlign = 'left';
       }
 
-      ctx.fillStyle = '#00F2FE';
+      ctx.fillStyle = '#0369A1';
       ctx.font = 'bold 13px sans-serif';
       ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 28);
       ctx.fillText(`成功通關: ${player.clearedObstacles} 個`, 20, 48);
@@ -842,12 +831,12 @@
       ctx.save();
       if (isInvincible) ctx.globalAlpha = 0.6;
 
-      ctx.strokeStyle = '#00F2FE';
+      ctx.strokeStyle = '#0284C7';
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.arc(x + 12, y + h - 10, 12, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = '#113847';
+      ctx.fillStyle = '#BAE6FD';
       ctx.fill();
 
       ctx.beginPath();
@@ -855,7 +844,7 @@
       ctx.stroke();
       ctx.fill();
 
-      ctx.fillStyle = '#00F2FE';
+      ctx.fillStyle = '#0284C7';
       ctx.beginPath();
       ctx.arc(x + w / 2, y + (isCrouching ? 10 : 16), isCrouching ? 7 : 9, 0, Math.PI * 2);
       ctx.fill();
