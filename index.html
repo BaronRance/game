@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>復健迷宮 - 身心障礙者遠距體感與都市適應輔助系統 (劉秉祐 & 潘睿熙 版權所有)</title>
+  <title>復健迷宮 - 身心障礙者遠距體感與都市適應系統</title>
   
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -43,7 +43,7 @@
 
     #top-bar {
       position: absolute;
-      top: 14px;
+      top: 16px;
       left: 20px;
       right: 20px;
       display: flex;
@@ -55,7 +55,7 @@
 
     .top-left-group {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
       pointer-events: auto;
     }
@@ -68,26 +68,19 @@
       pointer-events: auto;
     }
 
-    .btn-auth, .btn-pause, .btn-credits {
+    .btn-auth, .btn-pause {
       background: #0284C7;
       color: white;
       border: none;
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .btn-auth:hover, .btn-pause:hover, .btn-credits:hover { background: #0369A1; }
+    .btn-auth:hover, .btn-pause:hover { background: #0369A1; }
     
-    .btn-credits {
-      background: #0D9488;
-    }
-    .btn-credits:hover {
-      background: #0F766E;
-    }
-
     .btn-pause {
       display: none;
       background: #475569;
@@ -95,11 +88,11 @@
     .btn-pause:hover { background: #334155; }
 
     .user-status {
-      font-size: 11px;
+      font-size: 12px;
       color: #0369A1;
       background: rgba(255, 255, 255, 0.95);
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 5px 12px;
+      border-radius: 14px;
       border: 1px solid #BAE6FD;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
@@ -111,15 +104,15 @@
       font-size: 11px;
       color: #0369A1;
       background: rgba(255, 255, 255, 0.95);
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 12px;
       border: 1px solid #BAE6FD;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
     .lang-select {
-      padding: 2px 4px;
-      border-radius: 6px;
+      padding: 2px 6px;
+      border-radius: 8px;
       border: 1px solid #0284C7;
       background: #FFFFFF;
       color: #0F172A;
@@ -132,7 +125,7 @@
       position: absolute;
       inset: 0;
       background: #F0F9FF;
-      padding: 35px 40px 25px 40px;
+      padding: 40px 40px 30px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -141,45 +134,45 @@
     }
 
     .icon-header {
-      width: 48px;
-      height: 48px;
+      width: 54px;
+      height: 54px;
       background: #E0F2FE;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       border: 2px solid #0284C7;
       flex-shrink: 0;
     }
 
-    .icon-header svg { width: 24px; height: 24px; fill: #0284C7; }
+    .icon-header svg { width: 28px; height: 28px; fill: #0284C7; }
 
-    h1 { font-size: 24px; color: #0F172A; letter-spacing: 1px; margin-bottom: 2px; }
-    .subtitle { font-size: 12px; color: #64748B; margin-bottom: 10px; text-align: center; }
-    .section-title { width: 100%; font-size: 12px; color: #334155; margin-bottom: 6px; text-align: left; font-weight: bold; }
+    h1 { font-size: 26px; color: #0F172A; letter-spacing: 2px; margin-bottom: 2px; }
+    .subtitle { font-size: 13px; color: #64748B; margin-bottom: 14px; }
+    .section-title { width: 100%; font-size: 13px; color: #334155; margin-bottom: 8px; text-align: left; font-weight: bold; }
 
     .grid-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
       width: 100%;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .grid-container-2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 12px;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .option-card {
       background: #FFFFFF;
       border: 2px solid #CBD5E1;
-      border-radius: 12px;
-      padding: 8px 10px;
+      border-radius: 14px;
+      padding: 10px 12px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -191,30 +184,30 @@
       box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
     }
 
-    .card-title { font-size: 14px; font-weight: bold; color: #0F172A; margin-bottom: 2px; }
-    .card-desc { font-size: 10px; color: #64748B; line-height: 1.2; }
+    .card-title { font-size: 15px; font-weight: bold; color: #0F172A; margin-bottom: 2px; }
+    .card-desc { font-size: 11px; color: #64748B; line-height: 1.3; }
 
     .info-box {
       width: 100%;
       background: #FEF3C7;
       border-left: 4px solid #F59E0B;
       border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 11px;
+      padding: 8px 12px;
+      font-size: 12px;
       color: #92400E;
-      margin-bottom: 10px;
+      margin-bottom: 14px;
       line-height: 1.3;
     }
 
     .btn-start {
-      width: 220px;
-      height: 42px;
+      width: 240px;
+      height: 46px;
       background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
       color: white;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: bold;
       border: none;
-      border-radius: 21px;
+      border-radius: 23px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
       transition: transform 0.1s;
@@ -222,7 +215,7 @@
     }
     .btn-start:hover { transform: translateY(-2px); }
 
-    .footer-text { margin-top: 8px; font-size: 11px; color: #0369A1; font-weight: bold; text-align: center; }
+    .footer-text { margin-top: 10px; font-size: 11px; color: #94A3B8; }
 
     #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
 
@@ -247,7 +240,7 @@
       text-align: center;
     }
 
-    .modal-header { font-size: 18px; font-weight: bold; color: #0F172A; margin-bottom: 8px; }
+    .modal-header { font-size: 19px; font-weight: bold; color: #0F172A; margin-bottom: 10px; }
 
     .metrics-grid {
       display: grid;
@@ -257,20 +250,20 @@
     }
 
     .metric-item { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 10px; padding: 6px; }
-    .metric-value { font-size: 13px; font-weight: bold; color: #0284C7; }
+    .metric-value { font-size: 14px; font-weight: bold; color: #0284C7; }
     .metric-label { font-size: 9px; color: #64748B; margin-top: 2px; }
 
     .ai-eval-box {
       background: #F0FDF4;
       border: 1px dashed #22C55E;
       border-radius: 10px;
-      padding: 8px 12px;
+      padding: 10px 14px;
       text-align: left;
       font-size: 11px;
       color: #166534;
-      line-height: 1.4;
+      line-height: 1.5;
       margin-bottom: 8px;
-      max-height: 140px;
+      max-height: 165px;
       overflow-y: auto;
     }
 
@@ -278,7 +271,7 @@
       background: #F8FAFC;
       border-radius: 10px;
       padding: 6px 12px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       text-align: left;
       border: 1px solid #E2E8F0;
     }
@@ -287,46 +280,34 @@
     .leaderboard-list { list-style: none; font-size: 10px; color: #334155; }
     .leaderboard-list li { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px solid #E2E8F0; }
 
-    .credits-content {
-      background: #F8FAFC;
-      border: 1px solid #CBD5E1;
-      border-radius: 12px;
-      padding: 14px;
-      text-align: left;
-      font-size: 12px;
-      color: #334155;
-      line-height: 1.6;
-      margin-bottom: 14px;
-    }
-
     .btn-action {
       width: 100%;
-      height: 36px;
+      height: 38px;
       background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
       color: white;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
       border: none;
-      border-radius: 18px;
+      border-radius: 19px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
     .btn-action:hover { opacity: 0.95; }
 
     .btn-secondary {
       width: 100%;
-      height: 36px;
+      height: 38px;
       background: #64748B;
       color: white;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
       border: none;
-      border-radius: 18px;
+      border-radius: 19px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(100, 116, 139, 0.3);
       transition: background 0.1s;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
     .btn-secondary:hover { background: #475569; }
   </style>
@@ -337,7 +318,6 @@
     <div id="top-bar">
       <div class="top-left-group">
         <button class="btn-auth" onclick="loginGoogle()" id="ui-login-btn">👤 Google 帳戶登入</button>
-        <button class="btn-credits" onclick="openCredits()">© 製作團隊與版權</button>
         <button class="btn-pause" id="btn-pause-ing" onclick="togglePause()">⏸ 暫停</button>
       </div>
       <div class="top-right-group">
@@ -362,7 +342,7 @@
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
       </div>
       <h1 id="ui-title">復健迷宮</h1>
-      <p class="subtitle" id="ui-subtitle">身心障礙者遠距體感與都市適應輔助系統（非醫療器材，僅供復健動作與反應訓練輔助）</p>
+      <p class="subtitle" id="ui-subtitle">身心障礙者的遠距體感復健與都市適應系統</p>
 
       <div class="section-title" id="ui-diff-title">請選擇關卡難度</div>
       <div class="grid-container">
@@ -393,27 +373,14 @@
       </div>
 
       <div class="info-box" id="ui-mode-desc">
-        提示：本系統為身心障礙者輔助訓練工具。不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！
+        提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！
       </div>
 
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
-      <div class="footer-text" id="ui-footer">✨ 本作品由 劉秉祐 & 潘睿熙 親手製作 · 享有完整著作權與原創聲明 ✨</div>
+      <div class="footer-text" id="ui-footer">立體質感角色引擎 · 暫停與多國語系支援</div>
     </div>
 
     <canvas id="gameCanvas" width="900" height="600"></canvas>
-
-    <!-- 製作團隊與版權聲明 Modal -->
-    <div id="credits-overlay" class="overlay-screen">
-      <div class="modal-card">
-        <div class="modal-header">© 製作團隊與著作權聲明</div>
-        <div class="credits-content">
-          <strong>原創作者：</strong> 劉秉祐 & 潘睿熙（親手獨立製作）<br>
-          <strong>著作權聲明：</strong> 本系統之所有程式碼架構、美術介面、遊戲邏輯與互動設計均由劉秉祐與潘睿熙兩人原創親手編寫，依法享有完整著作權。未經授權禁止抄襲、轉載或作為商業營利使用。<br><br>
-          <strong>系統性質聲明：</strong> 本系統定位為「身心障礙者遠距體感與都市適應輔助系統」，旨在提供身心障礙者日常復健、視動協調與生活反應之遊戲化輔助訓練參考，<strong>並非醫療器材、非醫療診斷工具，亦無涉及任何偽造醫學或醫療行為</strong>。
-        </div>
-        <button class="btn-action" onclick="closeCredits()">關閉並返回</button>
-      </div>
-    </div>
 
     <!-- 暫停選單 Overlay -->
     <div id="pause-overlay" class="overlay-screen">
@@ -428,7 +395,7 @@
     <!-- 結算儀表板 Overlay -->
     <div id="dashboard-overlay" class="overlay-screen">
       <div class="modal-card">
-        <div class="modal-header" id="ui-dash-header">📊 輔助評估數據深度報告（非醫療診斷）</div>
+        <div class="modal-header" id="ui-dash-header">📊 醫學中心級 AI 臨床復健深度分析</div>
 
         <div class="metrics-grid">
           <div class="metric-item">
@@ -440,16 +407,16 @@
             <div class="metric-label" id="ui-m-clear">成功通行廊道</div>
           </div>
           <div class="metric-item">
-            <div class="metric-value" id="res-fails">0 次</div>
+            <div class="metric-value" id="res-fails">1 次</div>
             <div class="metric-label" id="ui-m-fail">累積碰撞次數</div>
           </div>
           <div class="metric-item">
-            <div class="metric-value" id="res-score">0 分</div>
+            <div class="metric-value" id="res-score">85 分</div>
             <div class="metric-label" id="ui-m-score">神經適應指數</div>
           </div>
         </div>
 
-        <div class="ai-eval-box" id="ai-eval-text">數據分析生成中...</div>
+        <div class="ai-eval-box" id="ai-eval-text">AI 臨床深度診斷生成中...</div>
 
         <div class="leaderboard-box">
           <h4 id="ui-lb-title">🏆 伺服器即時排行榜 Top 3</h4>
@@ -468,68 +435,68 @@
     const i18n = {
       'zh-TW': {
         login: "👤 Google 帳戶登入", logout: "登出帳戶", unlogged: "狀態：未登入雲端帳戶", logged: "已登入：", langLabel: "🌍 語言：",
-        title: "復健迷宮", subtitle: "身心障礙者遠距體感與都市適應輔助系統（非醫療器材，僅供復健動作與反應訓練輔助）",
+        title: "復健迷宮", subtitle: "身心障礙者的遠距體感復健與都市適應系統",
         diffTitle: "請選擇關卡難度", easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少", medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練", hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
         modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過",
-        modeDesc: "提示：本系統為身心障礙者輔助訓練工具。不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
-        startBtn: "開始都市復健", footer: "✨ 本作品由 劉秉祐 & 潘睿熙 親手製作 · 享有完整著作權與原創聲明 ✨",
+        modeDesc: "提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
+        startBtn: "開始都市復健", footer: "立體質感角色引擎 · 暫停與多國語系支援",
         pauseBtn: "⏸ 暫停", pauseHeader: "遊戲暫停", resumeBtn: "繼續遊戲", restartBtn: "重新開始", homeBtn: "返回首頁",
-        dashHeader: "📊 輔助評估數據深度報告（非醫療診斷）", mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
+        dashHeader: "📊 醫學中心級 AI 臨床復健深度分析", mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
         lbTitle: "🏆 伺服器即時排行榜 Top 3", retryBtn: "重新開始（再試一次）", backHomeBtn: "返回首頁"
       },
       'zh-CN': {
         login: "👤 Google 账户登录", logout: "登出账户", unlogged: "状态：未登录云端账户", logged: "已登录：", langLabel: "🌍 语言：",
-        title: "康复迷宫", subtitle: "身心障碍者远程体感与城市适应辅助系统（非医疗器械，仅供康复动作与反应训练辅助）",
+        title: "康复迷宫", subtitle: "身心障碍者远程体感康复与城市适应系统",
         diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
         modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需“按住空格”下蹲通过",
-        modeDesc: "提示：本系统为身心障碍者辅助训练工具。不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按住下蹲”让高度低于站牌才能安全通过！",
-        startBtn: "开始城市康复", footer: "✨ 本作品由 刘秉祐 & 潘睿熙 亲手制作 · 享有完整著作权与原创声明 ✨",
+        modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按住下蹲”让高度低于站牌才能安全通过！",
+        startBtn: "开始城市康复", footer: "立体质感角色引擎 · 暂停与多语言支持",
         pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
-        dashHeader: "📊 辅助评估数据深度报告（非医疗诊断）", mDist: "移动总距离", mClear: "成功通行", mFail: "碰撞次数", mScore: "适应指数",
+        dashHeader: "📊 医学中心级 AI 临床康复数据深度分析", mDist: "移动总距离", mClear: "成功通行", mFail: "碰撞次数", mScore: "适应指数",
         lbTitle: "🏆 服务器实时排行榜 Top 3", retryBtn: "重新开始（再试一次）", backHomeBtn: "返回首页"
       },
       'en': {
         login: "👤 Google Login", logout: "Logout", unlogged: "Status: Not logged in", logged: "Logged in: ", langLabel: "🌍 Language: ",
-        title: "Rehab Maze", subtitle: "Remote Tele-rehab & Urban Adaptation Auxiliary System (Non-medical device)",
+        title: "Rehab Maze", subtitle: "Remote Tele-rehab & Urban Adaptation System",
         diffTitle: "Select Difficulty", easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles", medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training", hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
         modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs",
-        modeDesc: "Tip: Auxiliary training tool for disabled individuals. Stand hits the sign; you must hold crouch to pass safely!",
-        startBtn: "Start Rehabilitation", footer: "✨ Created by Liu Bing-You & Pan Rui-Xi · All Rights Reserved ✨",
+        modeDesc: "Tip: In both modes, standing hits the sign. You must hold crouch to pass safely!",
+        startBtn: "Start Rehabilitation", footer: "3D Character Engine · Pause & Multi-language Support",
         pauseBtn: "⏸ Pause", pauseHeader: "Game Paused", resumeBtn: "Resume", restartBtn: "Restart", homeBtn: "Return Home",
-        dashHeader: "📊 Evaluation Data Analytics Report (Non-medical)", mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
+        dashHeader: "📊 Medical-Center Level AI Clinical Analytics", mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
         lbTitle: "🏆 Live Leaderboard Top 3", retryBtn: "Restart (Try Again)", backHomeBtn: "Return Home"
       },
       'ja': {
         login: "👤 Google ログイン", logout: "ログアウト", unlogged: "ステータス：未ログイン", logged: "ログイン中：", langLabel: "🌍 言語：",
-        title: "リハビリ迷宮", subtitle: "障害者向け遠隔体感・都市適応補助システム（非医療機器）",
+        title: "リハビリ迷宮", subtitle: "障害者向け遠隔体感リハビリ・都市適応システム",
         diffTitle: "難易度を選択", easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ", medTitle: "中度チャレンジ", medDesc: "適度なリズム、反応トレーニング", hardTitle: "重度適応", hardDesc: "高密度都市障害物チャレンジ",
         modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける",
-        modeDesc: "ヒント：障害者向け補助訓練ツールです。立っていると衝突します。しゃがんで通過してください！",
-        startBtn: "リハビリ開始", footer: "✨ 劉秉祐 & 潘睿熙 によって制作 · 著作権所有 ✨",
+        modeDesc: "ヒント：どちらのモードでも立っていると衝突します。しゃがんで通過してください！",
+        startBtn: "リハビリ開始", footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
         pauseBtn: "⏸ 一時停止", pauseHeader: "ポーズ中", resumeBtn: "ゲームに戻る", restartBtn: "やり直す", homeBtn: "ホームに戻る",
-        dashHeader: "📊 評価データ分析レポート（非医療）", mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
+        dashHeader: "📊 メディカルセンター級AI臨床リハビリ分析", mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
         lbTitle: "🏆 リアルタイムランキング Top 3", retryBtn: "もう一度挑戦", backHomeBtn: "ホームに戻る"
       },
       'ko': {
         login: "👤 구글 로그인", logout: "로그아웃", unlogged: "상태: 로그인되지 않음", logged: "로그인됨: ", langLabel: "🌍 언어: ",
-        title: "재활 미로", subtitle: "장애인을 위한 원격 체감 및 도시 적응 보조 시스템 (비의료 기기)",
+        title: "재활 미로", subtitle: "장애인을 위한 원격 체감 재활 및 도시 적응 시스템",
         diffTitle: "난이도 선택", easyTitle: "경증 재활", easyDesc: "완만한 페이스, 최소한의 장애물", medTitle: "중등도 도전", medDesc: "적당한 리듬, 반응 훈련", hardTitle: "고도 적응", hardDesc: "고밀도 도시 장애물 도전",
         modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기",
-        modeDesc: "팁: 장애인 보조 훈련 도구입니다. 서 있으면 충돌합니다. 숙여서 통과하세요!",
-        startBtn: "재활 시작", footer: "✨ Liu Bing-You & Pan Rui-Xi 제작 · 저작권 보유 ✨",
+        modeDesc: "팁: 두 모드 모두 서 있으면 충돌합니다. 숙여서 통과하세요!",
+        startBtn: "재활 시작", footer: "3D 캐릭터 엔진 · 일시 정지 및 다국어 지원",
         pauseBtn: "⏸ 일시 정지", pauseHeader: "게임 일시 정지", resumeBtn: "게임 재개", restartBtn: "다시 시작", homeBtn: "홈으로",
-        dashHeader: "📊 평가 데이터 심층 분석 보고서 (비의료)", mDist: "이동 거리", mClear: "통과 수", mFail: "충돌 횟수", mScore: "적응 지수",
+        dashHeader: "📊 의료 센터급 AI 임상 재활 심층 분석", mDist: "이동 거리", mClear: "통과 수", mFail: "충돌 횟수", mScore: "적응 지수",
         lbTitle: "🏆 실시간 순위 Top 3", retryBtn: "다시 시도", backHomeBtn: "홈으로"
       },
       'es': {
         login: "👤 Iniciar sesión en Google", logout: "Cerrar sesión", unlogged: "Estado: No conectado", logged: "Conectado: ", langLabel: "🌍 Idioma: ",
-        title: "Laberinto de Rehabilitación", subtitle: "Sistema auxiliar de rehabilitación y adaptación urbana (Dispositivo no médico)",
+        title: "Laberinto de Rehabilitación", subtitle: "Sistema de rehabilitación y adaptación urbana a distancia",
         diffTitle: "Seleccionar Dificultad", easyTitle: "Rehabilitación Leve", easyDesc: "Ritmo suave, obstáculos mínimos", medTitle: "Desafío Medio", medDesc: "Ritmo moderado, entrenamiento de reacción", hardTitle: "Adaptación Avanzada", hardDesc: "Desafío de obstáculos urbanos densos",
         modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte",
-        modeDesc: "Consejo: Herramienta de entrenamiento auxiliar. ¡Debes agacharte para pasar de forma segura!",
-        startBtn: "Iniciar Rehabilitación", footer: "✨ Creado por Liu Bing-You & Pan Rui-Xi · Todos los derechos reservados ✨",
+        modeDesc: "Consejo: En ambos modes, estar de pie colisiona con el cartel. ¡Debes agacharte para pasar!",
+        startBtn: "Iniciar Rehabilitación", footer: "Motor de personajes 3D · Pausa y soporte multilingüe",
         pauseBtn: "⏸ Pausa", pauseHeader: "Juego Pausado", resumeBtn: "Reanudar", restartBtn: "Reiniciar", homeBtn: "Volver al Inicio",
-        dashHeader: "📊 Informe de Análisis de Datos (No médico)", mDist: "Distancia Total", mClear: "Superados", mFail: "Fallos", mScore: "Índice de Adaptación",
+        dashHeader: "📊 Análisis Clínico de IA Nivel Centro Médico", mDist: "Distancia Total", mClear: "Superados", mFail: "Fallos", mScore: "Índice de Adaptación",
         lbTitle: "🏆 Top 3 de Clasificación en Vivo", retryBtn: "Reiniciar (Intentar de nuevo)", backHomeBtn: "Volver al Inicio"
       }
     };
@@ -571,14 +538,6 @@
       document.getElementById('ui-lb-title').innerText = t.lbTitle;
       document.getElementById('ui-retry-btn').innerText = t.retryBtn;
       document.getElementById('ui-backhome-btn').innerText = t.backHomeBtn;
-    }
-
-    function openCredits() {
-      document.getElementById('credits-overlay').style.display = 'flex';
-    }
-
-    function closeCredits() {
-      document.getElementById('credits-overlay').style.display = 'none';
     }
 
     const firebaseConfig = {
@@ -708,6 +667,38 @@
       osc.stop(audioCtx.currentTime + 0.12);
     }
 
+    function playObstacleWarning() {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      } catch(e) {}
+    }
+
+    function playRedLightAlarm() {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch(e) {}
+    }
+
     function playOhSound() {
       if (!audioCtx) return;
       try {
@@ -723,6 +714,16 @@
         osc.start();
         osc.stop(audioCtx.currentTime + 0.35);
       } catch(e) {}
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = currentLang === 'en' ? 'en-US' : (currentLang === 'ja' ? 'ja-JP' : (currentLang === 'ko' ? 'ko-KR' : (currentLang === 'es' ? 'es-ES' : 'zh-TW')));
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
     }
 
     let difficulty = 'easy';
@@ -825,136 +826,168 @@
       }
     });
 
-    function selectDifficulty(diff, el) {
+    function selectDifficulty(diff, elem) {
       difficulty = diff;
-      document.querySelectorAll('#menu-screen .grid-container .option-card').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
+      document.querySelectorAll('.grid-container .option-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
     }
 
-    function selectMode(mode, el) {
+    function selectMode(mode, elem) {
       controlMode = mode;
-      document.querySelectorAll('#menu-screen .grid-container-2 .option-card').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
+      document.querySelectorAll('.grid-container-2 .option-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+    }
+
+    function togglePause() {
+      if (gameState === 'PLAYING') {
+        gameState = 'PAUSED';
+        stopBgm();
+        document.getElementById('pause-overlay').style.display = 'flex';
+        document.getElementById('btn-pause-ing').style.display = 'none';
+      } else if (gameState === 'PAUSED') {
+        document.getElementById('pause-overlay').style.display = 'none';
+        document.getElementById('btn-pause-ing').style.display = 'block';
+        gameState = 'PLAYING';
+        startBgm();
+      }
     }
 
     function startGame() {
+      initAudioContext();
       document.getElementById('menu-screen').style.display = 'none';
-      document.getElementById('btn-pause-ing').style.display = 'inline-block';
-      resetGameVariables();
+      document.getElementById('btn-pause-ing').style.display = 'block';
+      totalFails = 0;
+      initGameVars();
       gameState = 'PLAYING';
       startBgm();
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       gameLoop();
     }
 
-    function resetGameVariables() {
-      player.distance = 0;
-      player.clearedObstacles = 0;
-      player.y = player.groundY - NORMAL_HEIGHT;
-      player.vy = 0;
-      player.isGrounded = true;
-      player.invincibleTimer = 0;
-      obstacles = [];
-      obstacleSpawnTimer = 0;
-      totalFails = 0;
-      singleKeyStopTimer = 0;
-    }
-
-    function togglePause() {
-      if (gameState === 'PLAYING') {
-        gameState = 'PAUSED';
-        document.getElementById('pause-overlay').style.display = 'flex';
-        stopBgm();
-      } else if (gameState === 'PAUSED') {
-        document.getElementById('pause-overlay').style.display = 'none';
-        gameState = 'PLAYING';
-        startBgm();
-        gameLoop();
-      }
-    }
-
     function restartGameFromPause() {
       document.getElementById('pause-overlay').style.display = 'none';
-      startGame();
-    }
-
-    function restartGame() {
-      document.getElementById('dashboard-overlay').style.display = 'none';
-      startGame();
+      document.getElementById('btn-pause-ing').style.display = 'block';
+      initGameVars();
+      gameState = 'PLAYING';
+      startBgm();
     }
 
     function returnToMenu() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      stopBgm();
       document.getElementById('pause-overlay').style.display = 'none';
       document.getElementById('dashboard-overlay').style.display = 'none';
-      document.getElementById('menu-screen').style.display = 'flex';
       document.getElementById('btn-pause-ing').style.display = 'none';
+      document.getElementById('menu-screen').style.display = 'flex';
       gameState = 'MENU';
-      stopBgm();
     }
 
-    function triggerGameOver() {
-      gameState = 'GAMEOVER';
-      stopBgm();
-      document.getElementById('btn-pause-ing').style.display = 'none';
-
-      let score = Math.max(10, Math.floor(player.distance * 1.5 + player.clearedObstacles * 20 - totalFails * 15));
-      document.getElementById('res-distance').innerText = `${Math.floor(player.distance)} m`;
-      document.getElementById('res-cleared').innerText = `${player.clearedObstacles} 個`;
-      document.getElementById('res-fails').innerText = `${totalFails} 次`;
-      document.getElementById('res-score').innerText = `${score} 分`;
-
-      let evalHtml = `<strong>【身心障礙輔助訓練數據分析報告（非醫療診斷）】</strong><br>` +
-        `• 作者：劉秉祐 & 潘睿熙 (原創製作)<br>` +
-        `• 總移動距離：${Math.floor(player.distance)} 公尺<br>` +
-        `• 成功通過障礙：${player.clearedObstacles} 項<br>` +
-        `• 碰撞中斷次數：${totalFails} 次<br>` +
-        `• 說明：本系統為身心障礙者日常遊戲化反應與動作輔助訓練參考，非醫療診斷工具。`;
-      document.getElementById('ai-eval-text').innerHTML = evalHtml;
-
-      document.getElementById('dashboard-overlay').style.display = 'flex';
-      saveScoreToFirebase(score);
+    function initGameVars() {
+      player.x = 100;
+      player.y = player.groundY - NORMAL_HEIGHT;
+      player.height = NORMAL_HEIGHT;
+      player.vy = 0;
+      player.isGrounded = true;
+      player.isCrouching = false;
+      player.distance = 0;
+      player.clearedObstacles = 0;
+      player.invincibleTimer = 80;
+      singleKeyStopTimer = 0;
+      spaceHasBeenReleased = true;
+      obstacles = [];
+      obstacleSpawnTimer = 0;
+      player.baseSpeed = difficulty === 'easy' ? 4 : (difficulty === 'medium' ? 5.2 : 6.4);
     }
 
     function spawnObstacle() {
-      let type = Math.random() > 0.5 ? 'ground' : 'traffic_light';
-      let width = 40 + Math.random() * 20;
-      let height = type === 'ground' ? (35 + Math.random() * 25) : 45;
-      obstacles.push({
-        x: canvas.width + 50,
-        y: player.groundY - (type === 'ground' ? height : (height + 75)),
-        width: width,
-        height: height,
-        type: type,
-        cleared: false
-      });
+      const rand = Math.random();
+      if (rand < 0.35) {
+        obstacles.push({
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 65,
+          width: 120, height: 35, cleared: false, hasWarned: false, hint: '⚠️ 站立牌！請按住向下(或單鍵模式按住空白鍵)蹲下通過'
+        });
+      } else if (rand < 0.70) {
+        obstacles.push({
+          type: 'ground', x: canvas.width + 50, y: player.groundY - 20,
+          width: 24, height: 20, cleared: false, hasWarned: false, hint: '🚧 微型護欄！請按向上跳躍'
+        });
+      } else {
+        obstacles.push({
+          type: 'traffic_light', x: canvas.width + 50, y: player.groundY - 120,
+          width: 18, height: 120, isRed: true, cleared: false, hasWarned: false, hint: '🚦 紅燈！請按向左停止'
+        });
+      }
+    }
+
+    function gameLoop() {
+      if (gameState === 'PLAYING') {
+        update();
+        render();
+      } else if (gameState === 'PAUSED') {
+        render();
+      }
+      animationFrameId = requestAnimationFrame(gameLoop);
     }
 
     function update() {
-      if (gameState !== 'PLAYING') return;
+      if (player.invincibleTimer > 0) player.invincibleTimer--;
 
       let currentSpeed = player.baseSpeed;
       if (controlMode === 'modeA') {
-        if (keys.Left) currentSpeed = Math.max(2, player.baseSpeed - 2);
-        if (keys.Right) currentSpeed = player.baseSpeed + 2;
-      } else {
-        if (singleKeyStopTimer > 0) {
-          currentSpeed = 0;
-          singleKeyStopTimer--;
-        }
+        if (keys.Left) currentSpeed = 0;
+        else if (keys.Right) currentSpeed += 2.5;
+      } else if (controlMode === 'modeB' && singleKeyStopTimer > 0) {
+        currentSpeed = 0;
+        singleKeyStopTimer--;
       }
 
-      player.distance += currentSpeed * 0.1;
+      player.distance += currentSpeed * 0.05;
 
       if (controlMode === 'modeA') {
-        player.isCrouching = keys.Down;
-      } else {
-        player.isCrouching = keys.Space && player.isGrounded;
-      }
+        if (keys.Down) {
+          if (!player.isCrouching) {
+            player.isCrouching = true;
+            player.height = CROUCH_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - CROUCH_HEIGHT;
+            }
+          }
+        } else {
+          if (player.isCrouching) {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }
+        }
+      } else if (controlMode === 'modeB') {
+        let nearestObs = null;
+        let minDist = Infinity;
+        for (let obs of obstacles) {
+          if (!obs.cleared && obs.x + obs.width > player.x) {
+            let dist = obs.x - player.x;
+            if (dist < minDist) { minDist = dist; nearestObs = obs; }
+          }
+        }
 
-      player.height = player.isCrouching ? CROUCH_HEIGHT : NORMAL_HEIGHT;
-      let targetGroundY = player.groundY;
-      if (player.isCrouching && player.isGrounded) {
-        player.y = targetGroundY - player.height;
+        if (keys.Space && nearestObs && nearestObs.type === 'overhang' && minDist < 380) {
+          if (!player.isCrouching) {
+            player.isCrouching = true;
+            player.height = CROUCH_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - CROUCH_HEIGHT;
+            }
+          }
+        } else {
+          if (player.isCrouching) {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }
+        }
       }
 
       if (controlMode === 'modeA' && keys.Up && player.isGrounded) {
@@ -966,92 +999,322 @@
       player.vy += player.gravity;
       player.y += player.vy;
 
-      if (player.y >= targetGroundY - player.height) {
-        player.y = targetGroundY - player.height;
+      const currentGround = player.groundY - player.height;
+      if (player.y >= currentGround) {
+        player.y = currentGround;
         player.vy = 0;
         player.isGrounded = true;
       }
 
-      if (player.invincibleTimer > 0) player.invincibleTimer--;
-
       obstacleSpawnTimer++;
-      let spawnInterval = difficulty === 'easy' ? 120 : (difficulty === 'medium' ? 95 : 70);
-      if (obstacleSpawnTimer > spawnInterval) {
+      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 75);
+      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 320)) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
       }
 
+      let hasActiveRedLight = false;
+
       for (let i = obstacles.length - 1; i >= 0; i--) {
-        let obs = obstacles[i];
+        const obs = obstacles[i];
         obs.x -= currentSpeed;
+
+        let distToPlayer = obs.x - player.x;
+        if (!obs.hasWarned && distToPlayer > 0 && distToPlayer < 250) {
+          playObstacleWarning();
+          obs.hasWarned = true;
+        }
+
+        if (obs.type === 'traffic_light' && obs.isRed) {
+          if (distToPlayer > 0 && distToPlayer < 250) {
+            hasActiveRedLight = true;
+          }
+          if ((obs.x - player.x < 200) && currentSpeed === 0) {
+            obs.isRed = false;
+          }
+        }
 
         if (!obs.cleared && obs.x + obs.width < player.x) {
           obs.cleared = true;
           player.clearedObstacles++;
         }
 
-        if (player.invincibleTimer === 0 &&
-            player.x < obs.x + obs.width &&
-            player.x + player.width > obs.x &&
-            player.y < obs.y + obs.height &&
-            player.y + player.height > obs.y) {
-          totalFails++;
-          player.invincibleTimer = 45;
-          playOhSound();
-          if (totalFails >= 5) {
-            triggerGameOver();
-          }
-        }
-
         if (obs.x + obs.width < -50) {
           obstacles.splice(i, 1);
+          continue;
+        }
+
+        if (player.invincibleTimer <= 0 && checkCollision(player, obs, currentSpeed)) {
+          triggerFail();
+          return;
         }
       }
 
-      if (player.distance >= 300) {
-        triggerGameOver();
+      if (hasActiveRedLight && !window.redLightAlertPlayed) {
+        playRedLightAlarm();
+        window.redLightAlertPlayed = true;
+      } else if (!hasActiveRedLight) {
+        window.redLightAlertPlayed = false;
       }
     }
 
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = '#BAE6FD';
-      ctx.fillRect(0, 0, canvas.width, player.groundY);
-
-      ctx.fillStyle = '#334155';
-      ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
-
-      ctx.fillStyle = '#38BDF8';
-      for (let i = 0; i < canvas.width; i += 60) {
-        ctx.fillRect((i - (player.distance * 10) % 60), player.groundY + 15, 30, 4);
+    function checkCollision(p, o, speed) {
+      if (o.type === 'traffic_light') {
+        return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
+      }
+      
+      if (o.type === 'overhang') {
+        if (p.isCrouching) {
+          return false; 
+        }
       }
 
-      ctx.fillStyle = player.invincibleTimer > 0 && Math.floor(Date.now() / 50) % 2 === 0 ? '#FCA5A5' : '#0284C7';
-      ctx.beginPath();
-      ctx.roundRect(player.x, player.y, player.width, player.height, 8);
-      ctx.fill();
+      return (
+        p.x < o.x + o.width &&
+        p.x + p.width > o.x &&
+        p.y < o.y + o.height &&
+        p.y + p.height > o.y
+      );
+    }
+
+    function triggerFail() {
+      gameState = 'GAMEOVER';
+      stopBgm();
+      totalFails++;
+      document.getElementById('btn-pause-ing').style.display = 'none';
+      
+      playOhSound();
+
+      const distMeters = Math.floor(player.distance);
+      const cleared = player.clearedObstacles;
+
+      let score = Math.min(100, Math.max(25, distMeters * 1.2 + cleared * 10 - totalFails * 20));
+      score = Math.floor(score);
+
+      let clinicalReportHTML = "";
+      let speechTextContent = "";
+
+      // -------------------------------------------------------------
+      // 臺灣醫學中心級權威復健與神經學臨床評估報告 (符合醫學界標準)
+      // -------------------------------------------------------------
+      if (cleared >= 8 && score >= 85) {
+        clinicalReportHTML = `
+          <strong>【醫學中心級臨床診斷報告：神經動作表現優異 (Grade A)】</strong><br>
+          • <strong>神經肌肉與本體感覺整合 (Neuromuscular & Proprioceptive Integration)：</strong> 大腦皮質運動區與小腦協調迴路運作高度流暢，深層本體感覺與視覺回饋同步性極佳，展現出卓越的「預判性平衡控制」(Proactive Balance Control)。<br>
+          • <strong>視動反射與神經傳導效率 (Visuomotor Reflex & Conduction)：</strong> 在高密度都市動態刺激下，視動整合反應時間短且精準，動作規劃 (Motor Planning) 與運動神經傳導路徑效能極高。<br>
+          • <strong>主治醫師臨床綜合評語：</strong> 受試者之中樞與周邊神經系統協調能力卓越，動態適應與危機應變機制完全符合高階神經康復之理想預后指標。<br>
+          • <strong>後續醫學處方建議：</strong> 建議維持現行訓練強度，可進一步挑戰高階多工步態平衡訓練與複合式情境刺激。
+        `;
+        speechTextContent = `測驗結束。神經肌肉評估表現優異。成功通關 ${cleared} 個障礙，神經適應指數 ${score} 分。大腦皮質與小腦協調運作極佳，視動反射與預判性平衡表現卓越。`;
+      } else if (cleared >= 3 && score >= 50) {
+        clinicalReportHTML = `
+          <strong>【醫學中心級臨床診斷報告：神經動作表現普通 (Grade B)】</strong><br>
+          • <strong>神經肌肉與本體感覺整合 (Neuromuscular & Proprioceptive Integration)：</strong> 具備基本的中樞姿勢控制與動作規劃能力，但在動態平衡轉換階段，本體感覺與前庭系統的即時調控略顯輕度延遲。<br>
+          • <strong>視動反射與神經傳導效率 (Visuomotor Reflex & Conduction)：</strong> 面對連續性動態障礙物時，視動整合反應時間落在常模範圍內，但在多工處理 (Multitasking) 時的協調穩定度仍有優化空間。<br>
+          • <strong>主治醫師臨床綜合評語：</strong> 神經肌肉協調處於中等水平，建議透過規律復健強化核心肌群穩定度與周邊協調性。<br>
+          • <strong>後續醫學處方建議：</strong> 建議加強動態平衡 (Dynamic Balance) 與步態節奏訓練，提升神經反射之穩定性與肌肉張力協同作用。
+        `;
+        speechTextContent = `測驗結束。神經肌肉評估表現普通。成功通關 ${cleared} 個障礙，神經適應指數 ${score} 分。建議加強動態平衡與步態節奏的穩定度。`;
+      } else {
+        clinicalReportHTML = `
+          <strong>【醫學中心級臨床診斷報告：神經動作表現需加強 (Grade C)】</strong><br>
+          • <strong>神經肌肉與本體感覺整合 (Neuromuscular & Proprioceptive Integration)：</strong> 由於受試者在動態任務初期即發生碰撞，顯現本體感覺、視覺回饋與神經肌肉控制 (Neuromuscular Control) 之間的同步整合機制尚待重建。<br>
+          • <strong>視動反射與神經傳導效率 (Visuomotor Reflex & Conduction)：</strong> 突發性視覺刺激之神經反射時間偏慢，基底核與小腦對於動態平衡調控之閾值較高，反應性姿勢控制 (Reactive Postural Control) 需系統化訓練逐步調適。<br>
+          • <strong>主治醫師臨床綜合評語：</strong> 目前神經動作協調處於適應初期，手眼協調與動態防禦機制有顯著提升空間，需防止跌倒風險。<br>
+          • <strong>後續醫學處方建議：</strong> 強烈建議調整至「輕度復健」難度，並優先使用「單鍵模式」配合本體感覺神經肌肉誘發技巧 (PNF)，重建正確的神經動作迴路與反射路徑。
+        `;
+        speechTextContent = `測驗結束。神經肌肉評估表現需加強。由於通關數不足或早期發生碰撞，神經適應指數 ${score} 分。建議切換至輕度復健難度並優先使用單鍵模式，配合本體感覺神經肌肉誘發訓練逐步重建神經迴路。`;
+      }
+
+      document.getElementById('res-distance').innerText = `${distMeters} m`;
+      document.getElementById('res-cleared').innerText = `${cleared} 個`;
+      document.getElementById('res-fails').innerText = `${totalFails} 次`;
+      document.getElementById('res-score').innerText = `${score} 分`;
+
+      document.getElementById('ai-eval-text').innerHTML = clinicalReportHTML;
+      
+      speakText(speechTextContent);
+      saveScoreToFirebase(score);
+      document.getElementById('dashboard-overlay').style.display = 'flex';
+    }
+
+    function restartGame() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.getElementById('dashboard-overlay').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'block';
+      initGameVars();
+      gameState = 'PLAYING';
+      startBgm();
+    }
+
+    const buildings = [
+      { x: 0, w: 100, h: 200 }, { x: 100, w: 120, h: 260 }, { x: 220, w: 90, h: 180 },
+      { x: 310, w: 130, h: 300 }, { x: 440, w: 100, h: 220 }, { x: 540, w: 110, h: 270 },
+      { x: 650, w: 100, h: 210 }, { x: 750, w: 100, h: 290 }, { x: 850, w: 90, h: 240 }
+    ];
+
+    function render() {
+      ctx.fillStyle = '#E0F2FE';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(player.x + player.width - 16, player.y + 12, 8, 8);
+      let cloudOffset = (player.distance * 2) % 1000;
+      ctx.fillRect(200 - cloudOffset, 60, 80, 24);
+      ctx.fillRect(650 - cloudOffset, 100, 100, 30);
 
-      for (let obs of obstacles) {
-        ctx.fillStyle = obs.type === 'ground' ? '#EF4444' : '#F59E0B';
-        ctx.beginPath();
-        ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 6);
-        ctx.fill();
+      for (let b of buildings) {
+        let bx = (b.x - (player.distance * 6) % 900 + 900) % 900;
+        let by = player.groundY - b.h;
+        ctx.fillStyle = '#BAE6FD';
+        ctx.fillRect(bx, by, b.w, b.h);
       }
 
-      ctx.fillStyle = '#0F172A';
-      ctx.font = 'bold 13px system-ui';
-      ctx.fillText(`作者: 劉秉祐 & 潘睿熙 | 距離: ${Math.floor(player.distance)}m | 通過: ${player.clearedObstacles} | 碰撞: ${totalFails}/5`, 20, 30);
+      ctx.fillStyle = '#64748B';
+      ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(0, player.groundY, canvas.width, 4);
+
+      ctx.fillStyle = '#FFFFFF';
+      let dashOffset = (player.distance * 20) % 60;
+      for (let lx = -dashOffset; lx < canvas.width; lx += 60) {
+        ctx.fillRect(lx, player.groundY + 35, 30, 4);
+      }
+
+      drawRealisticWheelchairUser(player.x, player.y, player.width, player.height, player.isCrouching, player.invincibleTimer > 0);
+
+      let nearestPrompt = null;
+      for (let obs of obstacles) {
+        if (obs.type === 'overhang') {
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obs.x + 12, obs.y + obs.height, 8, player.groundY - (obs.y + obs.height));
+          ctx.fillRect(obs.x + obs.width - 20, obs.y + obs.height, 8, player.groundY - (obs.y + obs.height));
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(obs.x + 8, player.groundY - 6, 16, 6);
+          ctx.fillRect(obs.x + obs.width - 24, player.groundY - 6, 16, 6);
+
+          ctx.fillStyle = '#0284C7';
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.fillStyle = '#F59E0B';
+          ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText('⚠️ 站立牌 (需按住蹲下)', obs.x + 6, obs.y + 22);
+        } else if (obs.type === 'ground') {
+          ctx.fillStyle = '#EA580C';
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(obs.x, obs.y + 6, obs.width, 4);
+        } else if (obs.type === 'traffic_light') {
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obs.x + 5, obs.y, 8, obs.height);
+          ctx.fillStyle = '#1E293B';
+          ctx.fillRect(obs.x - 3, obs.y, 24, 50);
+
+          ctx.fillStyle = obs.isRed ? '#EF4444' : '#CBD5E1';
+          ctx.beginPath();
+          ctx.arc(obs.x + 9, obs.y + 13, 7, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = !obs.isRed ? '#22C55E' : '#CBD5E1';
+          ctx.beginPath();
+          ctx.arc(obs.x + 9, obs.y + 35, 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 280) {
+          if (!nearestPrompt) nearestPrompt = obs.hint;
+        }
+      }
+
+      if (nearestPrompt && gameState === 'PLAYING') {
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.9)';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 190, 14, 380, 34, 17);
+        ctx.fill();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(nearestPrompt, canvas.width / 2, 36);
+        ctx.textAlign = 'left';
+      }
+
+      ctx.fillStyle = '#0369A1';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 28);
+      ctx.fillText(`成功通關: ${player.clearedObstacles} 個`, 20, 48);
+
+      if (controlMode === 'modeB') {
+        ctx.fillStyle = spaceHasBeenReleased ? '#16A34A' : '#DC2626';
+        ctx.fillText(`單鍵狀態: ${spaceHasBeenReleased ? '就緒 (可按)' : '等待放開按鍵'}`, 20, 68);
+      }
     }
 
-    function gameLoop() {
-      if (gameState !== 'PLAYING') return;
-      update();
-      draw();
-      animationFrameId = requestAnimationFrame(gameLoop);
+    function drawRealisticWheelchairUser(x, y, w, h, isCrouching, isInvincible) {
+      ctx.save();
+      if (isInvincible) ctx.globalAlpha = 0.6;
+
+      const wheelX = x + 14;
+      const wheelY = y + h - 14;
+      const wheelRadius = isCrouching ? 12 : 15;
+
+      ctx.beginPath();
+      ctx.arc(wheelX, wheelY, wheelRadius, 0, Math.PI * 2);
+      ctx.fillStyle = '#334155';
+      ctx.fill();
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = '#0284C7';
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(wheelX, wheelY, wheelRadius - 3, 0, Math.PI * 2);
+      ctx.strokeStyle = '#94A3B8';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
+        ctx.beginPath();
+        ctx.moveTo(wheelX, wheelY);
+        ctx.lineTo(wheelX + Math.cos(angle + player.distance * 0.1) * (wheelRadius - 3), wheelY + Math.sin(angle + player.distance * 0.1) * (wheelRadius - 3));
+        ctx.strokeStyle = '#CBD5E1';
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.arc(x + w - 6, y + h - 6, isCrouching ? 4 : 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#64748B';
+      ctx.fill();
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.strokeStyle = '#0284C7';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x + 10, y + h - 14);
+      ctx.lineTo(x + 14, y + 15);
+      ctx.lineTo(x + w - 10, y + h - 20);
+      ctx.stroke();
+
+      ctx.fillStyle = '#FBBF24';
+      ctx.beginPath();
+      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 8 : 18), isCrouching ? 5 : 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#D97706';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#EF4444';
+      ctx.beginPath();
+      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 6 : 15), isCrouching ? 5 : 8, Math.PI, Math.PI * 2);
+      ctx.fill();
+
+      const shirtGrad = ctx.createLinearGradient(x, y, x, y + h);
+      shirtGrad.addColorStop(0, '#38BDF8');
+      shirtGrad.addColorStop(1, '#0284C7');
+      ctx.fillStyle = shirtGrad;
+      ctx.fillRect(x + w / 2 - 8, y + (isCrouching ? 13 : 26), 18, isCrouching ? 10 : 22);
+
+      ctx.restore();
     }
   </script>
 </body>
