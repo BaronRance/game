@@ -446,7 +446,7 @@
         login: "👤 Google 账户登录", logout: "登出账户", unlogged: "状态：未登录云端账户", logged: "已登录：", langLabel: "🌍 语言：",
         title: "康复迷宫", subtitle: "身心障碍者远程体感康复与城市适应系统",
         diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
-        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按住下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进，每次动作后必须先松开按键才能执行下一个动作",
+        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进，每次动作后必须先松开按键才能执行下一个动作",
         modeDesc: "提示：站立时高度高于站牌（会碰撞）；按住 ↓ 下蹲时高度低于站牌（可安全通过）！",
         startBtn: "开始城市康复", footer: "立体质感角色引擎 · 暂停与多语言支持",
         pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
@@ -880,10 +880,10 @@
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
-        // 站立牌位置調整：y 設定得較低（距離地面更近），但底部仍在蹲高之上
+        // 站立牌位置下放：底部懸空高度適中，站立高於此高度會撞到，蹲下低於此高度可過
         obstacles.push({
-          type: 'overhang', x: canvas.width + 50, y: player.groundY - 85,
-          width: 120, height: 40, cleared: false, hint: '⚠️ 站立牌！請按住向下蹲下通過'
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 65,
+          width: 120, height: 35, cleared: false, hint: '⚠️ 站立牌！請按住向下蹲下通過'
         });
       } else if (rand < 0.70) {
         obstacles.push({
@@ -995,9 +995,10 @@
         return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
       }
       
+      // 站立牌嚴格碰撞檢測：若蹲下則安全過關，站立時觸發碰撞
       if (o.type === 'overhang') {
         if (p.isCrouching) {
-          return false;
+          return false; 
         }
       }
 
@@ -1098,7 +1099,7 @@
           ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('⚠️ 站立牌 (需蹲下)', obs.x + 10, obs.y + 24);
+          ctx.fillText('⚠️ 站立牌 (需蹲下)', obs.x + 10, obs.y + 22);
         } else if (obs.type === 'ground') {
           ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
