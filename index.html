@@ -533,7 +533,16 @@
         } else if (nearestObs.type === 'overhang') {
           player.isCrouching = true;
           player.height = CROUCH_HEIGHT;
-          setTimeout(() => { player.isCrouching = false; player.height = NORMAL_HEIGHT; }, 550);
+          if (player.isGrounded) {
+            player.y = player.groundY - CROUCH_HEIGHT;
+          }
+          setTimeout(() => { 
+            player.isCrouching = false; 
+            player.height = NORMAL_HEIGHT; 
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }, 550);
           playSound('jump');
         } else if (nearestObs.type === 'traffic_light') {
           singleKeyStopTimer = 55;
@@ -682,11 +691,21 @@
 
       if (controlMode === 'modeA') {
         if (keys.Down) {
-          player.isCrouching = true;
-          player.height = CROUCH_HEIGHT;
+          if (!player.isCrouching) {
+            player.isCrouching = true;
+            player.height = CROUCH_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - CROUCH_HEIGHT;
+            }
+          }
         } else {
-          player.isCrouching = false;
-          player.height = NORMAL_HEIGHT;
+          if (player.isCrouching) {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }
         }
       }
 
