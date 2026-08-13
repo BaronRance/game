@@ -665,7 +665,6 @@
       osc.stop(audioCtx.currentTime + 0.12);
     }
 
-    // 盲人專用聽覺導航提示音擴充
     function playObstacleWarning() {
       if (!audioCtx) return;
       try {
@@ -1018,7 +1017,6 @@
         const obs = obstacles[i];
         obs.x -= currentSpeed;
 
-        // 盲人導航：偵測障礙物距離並發出警告音
         let distToPlayer = obs.x - player.x;
         if (!obs.hasWarned && distToPlayer > 0 && distToPlayer < 250) {
           playObstacleWarning();
@@ -1050,7 +1048,6 @@
         }
       }
 
-      // 盲人導航：紅燈警報判定
       if (hasActiveRedLight && !window.redLightAlertPlayed) {
         playRedLightAlarm();
         window.redLightAlertPlayed = true;
@@ -1094,7 +1091,33 @@
       document.getElementById('res-fails').innerText = `${totalFails} 次`;
       document.getElementById('res-score').innerText = `${score} 分`;
 
-      let textDiagnosis = score >= 80 ? "AI 診斷：節奏控制精準，反應流暢！" : "AI 診斷：注意障礙物切換時機，保持重心穩定。";
+      // 擴充的多樣化動態 AI 診斷評語庫
+      const diagnosesHigh = [
+        "AI 診斷：節奏控制精準，反應流暢！神經反射協調性極佳。",
+        "AI 診斷：完美應對都市突發狀況，視覺判斷與決策速度表現優異！",
+        "AI 診斷：肢體協調度高，紅燈煞車與障礙閃避一氣呵成！"
+      ];
+      const diagnosesMid = [
+        "AI 診斷：表現平穩，但在連續障礙切換時的反應時間可再縮短。",
+        "AI 診斷：整體適應良好，建議加強突發紅燈時的瞬間煞車靈敏度。",
+        "AI 診斷：障礙閃避順暢，但重心控制與節奏維持仍有進步空間。"
+      ];
+      const diagnosesLow = [
+        "AI 診斷：初階適應階段，建議降低難度，多練習單鍵反應與專注力。",
+        "AI 診斷：碰撞次數較多，大腦與肢體協調需要更多時間適應，加油！",
+        "AI 診斷：反應時間稍慢，建議透過輕度模式反覆練習都市情境對應。"
+      ];
+
+      let textDiagnosis = "";
+      const randIndex = (arr) => Math.floor(Math.random() * arr.length);
+      if (score >= 85) {
+        textDiagnosis = diagnosesHigh[randIndex(diagnosesHigh)];
+      } else if (score >= 65) {
+        textDiagnosis = diagnosesMid[randIndex(diagnosesMid)];
+      } else {
+        textDiagnosis = diagnosesLow[randIndex(diagnosesLow)];
+      }
+
       document.getElementById('ai-eval-text').innerHTML = `<strong>💡 ${textDiagnosis}</strong>`;
       
       let speechTextContent = currentLang === 'en' ? 
