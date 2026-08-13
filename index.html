@@ -453,8 +453,8 @@
         subtitle: "Remote Tele-rehab & Urban Adaptation System",
         diffTitle: "Select Difficulty",
         easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles",
-        medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training",
-        hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
+        medTitle: "Medium Challenge", easyDesc: "Moderate rhythm, reaction training",
+        hardTitle: "Heavy Adaptation", easyDesc: "High-density urban obstacle challenge",
         modeTitle: "Select Control Mode",
         modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up",
         modbTitle: "Single-Key", modbDesc: "Auto-advance, release space to trigger actions",
@@ -754,7 +754,7 @@
             if (player.isGrounded) {
               player.y = player.groundY - NORMAL_HEIGHT;
             }
-          }, 600);
+          }, 1000);
           playSound('jump');
         } else if (nearestObs.type === 'traffic_light') {
           singleKeyStopTimer = 55;
@@ -885,8 +885,8 @@
       const rand = Math.random();
       if (rand < 0.35) {
         obstacles.push({
-          type: 'overhang', x: canvas.width + 50, y: player.groundY - 110,
-          width: 120, height: 45, cleared: false, hint: '⚠️ 遮雨棚！請按住向下蹲下'
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 115,
+          width: 140, height: 50, cleared: false, hint: '⚠️ 遮雨棚！請按住向下蹲下'
         });
       } else if (rand < 0.70) {
         obstacles.push({
@@ -963,7 +963,7 @@
 
       obstacleSpawnTimer++;
       const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 75);
-      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 300)) {
+      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 320)) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
       }
@@ -998,9 +998,10 @@
         return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
       }
       
-      // 修復：如果遇到遮雨棚且玩家已經成功蹲下，直接判定安全通過，不發生碰撞
-      if (o.type === 'overhang' && p.isCrouching) {
-        return false;
+      if (o.type === 'overhang') {
+        if (p.isCrouching) {
+          return false;
+        }
       }
 
       return (
@@ -1088,14 +1089,14 @@
       for (let obs of obstacles) {
         if (obs.type === 'overhang') {
           ctx.fillStyle = '#64748B';
-          ctx.fillRect(obs.x, obs.y - 80, 10, obs.y + 120);
+          ctx.fillRect(obs.x, 0, 10, obs.y + 10);
           ctx.fillStyle = '#F59E0B';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
           ctx.fillStyle = '#DC2626';
-          ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, 22);
+          ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, 24);
           ctx.fillStyle = '#FFFFFF';
           ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('⚠️ 遮雨棚 (需蹲下)', obs.x + 14, obs.y + 23);
+          ctx.fillText('⚠️ 遮雨棚 (需蹲下)', obs.x + 14, obs.y + 24);
         } else if (obs.type === 'ground') {
           ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
@@ -1118,7 +1119,7 @@
           ctx.fill();
         }
 
-        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 260) {
+        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 280) {
           if (!nearestPrompt) nearestPrompt = obs.hint;
         }
       }
