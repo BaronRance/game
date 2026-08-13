@@ -302,11 +302,11 @@
       </div>
 
       <div class="info-box" id="mode-desc">
-        傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！
+        傳統模式：按 ← 停止避讓紅綠燈（紅燈最多 3 秒變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！
       </div>
 
       <button class="btn-start" onclick="startGame()">開始都市復健</button>
-      <div class="footer-text">無障礙設計 · 都市街景主題 · 輪椅角色 · 滾輪選單 · 智慧語音診斷</div>
+      <div class="footer-text">無障礙設計 · 都市街景主題 · 輪椅角色 · 背景音樂 · 智慧語音診斷</div>
     </div>
 
     <!-- 2D 遊戲 Canvas -->
@@ -418,7 +418,7 @@
       });
     }
 
-    // --- 音效與語音系統 ---
+    // --- 音效與背景音樂系統 ---
     let audioCtx = null;
     let isBgmPlaying = false;
     let bgmTimer = null;
@@ -432,28 +432,41 @@
       }
     }
 
+    // 播放連續輕快的背景音樂 (BGM)
     function startBgm() {
       initAudioContext();
-      if (isBgmPlaying) return;
+      stopBgm(); // 確保不重複播放
 
       isBgmPlaying = true;
-      const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+      const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63, 440.00, 493.88];
       let step = 0;
 
       bgmTimer = setInterval(() => {
-        if (!isBgmPlaying || !audioCtx) return;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.3);
-        step++;
-      }, 350);
+        if (!isBgmPlaying || !audioCtx || gameState !== 'PLAYING') return;
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.28);
+          step++;
+        } catch (e) {
+          console.warn("BGM 播放出錯:", e);
+        }
+      }, 320);
+    }
+
+    function stopBgm() {
+      isBgmPlaying = false;
+      if (bgmTimer) {
+        clearInterval(bgmTimer);
+        bgmTimer = null;
+      }
     }
 
     // 1. 瑪利歐風格跳躍/過關音效
@@ -462,8 +475,8 @@
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'square';
-      osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.15);
+      osc.frequency.setValueAtTime(160, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(650, audioCtx.currentTime + 0.15);
       gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
       osc.connect(gain);
@@ -488,7 +501,7 @@
       osc.stop(audioCtx.currentTime + 0.6);
     }
 
-    // 3. 失敗數據 AI 語音朗讀
+    // 3. 數據 AI 語音朗讀
     function speakText(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -580,7 +593,7 @@
 
       const descBox = document.getElementById('mode-desc');
       if (mode === 'modeA') {
-        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈，→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
+        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈（紅燈最多 3 秒變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
       } else {
         descBox.innerText = '單鍵模式：輪椅自動前進。請在接近都市障礙物時按下單鍵觸發應變！';
       }
@@ -588,11 +601,11 @@
 
     function startGame() {
       initAudioContext();
-      startBgm();
       document.getElementById('menu-screen').style.display = 'none';
       totalFails = 0;
       initGameVars();
       gameState = 'PLAYING';
+      startBgm();
 
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
       gameLoop();
@@ -617,7 +630,7 @@
       else if (difficulty === 'hard') player.baseSpeed = 6.2;
     }
 
-    // 隨機生成都市專屬障礙物（都市低矮遮雨棚/限高桿、道路施工護欄、都市行人紅綠燈）
+    // 隨機生成都市專屬障礙物（低矮遮雨棚、道路施工護欄、紅燈最多3秒自動變綠燈的行人號誌）
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
@@ -643,7 +656,7 @@
           hint: '🚧 道路施工護欄！【按 ↑ 跳躍】'
         });
       } else {
-        // 都市行人紅綠燈 (按 ← 停止)
+        // 都市行人紅綠燈 (按 ← 停止，紅燈最多倒數 3 秒自動變綠燈)
         obstacles.push({
           type: 'traffic_light',
           x: canvas.width + 50,
@@ -651,8 +664,9 @@
           width: 24,
           height: 140,
           isRed: true,
+          redTimer: 180, // 60 FPS * 3 秒 = 180 幀 (最多 3 秒變綠燈)
           cleared: false,
-          hint: '🚦 都市行人紅綠燈！【按 ← 停止】'
+          hint: '🚦 行人紅綠燈！【按 ← 停止，最多等 3 秒變綠燈】'
         });
       }
     }
@@ -707,7 +721,7 @@
       }
 
       obstacleSpawnTimer++;
-      const spawnInterval = difficulty === 'easy' ? 150 : (difficulty === 'medium' ? 110 : 80);
+      const spawnInterval = difficulty === 'easy' ? 160 : (difficulty === 'medium' ? 120 : 90);
       if (obstacleSpawnTimer > spawnInterval) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
@@ -717,9 +731,13 @@
         const obs = obstacles[i];
         obs.x -= currentSpeed;
 
+        // 紅綠燈邏輯：最多等待 3 秒（180 幀）必自動切換為綠燈
         if (obs.type === 'traffic_light') {
-          if (obs.isRed && obs.x - player.x < 100 && currentSpeed === 0) {
-            obs.isRed = false; // 停車等待後紅燈變綠燈
+          if (obs.isRed) {
+            obs.redTimer--;
+            if (obs.redTimer <= 0) {
+              obs.isRed = false; // 最多 3 秒後轉換為綠燈
+            }
           }
         }
 
@@ -760,6 +778,7 @@
 
     function triggerFail() {
       gameState = 'GAMEOVER';
+      stopBgm();
       totalFails++;
 
       playFailOhSound();
@@ -776,7 +795,7 @@
       if (score >= 80) {
         textDiagnosis = "AI 診斷：都市街道應變極佳！紅綠燈與施工避障反應敏捷，肢體協調度優異。";
       } else if (score >= 60) {
-        textDiagnosis = "AI 診斷：表現良好。注意靠近低矮遮雨棚時提前下蹲，並遵守都市紅綠燈訊號。";
+        textDiagnosis = "AI 診斷：表現良好。注意靠近低矮遮雨棚時提前下蹲，並於紅燈時停等最多 3 秒。";
       } else {
         textDiagnosis = "AI 診斷：建議多利用方向鍵左鍵於紅綠燈前完全停止，以提升都市適應能力。";
       }
@@ -795,18 +814,19 @@
       document.getElementById('dashboard-overlay').style.display = 'none';
       initGameVars();
       gameState = 'PLAYING';
+      startBgm();
     }
 
     // --- 畫布繪製：都市夜景與都市障礙物 ---
     function render() {
-      // 1. 都市夜晚天空漸層 (Urban Night Sky)
+      // 1. 都市夜晚天空漸層
       let skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
       skyGrad.addColorStop(0, '#0A121D');
       skyGrad.addColorStop(1, '#1A2B3C');
       ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. 遠景都市大樓天際線 (City Skyline & Windows)
+      // 2. 遠景都市大樓天際線
       const buildings = [
         { x: 0, w: 90, h: 220 }, { x: 90, w: 110, h: 280 }, { x: 200, w: 85, h: 210 },
         { x: 285, w: 120, h: 320 }, { x: 405, w: 95, h: 190 }, { x: 500, w: 110, h: 290 },
@@ -817,11 +837,9 @@
         let bx = (b.x - (player.distance * 12) % 900 + 900) % 900;
         let by = player.groundY - b.h;
 
-        // 大樓外觀
         ctx.fillStyle = '#0E1E2E';
         ctx.fillRect(bx, by, b.w, b.h);
 
-        // 大樓發光窗戶
         ctx.fillStyle = '#FCE83A';
         for (let wx = bx + 12; wx < bx + b.w - 15; wx += 22) {
           for (let wy = by + 20; wy < player.groundY - 30; wy += 38) {
@@ -832,22 +850,20 @@
         }
       }
 
-      // 3. 都市柏油路面與人行道 (Asphalt Road & Lane Lines)
-      ctx.fillStyle = '#1E293B'; // 柏油路
+      // 3. 都市柏油路面與動態白線
+      ctx.fillStyle = '#1E293B';
       ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
 
-      // 人行道邊界石
       ctx.fillStyle = '#475569';
       ctx.fillRect(0, player.groundY - 6, canvas.width, 6);
 
-      // 動態都市白道虛線 (隨著距離滾動)
       ctx.fillStyle = '#F8FAFC';
       let dashOffset = (player.distance * 24) % 70;
       for (let lx = -dashOffset; lx < canvas.width; lx += 70) {
         ctx.fillRect(lx, player.groundY + 40, 40, 6);
       }
 
-      // 4. 繪製坐輪椅的角色
+      // 4. 繪製輪椅角色
       drawWheelchairUser(player.x, player.y, player.width, player.height, player.isCrouching, player.invincibleTimer > 0);
 
       // 5. 繪製都市障礙物
@@ -856,10 +872,9 @@
         if (obs.type === 'overhang') {
           // 【都市低矮遮雨棚 / 限高桿】
           ctx.fillStyle = '#475569';
-          ctx.fillRect(obs.x, obs.y - 120, 12, obs.y + obs.height); // 支撐金屬桿
+          ctx.fillRect(obs.x, obs.y - 120, 12, obs.y + obs.height);
           ctx.fillRect(obs.x + obs.width - 12, obs.y - 120, 12, obs.y + obs.height);
 
-          // 黃黑相間警示遮雨條
           ctx.fillStyle = '#FACC15';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
           ctx.fillStyle = '#0F172A';
@@ -872,7 +887,6 @@
             ctx.fill();
           }
 
-          // 限高警示標示牌
           ctx.fillStyle = '#DC2626';
           ctx.fillRect(obs.x + 15, obs.y + 10, obs.width - 30, 30);
           ctx.fillStyle = '#FFFFFF';
@@ -881,15 +895,13 @@
 
         } else if (obs.type === 'ground') {
           // 【道路施工護欄】
-          ctx.fillStyle = '#EA580C'; // 施工橘
+          ctx.fillStyle = '#EA580C';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
 
-          // 白反光條
           ctx.fillStyle = '#FFFFFF';
           ctx.fillRect(obs.x, obs.y + 10, obs.width, 8);
           ctx.fillRect(obs.x, obs.y + 26, obs.width, 8);
 
-          // 頂部施工警示閃燈
           ctx.fillStyle = '#FACC15';
           ctx.beginPath();
           ctx.arc(obs.x + obs.width / 2, obs.y - 6, 7, 0, Math.PI * 2);
@@ -900,14 +912,14 @@
           ctx.fillText('施工', obs.x + 12, obs.y + 24);
 
         } else if (obs.type === 'traffic_light') {
-          // 【都市行人紅綠燈】
+          // 【都市行人紅綠燈 - 倒數最多3秒】
           ctx.fillStyle = '#64748B';
-          ctx.fillRect(obs.x + 8, obs.y, 8, obs.height); // 金屬立燈桿
+          ctx.fillRect(obs.x + 8, obs.y, 8, obs.height);
 
           ctx.fillStyle = '#0F172A';
-          ctx.fillRect(obs.x - 6, obs.y, 36, 65); // 燈箱
+          ctx.fillRect(obs.x - 6, obs.y, 36, 65);
 
-          // 紅燈 (帶發光外光暈)
+          // 紅燈
           if (obs.isRed) {
             ctx.shadowColor = '#EF4444';
             ctx.shadowBlur = 12;
@@ -932,19 +944,27 @@
           ctx.arc(obs.x + 12, obs.y + 46, 10, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0;
+
+          // 若為紅燈且未切換，顯示秒數提示
+          if (obs.isRed) {
+            const secLeft = Math.ceil(obs.redTimer / 60);
+            ctx.fillStyle = '#FF4444';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillText(`${secLeft}s`, obs.x + 34, obs.y + 22);
+          }
         }
 
-        // 智慧智導提示（前方 280 像素內）
+        // 前方智導提示
         if (!obs.cleared && obs.x > player.x && obs.x - player.x < 280) {
           if (!nearestPrompt) nearestPrompt = obs.hint;
         }
       }
 
-      // 6. 即時都市前方智導提示面板
+      // 6. 即時智導提示面板
       if (nearestPrompt) {
         ctx.fillStyle = 'rgba(245, 158, 11, 0.92)';
         ctx.beginPath();
-        ctx.roundRect(canvas.width / 2 - 160, 16, 320, 38, 19);
+        ctx.roundRect(canvas.width / 2 - 180, 16, 360, 38, 19);
         ctx.fill();
 
         ctx.fillStyle = '#0F172A';
@@ -954,7 +974,7 @@
         ctx.textAlign = 'left';
       }
 
-      // HUD 數據面板
+      // HUD 面板
       ctx.fillStyle = '#FFFFFF';
       ctx.font = 'bold 15px sans-serif';
       ctx.fillText(`都市移動: ${Math.floor(player.distance)} m`, 20, 36);
@@ -966,14 +986,13 @@
       }
     }
 
-    // 專屬 Canvas 繪製坐輪椅的身心障礙者角色
+    // 專屬 Canvas 繪製坐輪椅的角色
     function drawWheelchairUser(x, y, w, h, isCrouch, isInvincible) {
       ctx.save();
       if (isInvincible && Math.floor(player.invincibleTimer / 6) % 2 === 0) {
         ctx.globalAlpha = 0.4;
       }
 
-      // 輪椅大輪
       ctx.strokeStyle = '#00F2FE';
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -985,12 +1004,10 @@
       ctx.moveTo(x + 2, y + h - 14); ctx.lineTo(x + 30, y + h - 14);
       ctx.stroke();
 
-      // 輪椅小輪
       ctx.beginPath();
       ctx.arc(x + w - 8, y + h - 6, 6, 0, Math.PI * 2);
       ctx.stroke();
 
-      // 輪椅金屬架
       ctx.strokeStyle = '#38BDF8';
       ctx.lineWidth = 4;
       ctx.beginPath();
@@ -1005,7 +1022,6 @@
       }
       ctx.stroke();
 
-      // 身心障礙學員角色（頭與軀幹）
       ctx.fillStyle = '#FFFFFF';
       if (isCrouch) {
         ctx.beginPath();
