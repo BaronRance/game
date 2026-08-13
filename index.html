@@ -5,624 +5,807 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>復健迷宮 - 身心障礙者遠距體感與都市適應系統</title>
   
-  <!-- Firebase SDKs (Compat Version) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
-    /**
-     * ====================================================================
-     * 程式碼原創與著作權聲明：
-     * 本系統完整程式碼與架構由開發者 劉秉祐、潘睿熙 親手編寫、設計與開發，
-     * 享有完整之原創程式著作權與智慧財產權。
-     * 未經劉秉祐、潘睿熙授權，任何人不得抄襲、冒用、重製或轉載。
-     * 
-     * 系統性質與學理宣告（嚴正聲明）：
-     * 1. 本系統基於客觀運動科學理論「重複任務訓練 (Repetitive Task Practice)」
-     *    與「視動整合 (Visuomotor Integration)」設計。
-     * 2. 本系統純粹為復健訓練與教育之「輔助系統」，絕非醫療器材。
-     * 3. 本系統絕對無法、亦不用以斷定任何真實的醫學狀況或疾病診斷。
-     * 4. 本系統並非為醫療目的設計，所有數據僅供動作協調趨勢之參考，
-     *    絕對不是偽醫學。
-     * ====================================================================
-     */
-
-    :root {
-      --primary: #0284c7;
-      --primary-hover: #0369a1;
-      --bg-color: #f0f9ff;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-sub: #475569;
-      --accent-red: #ef4444;
-      --accent-green: #22c55e;
-      --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      background-color: #0F172A;
+      color: #1E293B;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    #game-container {
+    #app-container {
       position: relative;
-      width: 800px;
-      height: 480px;
-      background: #bae6fd;
-      border-radius: 16px;
-      box-shadow: var(--shadow-soft);
+      width: 900px;
+      height: 600px;
+      background: #F8FAFC;
+      border: 3px solid #0284C7;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(2, 132, 199, 0.2);
       overflow: hidden;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
     }
 
-    canvas {
-      display: block;
-      background: linear-gradient(to bottom, #e0f2fe, #bae6fd);
-    }
-
-    /* 頂部控制列按鈕群組 */
-    .btn-pause-ing {
+    #top-bar {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(15, 23, 42, 0.6);
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    .top-left-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    .top-right-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      pointer-events: auto;
+    }
+
+    .btn-auth, .btn-pause {
+      background: #0284C7;
       color: white;
       border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      backdrop-filter: blur(4px);
-      transition: background 0.2s;
-      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .btn-auth:hover, .btn-pause:hover { background: #0369A1; }
+    
+    .btn-pause {
       display: none;
+      background: #475569;
+    }
+    .btn-pause:hover { background: #334155; }
+
+    .user-status {
+      font-size: 12px;
+      color: #0369A1;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 5px 12px;
+      border-radius: 14px;
+      border: 1px solid #BAE6FD;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
-    .btn-pause-ing:hover {
-      background: rgba(15, 23, 42, 0.8);
+    .lang-container-top {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #0369A1;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #BAE6FD;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     }
 
-    /* 通用畫面覆蓋層 */
-    .overlay-screen {
+    .lang-select {
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid #0284C7;
+      background: #FFFFFF;
+      color: #0F172A;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    #menu-screen {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(6px);
+      inset: 0;
+      background: #F0F9FF;
+      padding: 40px 40px 30px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       z-index: 20;
-      color: white;
-      padding: 20px;
-      text-align: center;
       overflow-y: auto;
     }
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 4px;
-      font-weight: 800;
-      letter-spacing: 1px;
-    }
-
-    .subtitle {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #cbd5e1;
+    .icon-header {
+      width: 54px;
+      height: 54px;
+      background: #E0F2FE;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-bottom: 6px;
-      text-align: left;
-      width: 100%;
-      max-width: 480px;
+      border: 2px solid #0284C7;
+      flex-shrink: 0;
     }
 
-    .grid-container, .grid-container-2 {
+    .icon-header svg { width: 28px; height: 28px; fill: #0284C7; }
+
+    h1 { font-size: 26px; color: #0F172A; letter-spacing: 2px; margin-bottom: 2px; }
+    .subtitle { font-size: 13px; color: #64748B; margin-bottom: 14px; }
+    .section-title { width: 100%; font-size: 13px; color: #334155; margin-bottom: 8px; text-align: left; font-weight: bold; }
+
+    .grid-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
       width: 100%;
-      max-width: 480px;
       margin-bottom: 12px;
     }
 
     .grid-container-2 {
+      display: grid;
       grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 10px;
     }
 
     .option-card {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      padding: 8px;
-      color: white;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      border-radius: 14px;
+      padding: 10px 12px;
       cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      transition: all 0.15s ease;
     }
 
-    .option-card:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
+    .option-card:hover { border-color: #0284C7; background: #F8FAFC; }
     .option-card.active {
-      background: var(--primary);
-      border-color: #38bdf8;
-      box-shadow: 0 0 15px rgba(2, 132, 199, 0.5);
+      border-color: #0284C7;
+      background: #E0F2FE;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
     }
 
-    .primary-btn {
-      background: #0284c7;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
-    }
+    .card-title { font-size: 15px; font-weight: bold; color: #0F172A; margin-bottom: 2px; }
+    .card-desc { font-size: 11px; color: #64748B; line-height: 1.3; }
 
-    .primary-btn:hover {
-      background: #0369a1;
-      transform: translateY(-2px);
-    }
-
-    .secondary-btn {
-      background: #475569;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .secondary-btn:hover {
-      background: #334155;
-    }
-
-    .menu-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    /* 結算儀表板 */
-    #dashboard-overlay {
-      display: none;
-      justify-content: flex-start;
-      padding: 20px;
-    }
-
-    .dashboard-card {
-      background: #ffffff;
-      color: var(--text-main);
+    .info-box {
       width: 100%;
-      max-width: 650px;
-      border-radius: 16px;
-      padding: 24px;
-      text-align: left;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-    }
-
-    .dashboard-card h2 {
-      font-size: 20px;
-      color: #0f172a;
-      margin-bottom: 2px;
-    }
-
-    .dashboard-card .author-info {
+      background: #FEF3C7;
+      border-left: 4px solid #F59E0B;
+      border-radius: 6px;
+      padding: 8px 12px;
       font-size: 12px;
-      color: #0284c7;
-      font-weight: 700;
-      margin-bottom: 10px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid #e2e8f0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      color: #92400E;
       margin-bottom: 14px;
+      line-height: 1.3;
     }
 
-    .stat-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      padding: 8px;
-      border-radius: 8px;
+    .btn-start {
+      width: 240px;
+      height: 46px;
+      background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 23px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+      transition: transform 0.1s;
+      flex-shrink: 0;
+    }
+    .btn-start:hover { transform: translateY(-2px); }
+
+    .footer-text { margin-top: 10px; font-size: 11px; color: #94A3B8; }
+
+    #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
+
+    .overlay-screen {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 40;
+    }
+
+    .modal-card {
+      width: 520px;
+      background: #FFFFFF;
+      border: 3px solid #0284C7;
+      border-radius: 20px;
+      padding: 20px 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       text-align: center;
     }
 
-    .stat-box .label {
-      font-size: 11px;
-      color: #64748b;
-      margin-bottom: 2px;
+    .modal-header { font-size: 19px; font-weight: bold; color: #0F172A; margin-bottom: 10px; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
-    .stat-box .value {
-      font-size: 16px;
-      font-weight: 800;
-      color: #0284c7;
-    }
+    .metric-item { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 10px; padding: 6px; }
+    .metric-value { font-size: 14px; font-weight: bold; color: #0284C7; }
+    .metric-label { font-size: 9px; color: #64748B; margin-top: 2px; }
 
-    .eval-box {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 12px;
-      line-height: 1.5;
-      color: #166534;
-      margin-bottom: 14px;
-    }
-
-    .dashboard-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    /* 著作權與聲明彈跳視窗 */
-    #author-modal {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.9);
-      z-index: 30;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
+    .ai-eval-box {
+      background: #F0FDF4;
+      border: 1px dashed #22C55E;
+      border-radius: 10px;
+      padding: 10px 14px;
       text-align: left;
+      font-size: 11px;
+      color: #166534;
+      line-height: 1.5;
+      margin-bottom: 8px;
+      max-height: 155px;
+      overflow-y: auto;
     }
 
-    .modal-content {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 24px;
-      max-width: 550px;
+    .leaderboard-box {
+      background: #F8FAFC;
+      border-radius: 10px;
+      padding: 6px 12px;
+      margin-bottom: 10px;
+      text-align: left;
+      border: 1px solid #E2E8F0;
+    }
+
+    .leaderboard-box h4 { font-size: 11px; color: #0F172A; margin-bottom: 3px; }
+    .leaderboard-list { list-style: none; font-size: 10px; color: #334155; }
+    .leaderboard-list li { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px solid #E2E8F0; }
+
+    .btn-action {
       width: 100%;
-      color: #f8fafc;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      height: 38px;
+      background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 19px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+      margin-bottom: 5px;
     }
+    .btn-action:hover { opacity: 0.95; }
 
-    .modal-content h3 {
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: #38bdf8;
+    .btn-secondary {
+      width: 100%;
+      height: 38px;
+      background: #64748B;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 19px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(100, 116, 139, 0.3);
+      transition: background 0.1s;
+      margin-bottom: 5px;
     }
-
-    .modal-content p {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #cbd5e1;
-      margin-bottom: 12px;
-    }
+    .btn-secondary:hover { background: #475569; }
   </style>
 </head>
 <body>
 
-  <div id="game-container">
-    <button id="btn-pause-ing" class="btn-pause-ing" onclick="togglePause()">暫停 / 選單</button>
+  <div id="app-container">
+    <div id="top-bar">
+      <div class="top-left-group">
+        <button class="btn-auth" onclick="loginGoogle()" id="ui-login-btn">👤 Google 帳戶登入</button>
+        <button class="btn-pause" id="btn-pause-ing" onclick="togglePause()">⏸ 暫停</button>
+      </div>
+      <div class="top-right-group">
+        <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
+        <div class="lang-container-top">
+          <span id="ui-lang-label">🌍 語言：</span>
+          <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="zh-TW">繁體中文</option>
+            <option value="zh-CN">简体中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-    <!-- 主選單畫面 -->
-    <div id="menu-screen" class="overlay-screen">
-      <h1>復健迷宮</h1>
-      <div class="subtitle">身心障礙者遠距體感與都市適應系統</div>
+    <!-- 首頁選單 -->
+    <div id="menu-screen">
+      <div class="icon-header">
+        <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
+      </div>
+      <h1 id="ui-title">復健迷宮</h1>
+      <p class="subtitle" id="ui-subtitle">身心障礙者的遠距體感復健與都市適應系統</p>
 
-      <div class="section-title">選擇訓練難度</div>
+      <div class="section-title" id="ui-diff-title">請選擇關卡難度</div>
       <div class="grid-container">
-        <div class="option-card active" onclick="selectDifficulty('easy', this)">輕鬆模式<br><small>適合初階適應</small></div>
-        <div class="option-card" onclick="selectDifficulty('medium', this)">標準模式<br><small>標準速度挑戰</small></div>
-        <div class="option-card" onclick="selectDifficulty('hard', this)">進階模式<br><small>高強度反應</small></div>
+        <div class="option-card active" onclick="selectDifficulty('easy', this)">
+          <div class="card-title" id="ui-easy-title">輕度復健</div>
+          <div class="card-desc" id="ui-easy-desc">平緩步調、障礙極少</div>
+        </div>
+        <div class="option-card" onclick="selectDifficulty('medium', this)">
+          <div class="card-title" id="ui-med-title">中度挑戰</div>
+          <div class="card-desc" id="ui-med-desc">適中節奏、反應訓練</div>
+        </div>
+        <div class="option-card" onclick="selectDifficulty('hard', this)">
+          <div class="card-title" id="ui-hard-title">重度適應</div>
+          <div class="card-desc" id="ui-hard-desc">高密度都市障礙挑戰</div>
+        </div>
       </div>
 
-      <div class="section-title">選擇操作模式</div>
+      <div class="section-title" id="ui-mode-title">選擇操作方式</div>
       <div class="grid-container-2">
-        <div class="option-card active" onclick="selectMode('modeA', this)">模式 A：鍵盤雙鍵控制<br><small>上跳 / 下蹲</small></div>
-        <div class="option-card" onclick="selectMode('modeB', this)">模式 B：單鍵點擊控制<br><small>點擊 / 空白鍵</small></div>
+        <div class="option-card active" onclick="selectMode('modeA', this)">
+          <div class="card-title" id="ui-moda-title">傳統鍵盤</div>
+          <div class="card-desc" id="ui-moda-desc">↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速</div>
+        </div>
+        <div class="option-card" onclick="selectMode('modeB', this)">
+          <div class="card-title" id="ui-modb-title">單鍵模式</div>
+          <div class="card-desc" id="ui-modb-desc">自動前進；遇站立牌需「按住空白鍵」蹲下通過</div>
+        </div>
       </div>
 
-      <div class="menu-actions">
-        <button class="primary-btn" onclick="startGame()">開始體驗系統</button>
-        <button class="secondary-btn" onclick="openAuthorModal()">著作權與系統聲明</button>
+      <div class="info-box" id="ui-mode-desc">
+        提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！
+      </div>
+
+      <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
+      <div class="footer-text" id="ui-footer">立體質感角色引擎 · 暫停與多國語系支援</div>
+    </div>
+
+    <canvas id="gameCanvas" width="900" height="600"></canvas>
+
+    <!-- 暫停選單 Overlay -->
+    <div id="pause-overlay" class="overlay-screen">
+      <div class="modal-card">
+        <div class="modal-header" id="ui-pause-header">遊戲暫停</div>
+        <button class="btn-action" id="ui-resume-btn" onclick="togglePause()">繼續遊戲</button>
+        <button class="btn-secondary" id="ui-restart-btn" onclick="restartGameFromPause()">重新開始</button>
+        <button class="btn-secondary" id="ui-home-btn" onclick="returnToMenu()">返回首頁</button>
       </div>
     </div>
 
-    <!-- 暫停畫面 -->
-    <div id="pause-overlay" class="overlay-screen" style="display: none;">
-      <h1>系統暫停</h1>
-      <div class="subtitle">您可以隨時返回繼續或重新開始訓練</div>
-      <div style="display: flex; gap: 15px; margin-top: 15px;">
-        <button class="primary-btn" onclick="togglePause()">繼續訓練</button>
-        <button class="secondary-btn" onclick="returnToMenu()">返回主選單</button>
-      </div>
-    </div>
-
-    <!-- 臨床儀表板畫面 -->
+    <!-- 結算儀表板 Overlay -->
     <div id="dashboard-overlay" class="overlay-screen">
-      <div class="dashboard-card">
-        <h2>訓練成果數據儀表板</h2>
-        <div class="author-info">程式原創開發與著作權人：劉秉祐、潘睿熙</div>
-        
-        <div class="stats-grid">
-          <div class="stat-box">
-            <div class="label">移動距離</div>
-            <div class="value" id="res-distance">0 m</div>
+      <div class="modal-card">
+        <div class="modal-header" id="ui-dash-header">📊 AI 臨床復健數據深度分析</div>
+
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-value" id="res-distance">0 m</div>
+            <div class="metric-label" id="ui-m-dist">移動總距離</div>
           </div>
-          <div class="stat-box">
-            <div class="label">通過廊道</div>
-            <div class="value" id="res-cleared">0 個</div>
+          <div class="metric-item">
+            <div class="metric-value" id="res-cleared">0 個</div>
+            <div class="metric-label" id="ui-m-clear">成功通行廊道</div>
           </div>
-          <div class="stat-box">
-            <div class="label">碰撞次數</div>
-            <div class="value" id="res-fails">0 次</div>
+          <div class="metric-item">
+            <div class="metric-value" id="res-fails">1 次</div>
+            <div class="metric-label" id="ui-m-fail">累積碰撞次數</div>
           </div>
-          <div class="stat-box">
-            <div class="label">綜合評分</div>
-            <div class="value" id="res-score">0 分</div>
+          <div class="metric-item">
+            <div class="metric-value" id="res-score">85 分</div>
+            <div class="metric-label" id="ui-m-score">肢體適應指數</div>
           </div>
         </div>
 
-        <div class="eval-box" id="ai-eval-text">
-          <!-- 動態載入臨床評估與嚴正聲明 -->
+        <div class="ai-eval-box" id="ai-eval-text">AI 臨床深度診斷生成中...</div>
+
+        <div class="leaderboard-box">
+          <h4 id="ui-lb-title">🏆 伺服器即時排行榜 Top 3</h4>
+          <ul id="leaderboard-list" class="leaderboard-list">
+            <li>尚未載入數據</li>
+          </ul>
         </div>
 
-        <div class="dashboard-actions">
-          <button class="primary-btn" onclick="restartGame()">重新開始訓練</button>
-          <button class="secondary-btn" onclick="returnToMenu()">返回主選單</button>
-        </div>
+        <button class="btn-action" id="ui-retry-btn" onclick="restartGame()">重新開始（再試一次）</button>
+        <button class="btn-secondary" id="ui-backhome-btn" onclick="returnToMenu()">返回首頁</button>
       </div>
     </div>
-
-    <!-- 著作權與系統聲明 Modal -->
-    <div id="author-modal">
-      <div class="modal-content">
-        <h3>程式原創著作權與學理聲明</h3>
-        <p><b>1. 原創開發者宣告：</b><br>本系統完整程式碼與架構由 <b>劉秉祐</b> 與 <b>潘睿熙</b> 親手編寫與獨立開發，享有完整之原創程式著作權與智慧財產權。</p>
-        <p><b>2. 系統性質與非醫療聲明：</b><br>本系統基於客觀科學理論「重複任務訓練 (Repetitive Task Practice)」與「視動整合 (Visuomotor Integration)」設計。本系統純粹為復健訓練與教育之<b>「輔助系統」</b>，絕非醫療器材。</p>
-        <p><b>3. 嚴正澄清：</b><br>本系統絕對無法、亦不用以斷定任何真實的醫學狀況或疾病診斷。本系統並非為醫療目的設計，所有數據僅供動作協調趨勢之參考，<b>絕對不是偽醫學</b>。</p>
-        <div style="text-align: right; margin-top: 15px;">
-          <button class="primary-btn" onclick="closeAuthorModal()">我知道了</button>
-        </div>
-      </div>
-    </div>
-
-    <canvas id="gameCanvas" width="800" height="480"></canvas>
   </div>
 
   <script>
-    /**
-     * ====================================================================
-     * 開發者與著作權宣告（程式碼核心註解）：
-     * 開發者：劉秉祐、潘睿熙（親手開發製作，享有完整智慧財產權與著作權）
-     * 系統名稱：復健迷宮 - 身心障礙者遠距體感與都市適應系統
-     * 
-     * 學理依據與嚴正免責聲明：
-     * - 本系統基於「重複任務訓練 (Repetitive Task Practice)」與「視動整合 (Visuomotor Integration)」理論設計。
-     * - 本系統僅為復健訓練與教育輔助之工具，絕非醫療器材。
-     * - 本系統絕對無法、亦不用以斷定真實的醫療狀況或疾病診斷。
-     * - 本系統並非為醫療目的設計，僅為輔助系統而已，絕對不是偽醫學，所有數據僅供動作協調趨勢參考。
-     * ====================================================================
-     */
-
-    // Firebase 初始設定 (Compat 模式架構)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDummyKeyForSystemArchitecture12345",
-      authDomain: "rehab-maze-system.firebaseapp.com",
-      projectId: "rehab-maze-system",
-      storageBucket: "rehab-maze-system.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
+    const i18n = {
+      'zh-TW': {
+        login: "👤 Google 帳戶登入", logout: "登出帳戶", unlogged: "狀態：未登入雲端帳戶", logged: "已登入：", langLabel: "🌍 語言：",
+        title: "復健迷宮", subtitle: "身心障礙者的遠距體感復健與都市適應系統",
+        diffTitle: "請選擇關卡難度", easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少", medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練", hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
+        modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過",
+        modeDesc: "提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
+        startBtn: "開始都市復健", footer: "立體質感角色引擎 · 暫停與多國語系支援",
+        pauseBtn: "⏸ 暫停", pauseHeader: "遊戲暫停", resumeBtn: "繼續遊戲", restartBtn: "重新開始", homeBtn: "返回首頁",
+        dashHeader: "📊 AI 臨床復健數據深度分析", mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
+        lbTitle: "🏆 伺服器即時排行榜 Top 3", retryBtn: "重新開始（再試一次）", backHomeBtn: "返回首頁"
+      },
+      'zh-CN': {
+        login: "👤 Google 账户登录", logout: "登出账户", unlogged: "状态：未登录云端账户", logged: "已登录：", langLabel: "🌍 语言：",
+        title: "康复迷宫", subtitle: "身心障碍者远程体感康复与城市适应系统",
+        diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
+        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需“按住空格”下蹲通过",
+        modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按住下蹲”让高度低于站牌才能安全通过！",
+        startBtn: "开始城市康复", footer: "立体质感角色引擎 · 暂停与多语言支持",
+        pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
+        dashHeader: "📊 AI 临床康复数据深度分析", mDist: "移动总距离", mClear: "成功通行", mFail: "碰撞次数", mScore: "适应指数",
+        lbTitle: "🏆 服务器实时排行榜 Top 3", retryBtn: "重新开始（再试一次）", backHomeBtn: "返回首页"
+      },
+      'en': {
+        login: "👤 Google Login", logout: "Logout", unlogged: "Status: Not logged in", logged: "Logged in: ", langLabel: "🌍 Language: ",
+        title: "Rehab Maze", subtitle: "Remote Tele-rehab & Urban Adaptation System",
+        diffTitle: "Select Difficulty", easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles", medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training", hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
+        modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs",
+        modeDesc: "Tip: In both modes, standing hits the sign. You must hold crouch to pass safely!",
+        startBtn: "Start Rehabilitation", footer: "3D Character Engine · Pause & Multi-language Support",
+        pauseBtn: "⏸ Pause", pauseHeader: "Game Paused", resumeBtn: "Resume", restartBtn: "Restart", homeBtn: "Return Home",
+        dashHeader: "📊 AI Clinical Rehabilitation Deep Analytics", mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
+        lbTitle: "🏆 Live Leaderboard Top 3", retryBtn: "Restart (Try Again)", backHomeBtn: "Return Home"
+      },
+      'ja': {
+        login: "👤 Google ログイン", logout: "ログアウト", unlogged: "ステータス：未ログイン", logged: "ログイン中：", langLabel: "🌍 言語：",
+        title: "リハビリ迷宮", subtitle: "障害者向け遠隔体感リハビリ・都市適応システム",
+        diffTitle: "難易度を選択", easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ", medTitle: "中度チャレンジ", medDesc: "適度なリズム、反応トレーニング", hardTitle: "重度適応", hardDesc: "高密度都市障害物チャレンジ",
+        modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける",
+        modeDesc: "ヒント：どちらのモードでも立っていると衝突します。しゃがんで通過してください！",
+        startBtn: "リハビリ開始", footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
+        pauseBtn: "⏸ 一時停止", pauseHeader: "ポーズ中", resumeBtn: "ゲームに戻る", restartBtn: "やり直す", homeBtn: "ホームに戻る",
+        dashHeader: "📊 AI臨床リハビリデータ詳細分析", mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
+        lbTitle: "🏆 リアルタイムランキング Top 3", retryBtn: "もう一度挑戦", backHomeBtn: "ホームに戻る"
+      },
+      'ko': {
+        login: "👤 구글 로그인", logout: "로그아웃", unlogged: "상태: 로그인되지 않음", logged: "로그인됨: ", langLabel: "🌍 언어: ",
+        title: "재활 미로", subtitle: "장애인을 위한 원격 체감 재활 및 도시 적응 시스템",
+        diffTitle: "난이도 선택", easyTitle: "경증 재활", easyDesc: "완만한 페이스, 최소한의 장애물", medTitle: "중등도 도전", medDesc: "적당한 리듬, 반응 훈련", hardTitle: "고도 적응", hardDesc: "고밀도 도시 장애물 도전",
+        modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기",
+        modeDesc: "팁: 두 모드 모두 서 있으면 충돌합니다. 숙여서 통과하세요!",
+        startBtn: "재활 시작", footer: "3D 캐릭터 엔진 · 일시 정지 및 다국어 지원",
+        pauseBtn: "⏸ 일시 정지", pauseHeader: "게임 일시 정지", resumeBtn: "게임 재개", restartBtn: "다시 시작", homeBtn: "홈으로",
+        dashHeader: "📊 AI 임상 재활 데이터 심층 분석", mDist: "이동 거리", mClear: "통과 수", mFail: "충돌 횟수", mScore: "적응 지수",
+        lbTitle: "🏆 실시간 순위 Top 3", retryBtn: "다시 시도", backHomeBtn: "홈으로"
+      },
+      'es': {
+        login: "👤 Iniciar sesión en Google", logout: "Cerrar sesión", unlogged: "Estado: No conectado", logged: "Conectado: ", langLabel: "🌍 Idioma: ",
+        title: "Laberinto de Rehabilitación", subtitle: "Sistema de rehabilitación y adaptación urbana a distancia",
+        diffTitle: "Seleccionar Dificultad", easyTitle: "Rehabilitación Leve", easyDesc: "Ritmo suave, obstáculos mínimos", medTitle: "Desafío Medio", medDesc: "Ritmo moderado, entrenamiento de reacción", hardTitle: "Adaptación Avanzada", hardDesc: "Desafío de obstáculos urbanos densos",
+        modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte",
+        modeDesc: "Consejo: En ambos modos, estar de pie colisiona con el cartel. ¡Debes agacharte para pasar!",
+        startBtn: "Iniciar Rehabilitación", footer: "Motor de personajes 3D · Pausa y soporte multilingüe",
+        pauseBtn: "⏸ Pausa", pauseHeader: "Juego Pausado", resumeBtn: "Reanudar", restartBtn: "Reiniciar", homeBtn: "Volver al Inicio",
+        dashHeader: "📊 Análisis Clínico Profundo de Rehabilitación AI", mDist: "Distancia Total", mClear: "Superados", mFail: "Fallos", mScore: "Índice de Adaptación",
+        lbTitle: "🏆 Top 3 de Clasificación en Vivo", retryBtn: "Reiniciar (Intentar de nuevo)", backHomeBtn: "Volver al Inicio"
+      }
     };
+
+    let currentLang = 'zh-TW';
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      const t = i18n[lang];
+      document.getElementById('ui-login-btn').innerText = t.login;
+      document.getElementById('ui-lang-label').innerText = t.langLabel;
+      document.getElementById('ui-title').innerText = t.title;
+      document.getElementById('ui-subtitle').innerText = t.subtitle;
+      document.getElementById('ui-diff-title').innerText = t.diffTitle;
+      document.getElementById('ui-easy-title').innerText = t.easyTitle;
+      document.getElementById('ui-easy-desc').innerText = t.easyDesc;
+      document.getElementById('ui-med-title').innerText = t.medTitle;
+      document.getElementById('ui-med-desc').innerText = t.medDesc;
+      document.getElementById('ui-hard-title').innerText = t.hardTitle;
+      document.getElementById('ui-hard-desc').innerText = t.hardDesc;
+      document.getElementById('ui-mode-title').innerText = t.modeTitle;
+      document.getElementById('ui-moda-title').innerText = t.modaTitle;
+      document.getElementById('ui-moda-desc').innerText = t.modaDesc;
+      document.getElementById('ui-modb-title').innerText = t.modbTitle;
+      document.getElementById('ui-modb-desc').innerText = t.modbDesc;
+      document.getElementById('ui-mode-desc').innerText = t.modeDesc;
+      document.getElementById('ui-start-btn').innerText = t.startBtn;
+      document.getElementById('ui-footer').innerText = t.footer;
+      document.getElementById('btn-pause-ing').innerText = t.pauseBtn;
+      document.getElementById('ui-pause-header').innerText = t.pauseHeader;
+      document.getElementById('ui-resume-btn').innerText = t.resumeBtn;
+      document.getElementById('ui-restart-btn').innerText = t.restartBtn;
+      document.getElementById('ui-home-btn').innerText = t.homeBtn;
+      document.getElementById('ui-dash-header').innerText = t.dashHeader;
+      document.getElementById('ui-m-dist').innerText = t.mDist;
+      document.getElementById('ui-m-clear').innerText = t.mClear;
+      document.getElementById('ui-m-fail').innerText = t.mFail;
+      document.getElementById('ui-m-score').innerText = t.mScore;
+      document.getElementById('ui-lb-title').innerText = t.lbTitle;
+      document.getElementById('ui-retry-btn').innerText = t.retryBtn;
+      document.getElementById('ui-backhome-btn').innerText = t.backHomeBtn;
+    }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB_yVtrLHKEVPuWVXk6OQqnZdbhel0yKWM",
+      authDomain: "rehab-maze-cc483.firebaseapp.com",
+      projectId: "rehab-maze-cc483",
+      storageBucket: "rehab-maze-cc483.firebasestorage.app",
+      messagingSenderId: "131056567325",
+      appId: "1:131056567325:web:438a5b9d778c63c96832f4",
+      measurementId: "G-TC0SH7TVKJ"
+    };
+
+    let db = null;
+    let auth = null;
+    let currentUser = null;
 
     try {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      auth.onAuthStateChanged(user => {
+        const statusEl = document.getElementById('user-status-text');
+        const loginBtn = document.getElementById('ui-login-btn');
+        const t = i18n[currentLang];
+        if (user) {
+          currentUser = user;
+          statusEl.innerText = `${t.logged}${user.displayName || user.email}`;
+          statusEl.style.color = '#16A34A';
+          loginBtn.innerText = t.logout;
+          loginBtn.onclick = () => auth.signOut();
+          loadLeaderboard();
+        } else {
+          currentUser = null;
+          statusEl.innerText = t.unlogged;
+          statusEl.style.color = '#0284C7';
+          loginBtn.innerText = t.login;
+          loginBtn.onclick = loginGoogle;
+        }
+      });
     } catch (e) {
-      console.warn("Firebase 初始化提示：", e);
+      console.error("Firebase 初始化錯誤: ", e);
     }
 
-    const db = firebase.firestore ? firebase.firestore() : null;
+    function loginGoogle() {
+      if (!auth) {
+        alert("Firebase 尚未正確初始化！");
+        return;
+      }
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).catch(err => alert("登入失敗: " + err.message));
+    }
 
-    /**
-     * 資料庫儲存函式：將由劉秉祐與潘睿熙親手開發之系統數據安全同步至雲端
-     */
     function saveScoreToFirebase(score) {
+      if (!db || !currentUser) return;
+      db.collection("leaderboard").add({
+        uid: currentUser.uid,
+        name: currentUser.displayName || "匿名學員",
+        score: score,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => loadLeaderboard());
+    }
+
+    function loadLeaderboard() {
       if (!db) return;
-      try {
-        db.collection("rehab_scores").add({
-          authors: "劉秉祐, 潘睿熙",
-          systemName: "復健迷宮 - 身心障礙者遠距體感與都市適應系統",
-          isMedicalDevice: false,
-          isRealMedicalDiagnosis: false,
-          isPseudoMedicine: false,
-          systemType: "輔助系統",
-          score: score,
-          distance: Math.floor(player.distance),
-          cleared: player.clearedObstacles,
-          fails: totalFails,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
-          console.log("由劉秉祐、潘睿熙開發之訓練數據已成功安全同步至雲端資料庫。");
-        }).catch(err => {
-          console.error("雲端同步失敗：", err);
+      db.collection("leaderboard").orderBy("score", "desc").limit(3).get().then(snapshot => {
+        const list = document.getElementById('leaderboard-list');
+        list.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const li = document.createElement('li');
+          li.innerHTML = `<span>${data.name}</span><strong>${data.score} 分</strong>`;
+          list.appendChild(li);
         });
-      } catch (err) {
-        console.error("資料庫寫入異常：", err);
-      }
+      });
     }
 
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let gameState = 'MENU'; // MENU, PLAYING, PAUSED, GAMEOVER
-    let difficulty = 'easy';
-    let controlMode = 'modeA';
-
-    let totalFails = 0;
-    let obstacles = [];
-    let obstacleSpawnTimer = 0;
-    let singleKeyStopTimer = 0;
-    let animationFrameId = null;
-
-    let player = {
-      x: 100,
-      y: 330,
-      width: 45,
-      height: 50,
-      baseSpeed: 5,
-      vy: 0,
-      gravity: 0.6,
-      jumpForce: -11,
-      groundY: 380,
-      isGrounded: true,
-      isCrouching: false,
-      distance: 0,
-      clearedObstacles: 0,
-      invincibleTimer: 0
-    };
-
-    const NORMAL_HEIGHT = 50;
-    const CROUCH_HEIGHT = 28;
-
-    let keys = { Up: false, Down: false, Space: false };
-    let spaceHasBeenReleased = true;
-
-    // 開啟與關閉著作權 Modal
-    function openAuthorModal() {
-      document.getElementById('author-modal').style.display = 'flex';
-    }
-
-    function closeAuthorModal() {
-      document.getElementById('author-modal').style.display = 'none';
-    }
-
-    // Web Audio API 簡易音效合成器
     let audioCtx = null;
+    let isBgmPlaying = false;
+    let bgmTimer = null;
+
     function initAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function startBgm() {
+      initAudioContext();
+      stopBgm();
+      isBgmPlaying = true;
+      const notes = [261.63, 329.63, 392.00, 523.25];
+      let step = 0;
+      bgmTimer = setInterval(() => {
+        if (!isBgmPlaying || !audioCtx || gameState !== 'PLAYING') return;
+        try {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.15);
+          step++;
+        } catch (e) {}
+      }, 400);
+    }
+
+    function stopBgm() {
+      isBgmPlaying = false;
+      if (bgmTimer) { clearInterval(bgmTimer); bgmTimer = null; }
     }
 
     function playSound(type) {
       if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type === 'jump' ? 'triangle' : 'sawtooth';
+      osc.frequency.setValueAtTime(type === 'jump' ? 200 : 250, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(type === 'jump' ? 500 : 80, audioCtx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12);
+    }
+
+    function playObstacleWarning() {
+      if (!audioCtx) return;
       try {
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        let now = audioCtx.currentTime;
-
-        if (type === 'jump') {
-          osc.frequency.setValueAtTime(300, now);
-          osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
-          gain.gain.setValueAtTime(0.1, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
-          osc.start(now);
-          osc.stop(now + 0.15);
-        } else if (type === 'oh') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(150, now);
-          osc.frequency.linearRampToValueAtTime(80, now + 0.2);
-          gain.gain.setValueAtTime(0.15, now);
-          gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
-          osc.start(now);
-          osc.stop(now + 0.2);
-        }
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
       } catch(e) {}
     }
 
-    let bgmInterval = null;
-    function startBgm() {
-      if (bgmInterval) return;
-      bgmInterval = setInterval(() => {
-        if (gameState !== 'PLAYING' || !audioCtx) return;
-        try {
-          let osc = audioCtx.createOscillator();
-          let gain = audioCtx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
-          gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.2);
-        } catch(e) {}
-      }, 600);
+    function playRedLightAlarm() {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch(e) {}
     }
 
-    function stopBgm() {
-      if (bgmInterval) {
-        clearInterval(bgmInterval);
-        bgmInterval = null;
+    function playOhSound() {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch(e) {}
+    }
+
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = currentLang === 'en' ? 'en-US' : (currentLang === 'ja' ? 'ja-JP' : (currentLang === 'ko' ? 'ko-KR' : (currentLang === 'es' ? 'es-ES' : 'zh-TW')));
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
       }
     }
 
-    // 鍵盤與滑鼠事件監聽
-    window.addEventListener('keydown', (e) => {
-      if (e.code === 'ArrowUp' || e.code === 'KeyW') { keys.Up = true; e.preventDefault(); }
-      if (e.code === 'ArrowDown' || e.code === 'KeyS') { keys.Down = true; e.preventDefault(); }
-      if (e.code === 'Space') {
-        if (controlMode === 'modeB' && spaceHasBeenReleased && gameState === 'PLAYING') {
-          if (player.isGrounded) {
-            player.vy = player.jumpForce;
-            player.isGrounded = false;
-            playSound('jump');
-          }
-          spaceHasBeenReleased = false;
+    let difficulty = 'easy';
+    let controlMode = 'modeA';
+    let totalFails = 0;
+    let singleKeyStopTimer = 0;
+    let spaceHasBeenReleased = true;
+
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let gameState = 'MENU';
+    let animationFrameId = null;
+
+    const NORMAL_HEIGHT = 65;
+    const CROUCH_HEIGHT = 30;
+
+    const player = {
+      x: 100, y: 0, width: 52, height: NORMAL_HEIGHT,
+      groundY: 480, vy: 0, gravity: 0.6, jumpForce: -12,
+      isGrounded: true, isCrouching: false, baseSpeed: 4,
+      distance: 0, clearedObstacles: 0, invincibleTimer: 0
+    };
+
+    let obstacles = [];
+    let obstacleSpawnTimer = 0;
+    const keys = { Up: false, Down: false, Left: false, Right: false, Space: false };
+
+    function handleSingleKeyAction() {
+      if (controlMode !== 'modeB' || gameState !== 'PLAYING') return;
+      if (!spaceHasBeenReleased) return;
+      
+      spaceHasBeenReleased = false;
+
+      let nearestObs = null;
+      let minDist = Infinity;
+      for (let obs of obstacles) {
+        if (!obs.cleared && obs.x + obs.width > player.x) {
+          let dist = obs.x - player.x;
+          if (dist < minDist) { minDist = dist; nearestObs = obs; }
         }
-        keys.Space = true;
-        e.preventDefault();
+      }
+
+      if (nearestObs && minDist < 380) {
+        if (nearestObs.type === 'ground' && player.isGrounded) {
+          player.vy = player.jumpForce;
+          player.isGrounded = false;
+          playSound('jump');
+        } else if (nearestObs.type === 'traffic_light') {
+          singleKeyStopTimer = 55;
+          playSound('jump');
+        }
+      } else if (player.isGrounded) {
+        player.vy = player.jumpForce;
+        player.isGrounded = false;
+        playSound('jump');
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.Up = true;
+      if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.Down = true;
+      if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.Left = true;
+      if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = true;
+      if (e.code === 'Space') {
+        if (!keys.Space) {
+          keys.Space = true;
+          if (controlMode === 'modeB' && gameState === 'PLAYING') {
+            handleSingleKeyAction();
+          }
+        }
+      }
+      if (e.code === 'Escape' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
+        togglePause();
       }
     });
 
     window.addEventListener('keyup', (e) => {
       if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.Up = false;
       if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.Down = false;
+      if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.Left = false;
+      if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = false;
       if (e.code === 'Space') {
         keys.Space = false;
         spaceHasBeenReleased = true;
@@ -630,11 +813,9 @@
     });
 
     canvas.addEventListener('pointerdown', () => {
-      if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded && spaceHasBeenReleased) {
-        player.vy = player.jumpForce;
-        player.isGrounded = false;
-        playSound('jump');
-        spaceHasBeenReleased = false;
+      if (controlMode === 'modeB' && gameState === 'PLAYING') {
+        keys.Space = true;
+        handleSingleKeyAction();
       }
     });
 
@@ -645,274 +826,500 @@
       }
     });
 
-    function selectDifficulty(diff, el) {
+    function selectDifficulty(diff, elem) {
       difficulty = diff;
-      document.querySelectorAll('#menu-screen .grid-container .option-card').forEach(card => card.classList.remove('active'));
-      el.classList.add('active');
+      document.querySelectorAll('.grid-container .option-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
     }
 
-    function selectMode(mode, el) {
+    function selectMode(mode, elem) {
       controlMode = mode;
-      document.querySelectorAll('#menu-screen .grid-container-2 .option-card').forEach(card => card.classList.remove('active'));
-      el.classList.add('active');
+      document.querySelectorAll('.grid-container-2 .option-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+    }
+
+    function togglePause() {
+      if (gameState === 'PLAYING') {
+        gameState = 'PAUSED';
+        stopBgm();
+        document.getElementById('pause-overlay').style.display = 'flex';
+        document.getElementById('btn-pause-ing').style.display = 'none';
+      } else if (gameState === 'PAUSED') {
+        document.getElementById('pause-overlay').style.display = 'none';
+        document.getElementById('btn-pause-ing').style.display = 'block';
+        gameState = 'PLAYING';
+        startBgm();
+      }
     }
 
     function startGame() {
       initAudioContext();
       document.getElementById('menu-screen').style.display = 'none';
       document.getElementById('btn-pause-ing').style.display = 'block';
+      totalFails = 0;
+      initGameVars();
       gameState = 'PLAYING';
-      resetGameData();
       startBgm();
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      animationFrameId = requestAnimationFrame(gameLoop);
+      gameLoop();
     }
 
-    function togglePause() {
-      if (gameState === 'PLAYING') {
-        gameState = 'PAUSED';
-        document.getElementById('pause-overlay').style.display = 'flex';
-        stopBgm();
-      } else if (gameState === 'PAUSED') {
-        gameState = 'PLAYING';
-        document.getElementById('pause-overlay').style.display = 'none';
-        startBgm();
-        animationFrameId = requestAnimationFrame(gameLoop);
-      }
+    function restartGameFromPause() {
+      document.getElementById('pause-overlay').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'block';
+      initGameVars();
+      gameState = 'PLAYING';
+      startBgm();
     }
 
     function returnToMenu() {
-      gameState = 'MENU';
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       stopBgm();
       document.getElementById('pause-overlay').style.display = 'none';
       document.getElementById('dashboard-overlay').style.display = 'none';
-      document.getElementById('menu-screen').style.display = 'flex';
       document.getElementById('btn-pause-ing').style.display = 'none';
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      document.getElementById('menu-screen').style.display = 'flex';
+      gameState = 'MENU';
     }
 
-    function restartGame() {
-      document.getElementById('dashboard-overlay').style.display = 'none';
-      startGame();
-    }
-
-    function resetGameData() {
+    function initGameVars() {
       player.x = 100;
       player.y = player.groundY - NORMAL_HEIGHT;
+      player.height = NORMAL_HEIGHT;
       player.vy = 0;
       player.isGrounded = true;
       player.isCrouching = false;
       player.distance = 0;
       player.clearedObstacles = 0;
-      player.invincibleTimer = 0;
-      totalFails = 0;
+      player.invincibleTimer = 80;
+      singleKeyStopTimer = 0;
+      spaceHasBeenReleased = true;
       obstacles = [];
       obstacleSpawnTimer = 0;
-      singleKeyStopTimer = 0;
+      player.baseSpeed = difficulty === 'easy' ? 4 : (difficulty === 'medium' ? 5.2 : 6.4);
     }
 
     function spawnObstacle() {
-      let types = ['ground', 'traffic_light', 'overhang'];
-      let chosenType = types[Math.floor(Math.random() * types.length)];
-      let obsWidth = 45;
-      let obsHeight = 50;
-      let obsY = player.groundY - obsHeight;
-
-      if (chosenType === 'overhang') {
-        obsHeight = 40;
-        obsY = player.groundY - NORMAL_HEIGHT - 35;
-      } else if (chosenType === 'traffic_light') {
-        obsWidth = 40;
-        obsHeight = 70;
-        obsY = player.groundY - obsHeight;
+      const rand = Math.random();
+      if (rand < 0.35) {
+        obstacles.push({
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 65,
+          width: 120, height: 35, cleared: false, hasWarned: false, hint: '⚠️ 站立牌！請按住向下(或單鍵模式按住空白鍵)蹲下通過'
+        });
+      } else if (rand < 0.70) {
+        obstacles.push({
+          type: 'ground', x: canvas.width + 50, y: player.groundY - 20,
+          width: 24, height: 20, cleared: false, hasWarned: false, hint: '🚧 微型護欄！請按向上跳躍'
+        });
+      } else {
+        obstacles.push({
+          type: 'traffic_light', x: canvas.width + 50, y: player.groundY - 120,
+          width: 18, height: 120, isRed: true, cleared: false, hasWarned: false, hint: '🚦 紅燈！請按向左停止'
+        });
       }
-
-      let speedFactor = difficulty === 'easy' ? 1.0 : (difficulty === 'medium' ? 1.3 : 1.6);
-      obstacles.push({
-        x: canvas.width + 50,
-        y: obsY,
-        width: obsWidth,
-        height: obsHeight,
-        type: chosenType,
-        speed: (player.baseSpeed * speedFactor),
-        cleared: false
-      });
     }
 
-    function updateGame() {
-      if (gameState !== 'PLAYING') return;
+    function gameLoop() {
+      if (gameState === 'PLAYING') {
+        update();
+        render();
+      } else if (gameState === 'PAUSED') {
+        render();
+      }
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
 
-      if (singleKeyStopTimer > 0) {
+    function update() {
+      if (player.invincibleTimer > 0) player.invincibleTimer--;
+
+      let currentSpeed = player.baseSpeed;
+      if (controlMode === 'modeA') {
+        if (keys.Left) currentSpeed = 0;
+        else if (keys.Right) currentSpeed += 2.5;
+      } else if (controlMode === 'modeB' && singleKeyStopTimer > 0) {
+        currentSpeed = 0;
         singleKeyStopTimer--;
-      } else {
-        player.distance += 0.1;
       }
 
+      player.distance += currentSpeed * 0.05;
+
       if (controlMode === 'modeA') {
-        if (keys.Up && player.isGrounded) {
-          player.vy = player.jumpForce;
-          player.isGrounded = false;
-          playSound('jump');
-        }
-        player.isCrouching = keys.Down;
-      } else {
         if (keys.Down) {
-          player.isCrouching = true;
+          if (!player.isCrouching) {
+            player.isCrouching = true;
+            player.height = CROUCH_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - CROUCH_HEIGHT;
+            }
+          }
         } else {
-          player.isCrouching = false;
+          if (player.isCrouching) {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }
         }
+      } else if (controlMode === 'modeB') {
+        let nearestObs = null;
+        let minDist = Infinity;
+        for (let obs of obstacles) {
+          if (!obs.cleared && obs.x + obs.width > player.x) {
+            let dist = obs.x - player.x;
+            if (dist < minDist) { minDist = dist; nearestObs = obs; }
+          }
+        }
+
+        if (keys.Space && nearestObs && nearestObs.type === 'overhang' && minDist < 380) {
+          if (!player.isCrouching) {
+            player.isCrouching = true;
+            player.height = CROUCH_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - CROUCH_HEIGHT;
+            }
+          }
+        } else {
+          if (player.isCrouching) {
+            player.isCrouching = false;
+            player.height = NORMAL_HEIGHT;
+            if (player.isGrounded) {
+              player.y = player.groundY - NORMAL_HEIGHT;
+            }
+          }
+        }
+      }
+
+      if (controlMode === 'modeA' && keys.Up && player.isGrounded) {
+        player.vy = player.jumpForce;
+        player.isGrounded = false;
+        playSound('jump');
       }
 
       player.vy += player.gravity;
       player.y += player.vy;
-      if (player.y >= player.groundY - (player.isCrouching ? CROUCH_HEIGHT : NORMAL_HEIGHT)) {
-        player.y = player.groundY - (player.isCrouching ? CROUCH_HEIGHT : NORMAL_HEIGHT);
+
+      const currentGround = player.groundY - player.height;
+      if (player.y >= currentGround) {
+        player.y = currentGround;
         player.vy = 0;
         player.isGrounded = true;
       }
 
-      player.height = player.isCrouching ? CROUCH_HEIGHT : NORMAL_HEIGHT;
-
       obstacleSpawnTimer++;
-      let spawnInterval = difficulty === 'easy' ? 110 : (difficulty === 'medium' ? 85 : 65);
-      if (obstacleSpawnTimer > spawnInterval) {
+      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 75);
+      if (obstacleSpawnTimer > spawnInterval && (obstacles.length === 0 || canvas.width + 50 - obstacles[obstacles.length - 1].x >= 320)) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
       }
 
-      if (player.invincibleTimer > 0) player.invincibleTimer--;
+      let hasActiveRedLight = false;
 
       for (let i = obstacles.length - 1; i >= 0; i--) {
-        let obs = obstacles[i];
-        let currentSpeed = singleKeyStopTimer > 0 ? 0 : obs.speed;
+        const obs = obstacles[i];
         obs.x -= currentSpeed;
+
+        let distToPlayer = obs.x - player.x;
+        if (!obs.hasWarned && distToPlayer > 0 && distToPlayer < 250) {
+          playObstacleWarning();
+          obs.hasWarned = true;
+        }
+
+        if (obs.type === 'traffic_light' && obs.isRed) {
+          if (distToPlayer > 0 && distToPlayer < 250) {
+            hasActiveRedLight = true;
+          }
+          if ((obs.x - player.x < 200) && currentSpeed === 0) {
+            obs.isRed = false;
+          }
+        }
 
         if (!obs.cleared && obs.x + obs.width < player.x) {
           obs.cleared = true;
           player.clearedObstacles++;
         }
 
-        if (
-          player.x < obs.x + obs.width &&
-          player.x + player.width > obs.x &&
-          player.y < obs.y + obs.height &&
-          player.y + player.height > obs.y
-        ) {
-          if (player.invincibleTimer === 0) {
-            totalFails++;
-            player.invincibleTimer = 45;
-            playSound('oh');
-          }
-        }
-
         if (obs.x + obs.width < -50) {
           obstacles.splice(i, 1);
+          continue;
+        }
+
+        if (player.invincibleTimer <= 0 && checkCollision(player, obs, currentSpeed)) {
+          triggerFail();
+          return;
         }
       }
 
-      if (player.distance >= 100) {
-        gameState = 'GAMEOVER';
+      if (hasActiveRedLight && !window.redLightAlertPlayed) {
+        playRedLightAlarm();
+        window.redLightAlertPlayed = true;
+      } else if (!hasActiveRedLight) {
+        window.redLightAlertPlayed = false;
       }
     }
 
-    function drawScene() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function checkCollision(p, o, speed) {
+      if (o.type === 'traffic_light') {
+        return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
+      }
+      
+      if (o.type === 'overhang') {
+        if (p.isCrouching) {
+          return false; 
+        }
+      }
 
-      // 背景天空
-      ctx.fillStyle = '#BAE6FD';
+      return (
+        p.x < o.x + o.width &&
+        p.x + p.width > o.x &&
+        p.y < o.y + o.height &&
+        p.y + p.height > o.y
+      );
+    }
+
+    function triggerFail() {
+      gameState = 'GAMEOVER';
+      stopBgm();
+      totalFails++;
+      document.getElementById('btn-pause-ing').style.display = 'none';
+      
+      playOhSound();
+
+      const distMeters = Math.floor(player.distance);
+      const cleared = player.clearedObstacles;
+
+      // -------------------------------------------------------------
+      // 修正後的嚴格評分與 AI 臨床診斷引擎
+      // 確保碰撞失敗（尤其是早期失敗）絕對不會給出過高的評估
+      // -------------------------------------------------------------
+      let score = Math.min(100, Math.max(25, distMeters * 1.2 + cleared * 10 - totalFails * 20));
+      score = Math.floor(score);
+
+      let clinicalReportHTML = "";
+      let speechTextContent = "";
+
+      // 必須同時滿足「通關數足夠」且「分數夠高」才能判定為優異或普通；若通關數少於 3 個或早期碰撞，強制歸類為需加強
+      if (cleared >= 8 && score >= 85) {
+        // 表現：優異 (Good)
+        clinicalReportHTML = `
+          <strong>【臨床評估級別：表現優異 (Good)】</strong><br>
+          • <strong>神經肌肉協調：</strong> 受試者成功連續通過多個都市障礙，展現出高度的核心穩定度與動作流暢性。<br>
+          • <strong>視動反射指標：</strong> 在高密度的障礙物與號誌切換中，視覺刺激至動作執行的反應時間極短且精準。<br>
+          • <strong>臨床綜合評語：</strong> 具備優秀的動態適應與危機應變能力，大腦與肢體協調效率高。<br>
+          • <strong>階段復健處方：</strong> 建議維持目前訓練強度，可解鎖更高難度挑戰。
+        `;
+        speechTextContent = `遊戲結束。表現優異！成功通關 ${cleared} 個障礙，適應指數 ${score} 分。您的神經肌肉協調與視動反射表現極佳。`;
+      } else if (cleared >= 3 && score >= 50) {
+        // 表現：普通 (Normal)
+        clinicalReportHTML = `
+          <strong>【臨床評估級別：表現普通 (Normal)】</strong><br>
+          • <strong>神經肌肉協調：</strong> 能夠完成基礎的障礙閃避，但在連續動作切換時的瞬間轉換略有不穩定現象。<br>
+          • <strong>視動反射指標：</strong> 具備基本的號誌辨識與反應能力，但在突發狀況的預判準確度上仍有提升空間。<br>
+          • <strong>臨床綜合評語：</strong> 肢體反應維持在基本水平，建議透過規律訓練提升連續動作的流暢度。<br>
+          • <strong>階段復健處方：</strong> 建議在面對障礙時保持專注，提前預判動作時機，以減少碰撞失誤。
+        `;
+        speechTextContent = `遊戲結束。表現普通。成功通關 ${cleared} 個障礙，適應指數 ${score} 分。建議加強連續動作的穩定度與提前預判。`;
+      } else {
+        // 表現：需加強 (Needs Improvement) - 涵蓋所有早期碰撞、通關數極少的情況
+        clinicalReportHTML = `
+          <strong>【臨床評估級別：表現需加強 (Needs Improvement)】</strong><br>
+          • <strong>神經肌肉協調：</strong> 由於在遊戲初期遭遇障礙即發生碰撞，顯示核心控制與動態平衡的即時反應尚需重建。<br>
+          • <strong>視動反射指標：</strong> 視覺刺激與動作執行的同步性不足，面對突發障礙時的神經反射時間偏慢。<br>
+          • <strong>臨床綜合評語：</strong> 目前處於適應初期，手眼協調與節奏掌控能力有顯著的提升空間。<br>
+          • <strong>階段復健處方：</strong> 強烈建議切換至「輕度復健」難度，或優先使用「單鍵模式」熟悉按鍵時機與節奏，逐步建立協調性。
+        `;
+        speechTextContent = `遊戲結束。表現需加強。由於通關數較少或早期發生碰撞，適應指數 ${score} 分。建議切換至輕度復健難度並優先使用單鍵模式，逐步重建協調性。`;
+      }
+
+      document.getElementById('res-distance').innerText = `${distMeters} m`;
+      document.getElementById('res-cleared').innerText = `${cleared} 個`;
+      document.getElementById('res-fails').innerText = `${totalFails} 次`;
+      document.getElementById('res-score').innerText = `${score} 分`;
+
+      document.getElementById('ai-eval-text').innerHTML = clinicalReportHTML;
+      
+      speakText(speechTextContent);
+      saveScoreToFirebase(score);
+      document.getElementById('dashboard-overlay').style.display = 'flex';
+    }
+
+    function restartGame() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.getElementById('dashboard-overlay').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'block';
+      initGameVars();
+      gameState = 'PLAYING';
+      startBgm();
+    }
+
+    const buildings = [
+      { x: 0, w: 100, h: 200 }, { x: 100, w: 120, h: 260 }, { x: 220, w: 90, h: 180 },
+      { x: 310, w: 130, h: 300 }, { x: 440, w: 100, h: 220 }, { x: 540, w: 110, h: 270 },
+      { x: 650, w: 100, h: 210 }, { x: 750, w: 100, h: 290 }, { x: 850, w: 90, h: 240 }
+    ];
+
+    function render() {
+      ctx.fillStyle = '#E0F2FE';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 遠景建築剪影
-      ctx.fillStyle = '#7DD3FC';
-      ctx.fillRect(100, 250, 120, 230);
-      ctx.fillRect(350, 180, 150, 300);
-      ctx.fillRect(650, 220, 140, 260);
+      ctx.fillStyle = '#FFFFFF';
+      let cloudOffset = (player.distance * 2) % 1000;
+      ctx.fillRect(200 - cloudOffset, 60, 80, 24);
+      ctx.fillRect(650 - cloudOffset, 100, 100, 30);
 
-      // 地面
-      ctx.fillStyle = '#0284C7';
+      for (let b of buildings) {
+        let bx = (b.x - (player.distance * 6) % 900 + 900) % 900;
+        let by = player.groundY - b.h;
+        ctx.fillStyle = '#BAE6FD';
+        ctx.fillRect(bx, by, b.w, b.h);
+      }
+
+      ctx.fillStyle = '#64748B';
       ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
-      ctx.fillStyle = '#0369A1';
-      ctx.fillRect(0, player.groundY, canvas.width, 6);
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(0, player.groundY, canvas.width, 4);
 
-      // 障礙物繪製
+      ctx.fillStyle = '#FFFFFF';
+      let dashOffset = (player.distance * 20) % 60;
+      for (let lx = -dashOffset; lx < canvas.width; lx += 60) {
+        ctx.fillRect(lx, player.groundY + 35, 30, 4);
+      }
+
+      drawRealisticWheelchairUser(player.x, player.y, player.width, player.height, player.isCrouching, player.invincibleTimer > 0);
+
+      let nearestPrompt = null;
       for (let obs of obstacles) {
         if (obs.type === 'overhang') {
-          ctx.fillStyle = '#EF4444';
-          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-          ctx.fillStyle = '#F8FAFC';
-          ctx.font = 'bold 11px sans-serif';
-          ctx.fillText('低矮標示', obs.x + 2, obs.y + 24);
-        } else if (obs.type === 'traffic_light') {
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obs.x + 12, obs.y + obs.height, 8, player.groundY - (obs.y + obs.height));
+          ctx.fillRect(obs.x + obs.width - 20, obs.y + obs.height, 8, player.groundY - (obs.y + obs.height));
           ctx.fillStyle = '#334155';
-          ctx.fillRect(obs.x + 12, obs.y, 16, obs.height);
-          ctx.fillStyle = '#EF4444';
-          ctx.beginPath();
-          ctx.arc(obs.x + 20, obs.y + 15, 6, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          ctx.fillStyle = '#F59E0B';
+          ctx.fillRect(obs.x + 8, player.groundY - 6, 16, 6);
+          ctx.fillRect(obs.x + obs.width - 24, player.groundY - 6, 16, 6);
+
+          ctx.fillStyle = '#0284C7';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.fillStyle = '#F59E0B';
+          ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText('⚠️ 站立牌 (需按住蹲下)', obs.x + 6, obs.y + 22);
+        } else if (obs.type === 'ground') {
+          ctx.fillStyle = '#EA580C';
+          ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(obs.x, obs.y + 6, obs.width, 4);
+        } else if (obs.type === 'traffic_light') {
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(obs.x + 5, obs.y, 8, obs.height);
+          ctx.fillStyle = '#1E293B';
+          ctx.fillRect(obs.x - 3, obs.y, 24, 50);
+
+          ctx.fillStyle = obs.isRed ? '#EF4444' : '#CBD5E1';
+          ctx.beginPath();
+          ctx.arc(obs.x + 9, obs.y + 13, 7, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = !obs.isRed ? '#22C55E' : '#CBD5E1';
+          ctx.beginPath();
+          ctx.arc(obs.x + 9, obs.y + 35, 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        if (!obs.cleared && obs.x > player.x && obs.x - player.x < 280) {
+          if (!nearestPrompt) nearestPrompt = obs.hint;
         }
       }
 
-      // 玩家角色繪製
-      ctx.fillStyle = player.invincibleTimer > 0 && Math.floor(Date.now() / 80) % 2 === 0 ? '#F43F5E' : '#0284C7';
-      ctx.beginPath();
-      ctx.roundRect(player.x, player.y, player.width, player.height, 10);
-      ctx.fill();
+      if (nearestPrompt && gameState === 'PLAYING') {
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.9)';
+        ctx.beginPath();
+        ctx.roundRect(canvas.width / 2 - 190, 14, 380, 34, 17);
+        ctx.fill();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(nearestPrompt, canvas.width / 2, 36);
+        ctx.textAlign = 'left';
+      }
 
-      // 角色細節
-      ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath();
-      ctx.arc(player.x + 36, player.y + 18, 5, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = '#0369A1';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 28);
+      ctx.fillText(`成功通關: ${player.clearedObstacles} 個`, 20, 48);
 
-      // 即時數據 UI
-      ctx.fillStyle = '#0F172A';
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 30);
-      ctx.fillText(`成功廊道: ${player.clearedObstacles} 個`, 180, 30);
-      ctx.fillText(`碰撞次數: ${totalFails} 次`, 330, 30);
-    }
-
-    function gameLoop() {
-      if (gameState === 'PLAYING') {
-        updateGame();
-        drawScene();
-        animationFrameId = requestAnimationFrame(gameLoop);
-      } else if (gameState === 'GAMEOVER') {
-        showDashboard();
+      if (controlMode === 'modeB') {
+        ctx.fillStyle = spaceHasBeenReleased ? '#16A34A' : '#DC2626';
+        ctx.fillText(`單鍵狀態: ${spaceHasBeenReleased ? '就緒 (可按)' : '等待放開按鍵'}`, 20, 68);
       }
     }
 
-    /**
-     * 顯示結算儀表板：明確宣告作者劉秉祐與潘睿熙之原創著作權，
-     * 並嚴正澄清本系統為輔助系統，絕非醫療器材、絕非真實醫療診斷、絕非偽醫學。
-     */
-    function showDashboard() {
-      document.getElementById('dashboard-overlay').style.display = 'flex';
-      document.getElementById('btn-pause-ing').style.display = 'none';
-      stopBgm();
+    function drawRealisticWheelchairUser(x, y, w, h, isCrouching, isInvincible) {
+      ctx.save();
+      if (isInvincible) ctx.globalAlpha = 0.6;
 
-      let finalScore = Math.max(10, 100 - totalFails * 12 + player.clearedObstacles * 5);
-      document.getElementById('res-distance').innerText = `${Math.floor(player.distance)} m`;
-      document.getElementById('res-cleared').innerText = `${player.clearedObstacles} 個`;
-      document.getElementById('res-fails').innerText = `${totalFails} 次`;
-      document.getElementById('res-score').innerText = `${finalScore} 分`;
+      const wheelX = x + 14;
+      const wheelY = y + h - 14;
+      const wheelRadius = isCrouching ? 12 : 15;
 
-      const evalBox = document.getElementById('ai-eval-text');
-      evalBox.innerHTML = `
-        <strong>【程式原創著作權與開發者聲明】</strong><br>
-        本系統程式碼與架構由 <b>劉秉祐</b> 與 <b>潘睿熙</b> 親手開發與編寫，享有完整原創著作權。<br><br>
-        <strong>【嚴正學理與非醫療宣告】</strong><br>
-        本系統基於客觀科學理論「重複任務訓練 (Repetitive Task Practice)」與「視動整合 (Visuomotor Integration)」設計。<b>本系統純粹為復健訓練與教育之「輔助系統」，絕非醫療器材，亦無法、不用以斷定任何真實的醫學狀況或疾病診斷。本系統並非為醫療目的設計，所有數據僅供動作協調趨勢之參考，絕對不是偽醫學。</b><br><br>
-        <strong>【輔助系統分析報告】</strong><br>
-        - <b>動作與移動表現：</b> 累積移動距離 ${Math.floor(player.distance)} 公尺，成功通過 ${player.clearedObstacles} 個障礙。<br>
-        - <b>協調與反應次數：</b> 偵測碰撞次數共計 ${totalFails} 次，反映視動整合路徑中的動作控制表現。<br>
-        - <b>綜合總結：</b> 僅作為輔助訓練參考，非臨床診斷依據。
-      `;
+      ctx.beginPath();
+      ctx.arc(wheelX, wheelY, wheelRadius, 0, Math.PI * 2);
+      ctx.fillStyle = '#334155';
+      ctx.fill();
+      ctx.lineWidth = 3.5;
+      ctx.strokeStyle = '#0284C7';
+      ctx.stroke();
 
-      saveScoreToFirebase(finalScore);
+      ctx.beginPath();
+      ctx.arc(wheelX, wheelY, wheelRadius - 3, 0, Math.PI * 2);
+      ctx.strokeStyle = '#94A3B8';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
+        ctx.beginPath();
+        ctx.moveTo(wheelX, wheelY);
+        ctx.lineTo(wheelX + Math.cos(angle + player.distance * 0.1) * (wheelRadius - 3), wheelY + Math.sin(angle + player.distance * 0.1) * (wheelRadius - 3));
+        ctx.strokeStyle = '#CBD5E1';
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      ctx.arc(x + w - 6, y + h - 6, isCrouching ? 4 : 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#64748B';
+      ctx.fill();
+      ctx.strokeStyle = '#0F172A';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.strokeStyle = '#0284C7';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x + 10, y + h - 14);
+      ctx.lineTo(x + 14, y + 15);
+      ctx.lineTo(x + w - 10, y + h - 20);
+      ctx.stroke();
+
+      ctx.fillStyle = '#FBBF24';
+      ctx.beginPath();
+      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 8 : 18), isCrouching ? 5 : 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#D97706';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = '#EF4444';
+      ctx.beginPath();
+      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 6 : 15), isCrouching ? 5 : 8, Math.PI, Math.PI * 2);
+      ctx.fill();
+
+      const shirtGrad = ctx.createLinearGradient(x, y, x, y + h);
+      shirtGrad.addColorStop(0, '#38BDF8');
+      shirtGrad.addColorStop(1, '#0284C7');
+      ctx.fillStyle = shirtGrad;
+      ctx.fillRect(x + w / 2 - 8, y + (isCrouching ? 13 : 26), 18, isCrouching ? 10 : 22);
+
+      ctx.restore();
     }
   </script>
 </body>
