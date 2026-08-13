@@ -3,147 +3,349 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>智網專注力大師 - 復健迷宮系統</title>
-  <!-- 引入 Firebase SDK (預設儲存區域為美國 us-central1 雲端伺服器) -->
+  <title>復健迷宮 - 身心障礙者遠距體感與都市適應系統</title>
+  
+  <!-- 引入 Firebase SDK (美國伺服器資料庫與驗證) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: #1a1a1a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    
-    #score-ui {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #0d1b2a;
-      border: 2px solid #00b4d8;
-      color: #00f5d4;
-      padding: 10px 20px;
-      font-size: 20px;
-      font-weight: bold;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 245, 212, 0.3);
-      z-index: 100;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      user-select: none;
     }
 
-    #main-wrapper {
+    body {
+      background-color: #06151C;
+      color: #E2E8F0;
       display: flex;
-      gap: 20px;
-      max-width: 900px;
-      width: 100%;
-      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
 
-    #game-container {
-      background: #2b2b2b;
-      padding: 24px;
-      border-radius: 12px;
-      flex: 1.2;
-      min-width: 340px;
+    #app-container {
+      position: relative;
+      width: 900px;
+      height: 600px;
+      background: #0B2B36;
+      border: 2px solid #00F2FE;
+      border-radius: 24px;
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.15);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 頂部 Google 驗證與狀態列 */
+    #top-bar {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 30;
+    }
+
+    .btn-auth {
+      background: #1A73E8;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: all 0.2s;
+    }
+    .btn-auth:hover { background: #1557B0; }
+
+    .user-status {
+      font-size: 13px;
+      color: #00F2FE;
+      background: rgba(11, 43, 54, 0.8);
+      padding: 6px 14px;
+      border-radius: 16px;
+      border: 1px solid #1A4250;
+    }
+
+    /* 1. 開始前選單介面 */
+    #menu-screen {
+      position: absolute;
+      inset: 0;
+      background: #0B2B36;
+      padding: 60px 40px 32px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      overflow-y: auto;
     }
 
-    h2 { font-size: 22px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    
-    .btn {
+    .icon-header {
+      width: 64px;
+      height: 64px;
+      background: #144958;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      border: 2px solid #00F2FE;
+    }
+
+    .icon-header svg { width: 34px; height: 34px; fill: #00F2FE; }
+
+    h1 { font-size: 30px; color: #FFFFFF; letter-spacing: 2px; margin-bottom: 4px; }
+    .subtitle { font-size: 14px; color: #94A3B8; margin-bottom: 20px; }
+    .section-title { width: 100%; font-size: 14px; color: #E2E8F0; margin-bottom: 10px; text-align: left; }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
       width: 100%;
-      padding: 12px 20px;
-      border-radius: 8px;
-      border: none;
-      font-size: 15px;
-      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .grid-container-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    .option-card {
+      background: rgba(15, 45, 56, 0.8);
+      border: 2px solid #1A4250;
+      border-radius: 16px;
+      padding: 14px;
       cursor: pointer;
       transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 12px;
     }
 
-    .btn-auth { background-color: #1a73e8; color: white; }
-    .btn-auth:hover { background-color: #1557b0; }
-    .btn-start { background-color: #0084ff; color: white; margin-top: 12px; }
-    .btn-start:hover { background-color: #0062cc; }
+    .option-card:hover { border-color: #00D2FF; background: #113847; }
+    .option-card.active {
+      border-color: #00F2FE;
+      background: #0E3B4C;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    }
 
-    .status-text { font-size: 14px; color: #aaa; margin-bottom: 16px; text-align: center; }
+    .card-title { font-size: 16px; font-weight: bold; color: #FFFFFF; margin-bottom: 4px; }
+    .card-desc { font-size: 12px; color: #94A3B8; line-height: 1.4; }
 
-    #gameCanvas {
-      background-color: #000;
-      border: 2px solid #444;
+    .info-box {
+      width: 100%;
+      background: rgba(255, 160, 0, 0.08);
+      border-left: 4px solid #FFA000;
       border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #CBD5E1;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .btn-start {
+      width: 260px;
+      height: 50px;
+      background: linear-gradient(180deg, #FFB300 0%, #F57C00 100%);
+      color: #1A0D00;
+      font-size: 19px;
+      font-weight: bold;
+      border: none;
+      border-radius: 25px;
       cursor: pointer;
+      box-shadow: 0 6px 16px rgba(245, 124, 0, 0.4);
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245, 124, 0, 0.6); }
+
+    .footer-text { margin-top: 10px; font-size: 12px; color: #64748B; }
+
+    /* 2. 遊戲主畫布 */
+    #gameCanvas { width: 100%; height: 100%; display: block; background: #081B24; }
+
+    /* 3. AI 復健數據儀表板 (彈出視窗) */
+    #dashboard-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 21, 28, 0.88);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 40;
     }
 
-    .hint-text { font-size: 12px; color: #ccc; margin-top: 10px; text-align: center; }
-
-    #sidebar {
-      flex: 1;
-      min-width: 280px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    .dashboard-card {
+      width: 560px;
+      background: #0B2B36;
+      border: 2px solid #00F2FE;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 0 40px rgba(0, 242, 254, 0.25);
+      text-align: center;
     }
 
-    .panel {
-      background: #2b2b2b;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    .dash-header { font-size: 22px; font-weight: bold; color: #00F2FE; margin-bottom: 16px; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
-    .panel h3 { font-size: 16px; border-bottom: 1px solid #444; padding-bottom: 8px; margin-bottom: 12px; }
-    .leaderboard-list { list-style: none; font-size: 14px; }
-    .leaderboard-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #333; }
+    .metric-item { background: #113847; border: 1px solid #1A4250; border-radius: 10px; padding: 10px; }
+    .metric-value { font-size: 18px; font-weight: bold; color: #38BDF8; }
+    .metric-label { font-size: 11px; color: #94A3B8; margin-top: 2px; }
+
+    .ai-eval-box {
+      background: rgba(0, 242, 254, 0.05);
+      border: 1px dashed #00D2FF;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: left;
+      font-size: 13px;
+      color: #E2E8F0;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .leaderboard-box {
+      background: #081B24;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .leaderboard-box h4 { font-size: 13px; color: #00F2FE; margin-bottom: 6px; }
+    .leaderboard-list { list-style: none; font-size: 12px; color: #CBD5E1; }
+    .leaderboard-list li { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #1A4250; }
+
+    .btn-restart {
+      width: 100%;
+      height: 46px;
+      background: linear-gradient(180deg, #00F2FE 0%, #0088FF 100%);
+      color: #04121A;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 23px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 242, 254, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-restart:hover { box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5); transform: translateY(-1px); }
   </style>
 </head>
 <body>
 
-  <div id="score-ui">Progress: <span id="progress-val">0</span> / 100</div>
-
-  <div id="main-wrapper">
-    <div id="game-container">
-      <h2>♿ 智網專注力大師</h2>
-
-      <button id="auth-btn" class="btn btn-auth" onclick="loginGoogle()">
-        👤 點擊進行 Google 登入驗證
-      </button>
-
-      <div id="auth-status" class="status-text">狀態：尚未登入雲端帳戶</div>
-
-      <canvas id="gameCanvas" width="400" height="180"></canvas>
-
-      <p class="hint-text">操作提示：點擊下方按鈕開始，遊玩時「點擊黑色遊戲畫面」控制跳躍</p>
-
-      <button id="start-btn" class="btn btn-start" onclick="startGame()">
-        🎮 開始測試復健反應力
-      </button>
+  <div id="app-container">
+    <!-- 頂部 Google 登入驗證列 -->
+    <div id="top-bar">
+      <button class="btn-auth" onclick="loginGoogle()">👤 Google 帳戶登入</button>
+      <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
     </div>
 
-    <div id="sidebar">
-      <div id="dashboard" class="panel">
-        <h3>📊 AI 臨床數據分析</h3>
-        <div id="dashboard-content" style="font-size: 14px; color: #aaa;">完成遊戲測試後將自動生成數據報告...</div>
+    <!-- 1. 開始前選單 UI -->
+    <div id="menu-screen">
+      <div class="icon-header">
+        <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
+      </div>
+      <h1>復健迷宮</h1>
+      <p class="subtitle">身心障礙者的遠距體感復健與都市適應迷宮</p>
+
+      <div class="section-title">請選擇關卡難度</div>
+      <div class="grid-container">
+        <div class="option-card active" onclick="selectDifficulty('easy', this)">
+          <div class="card-title">輕度復健</div>
+          <div class="card-desc">步調平緩、障礙少</div>
+        </div>
+        <div class="option-card" onclick="selectDifficulty('medium', this)">
+          <div class="card-title">中度挑戰</div>
+          <div class="card-desc">節奏適中、反應訓練</div>
+        </div>
+        <div class="option-card" onclick="selectDifficulty('hard', this)">
+          <div class="card-title">重度適應</div>
+          <div class="card-desc">高密度、進階適應</div>
+        </div>
       </div>
 
-      <div id="leaderboard-container" class="panel">
-        <h3>🏆 即時線上排行榜 (美國伺服器)</h3>
-        <ul id="leaderboard" class="leaderboard-list">
-          <li>尚未載入數據</li>
-        </ul>
+      <div class="section-title">選擇操作方式</div>
+      <div class="grid-container-2">
+        <div class="option-card active" onclick="selectMode('modeA', this)">
+          <div class="card-title">傳統鍵盤</div>
+          <div class="card-desc">↑跳躍 ↓下蹲 ←煞車 →加速</div>
+        </div>
+        <div class="option-card" onclick="selectMode('modeB', this)">
+          <div class="card-title">單鍵模式</div>
+          <div class="card-desc">自動前進，只按一個鍵</div>
+        </div>
+      </div>
+
+      <div class="info-box" id="mode-desc">
+        傳統模式：使用方向鍵完整操控輪椅移動與轉向避障。
+      </div>
+
+      <button class="btn-start" onclick="startGame()">開始復健</button>
+      <div class="footer-text">無障礙設計 · 高對比配色 · 支援單鍵開關 (Switch Access)</div>
+    </div>
+
+    <!-- 2D 遊戲 Canvas -->
+    <canvas id="gameCanvas" width="900" height="600"></canvas>
+
+    <!-- 繁體中文 AI 復健數據儀表板 -->
+    <div id="dashboard-overlay">
+      <div class="dashboard-card">
+        <div class="dash-header">📊 AI 臨床復健數據分析</div>
+
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-value" id="res-distance">0 m</div>
+            <div class="metric-label">移動總距離</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value" id="res-cleared">0 個</div>
+            <div class="metric-label">成功通行廊道</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value" id="res-fails">1 次</div>
+            <div class="metric-label">累積碰撞次數</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value" id="res-score">85 分</div>
+            <div class="metric-label">肢體適應指數</div>
+          </div>
+        </div>
+
+        <div class="ai-eval-box" id="ai-eval-text">AI 診斷數據生成中...</div>
+
+        <div class="leaderboard-box">
+          <h4>🏆 美國伺服器即時排行榜 Top 3</h4>
+          <ul id="leaderboard-list" class="leaderboard-list">
+            <li>尚未載入數據</li>
+          </ul>
+        </div>
+
+        <button class="btn-restart" onclick="restartGame()">重新開始（再試一次）</button>
       </div>
     </div>
   </div>
 
   <script>
-    // --------------------------------------------------
-    // 已將你 Firebase 的金鑰正確填入下方專案設定中
-    // --------------------------------------------------
+    // --- Firebase 雲端資料庫設定 ---
     const firebaseConfig = {
       apiKey: "AIzaSyB_yVtrLHKEVPuWVXk6OQqnzDbhel0yKWM",
       authDomain: "rehab-maze-cc483.firebaseapp.com",
@@ -162,78 +364,64 @@
       firebase.initializeApp(firebaseConfig);
       auth = firebase.auth();
       db = firebase.firestore();
-      
+
       auth.onAuthStateChanged(user => {
-        const statusEl = document.getElementById('auth-status');
+        const statusEl = document.getElementById('user-status-text');
         if (user) {
           currentUser = user;
-          statusEl.innerText = `狀態：已登入 (${user.displayName || user.email})`;
-          statusEl.style.color = '#4caf50';
+          statusEl.innerText = `已登入：${user.displayName || user.email}`;
+          statusEl.style.color = '#4CAF50';
           loadLeaderboard();
         } else {
           currentUser = null;
-          statusEl.innerText = '狀態：尚未登入雲端帳戶';
-          statusEl.style.color = '#aaa';
+          statusEl.innerText = '狀態：未登入雲端帳戶';
+          statusEl.style.color = '#00F2FE';
         }
       });
     } catch (e) {
-      console.warn("Firebase 連線初始化失敗，請確認 apiKey 是否正確輸入。");
+      console.warn("Firebase 未初始化");
     }
 
     function loginGoogle() {
-      if (!auth) {
-        alert("Firebase 未正確設定。");
-        return;
-      }
+      if (!auth) return;
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).catch(err => {
-        alert("登入失敗：" + err.message);
-      });
+      auth.signInWithPopup(provider).catch(err => alert("登入失敗: " + err.message));
     }
 
-    function saveScoreToUSDB(score) {
+    function saveScoreToFirebase(score) {
       if (!db || !currentUser) return;
       db.collection("leaderboard").add({
         uid: currentUser.uid,
-        name: currentUser.displayName || "匿名患者",
+        name: currentUser.displayName || "匿名學員",
         score: score,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        loadLeaderboard();
-      }).catch(err => console.error("資料寫入失敗:", err));
+      }).then(() => loadLeaderboard());
     }
 
     function loadLeaderboard() {
       if (!db) return;
-      db.collection("leaderboard")
-        .orderBy("score", "desc")
-        .limit(5)
-        .get()
-        .then(snapshot => {
-          const list = document.getElementById('leaderboard');
-          list.innerHTML = "";
-          snapshot.forEach(doc => {
-            const data = doc.data();
-            const li = document.createElement('li');
-            li.innerHTML = `<span>${data.name}</span><strong>${data.score} 分</strong>`;
-            list.appendChild(li);
-          });
+      db.collection("leaderboard").orderBy("score", "desc").limit(3).get().then(snapshot => {
+        const list = document.getElementById('leaderboard-list');
+        list.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const li = document.createElement('li');
+          li.innerHTML = `<span>${data.name}</span><strong>${data.score} 分</strong>`;
+          list.appendChild(li);
         });
+      });
     }
 
+    // --- Web Audio 背景音樂音效 ---
     let audioCtx = null;
     let isBgmPlaying = false;
     let bgmTimer = null;
 
     function startBgm() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       if (isBgmPlaying) return;
-      
+
       isBgmPlaying = true;
       const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
       let step = 0;
@@ -244,133 +432,343 @@
         const gain = audioCtx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-        
-        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-
+        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.35);
+        osc.stop(audioCtx.currentTime + 0.3);
         step++;
       }, 350);
     }
 
+    // --- 遊戲邏輯與組態 ---
+    let difficulty = 'easy';
+    let controlMode = 'modeA';
+    let totalFails = 0;
+
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    let gameRunning = false;
-    let score = 0;
-    let animationId = null;
+    let gameState = 'MENU';
+    let animationFrameId = null;
 
-    const player = { x: 50, y: 130, width: 20, height: 20, dy: 0, gravity: 0.65, jumpForce: -9.5, isGrounded: true };
-    const obstacle = { x: 400, y: 130, width: 15, height: 20, speed: 4.5 };
+    const NORMAL_HEIGHT = 64;
+    const CROUCH_HEIGHT = 26;
 
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#444';
-      ctx.fillRect(0, 150, canvas.width, 30);
-      ctx.fillStyle = '#00f5d4';
-      ctx.fillRect(player.x, player.y, player.width, player.height);
-      ctx.fillStyle = '#ff4757';
-      ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    }
+    const player = {
+      x: 100,
+      y: 0,
+      width: 48,
+      height: NORMAL_HEIGHT,
+      groundY: 480,
+      vy: 0,
+      gravity: 0.65,
+      jumpForce: -13,
+      isGrounded: true,
+      isCrouching: false,
+      speed: 4,
+      distance: 0,
+      clearedObstacles: 0,
+      invincibleTimer: 0
+    };
 
-    function update() {
-      if (!gameRunning) return;
+    let obstacles = [];
+    let obstacleSpawnTimer = 0;
 
-      player.dy += player.gravity;
-      player.y += player.dy;
+    const keys = { Up: false, Down: false, Left: false, Right: false, Space: false };
 
-      if (player.y >= 130) {
-        player.y = 130;
-        player.dy = 0;
-        player.isGrounded = true;
-      }
-
-      obstacle.x -= obstacle.speed;
-      if (obstacle.x + obstacle.width < 0) {
-        obstacle.x = 400;
-        score += 10;
-        document.getElementById('progress-val').innerText = score;
-
-        if (score >= 100) {
-          gameWin();
-          return;
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.Up = true;
+      if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.Down = true;
+      if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.Left = true;
+      if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = true;
+      if (e.code === 'Space') {
+        keys.Space = true;
+        if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded) {
+          player.vy = player.jumpForce;
+          player.isGrounded = false;
         }
       }
+    });
 
-      if (
-        player.x < obstacle.x + obstacle.width &&
-        player.x + player.width > obstacle.x &&
-        player.y < obstacle.y + obstacle.height &&
-        player.y + player.height > obstacle.y
-      ) {
-        gameOver();
-        return;
-      }
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.Up = false;
+      if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.Down = false;
+      if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.Left = false;
+      if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.Right = false;
+      if (e.code === 'Space') keys.Space = false;
+    });
 
-      draw();
-      animationId = requestAnimationFrame(update);
-    }
-
-    function jump() {
-      if (player.isGrounded && gameRunning) {
-        player.dy = player.jumpForce;
+    canvas.addEventListener('pointerdown', () => {
+      if (controlMode === 'modeB' && gameState === 'PLAYING' && player.isGrounded) {
+        player.vy = player.jumpForce;
         player.isGrounded = false;
       }
+    });
+
+    function selectDifficulty(diff, elem) {
+      difficulty = diff;
+      document.querySelectorAll('.grid-container .option-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
     }
 
-    canvas.addEventListener('click', jump);
-    window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') jump();
-    });
+    function selectMode(mode, elem) {
+      controlMode = mode;
+      document.querySelectorAll('.grid-container-2 .option-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+
+      const descBox = document.getElementById('mode-desc');
+      if (mode === 'modeA') {
+        descBox.innerText = '傳統模式：使用方向鍵完整操控輪椅移動與轉向避障。';
+      } else {
+        descBox.innerText = '單鍵模式：角色自動前進。遇到「低廊」與「高低差」時按一下進行應變跳躍。';
+      }
+    }
 
     function startGame() {
       startBgm();
-      score = 0;
-      document.getElementById('progress-val').innerText = score;
-      obstacle.x = 400;
-      player.y = 130;
-      player.dy = 0;
-      gameRunning = true;
-      
-      if (animationId) cancelAnimationFrame(animationId);
-      update();
+      document.getElementById('menu-screen').style.display = 'none';
+      totalFails = 0;
+      initGameVars();
+      gameState = 'PLAYING';
+
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      gameLoop();
     }
 
-    function gameOver() {
-      gameRunning = false;
-      ctx.fillStyle = 'rgba(0,0,0,0.75)';
+    function initGameVars() {
+      player.x = 100;
+      player.y = player.groundY - NORMAL_HEIGHT;
+      player.height = NORMAL_HEIGHT;
+      player.vy = 0;
+      player.isGrounded = true;
+      player.isCrouching = false;
+      player.distance = 0;
+      player.clearedObstacles = 0;
+      player.invincibleTimer = 120;
+
+      obstacles = [];
+      obstacleSpawnTimer = 0;
+
+      if (difficulty === 'easy') player.speed = 3.5;
+      else if (difficulty === 'medium') player.speed = 4.8;
+      else if (difficulty === 'hard') player.speed = 6.2;
+    }
+
+    function spawnObstacle() {
+      const isOverhang = Math.random() > 0.45;
+      if (isOverhang) {
+        obstacles.push({
+          type: 'overhang',
+          x: canvas.width + 50,
+          y: player.groundY - 110,
+          width: 140,
+          height: 60,
+          cleared: false
+        });
+      } else {
+        obstacles.push({
+          type: 'ground',
+          x: canvas.width + 50,
+          y: player.groundY - 36,
+          width: 32,
+          height: 36,
+          cleared: false
+        });
+      }
+    }
+
+    function gameLoop() {
+      if (gameState === 'PLAYING') {
+        update();
+        render();
+      }
+      animationFrameId = requestAnimationFrame(gameLoop);
+    }
+
+    function update() {
+      if (player.invincibleTimer > 0) player.invincibleTimer--;
+
+      let currentSpeed = player.speed;
+      if (controlMode === 'modeA') {
+        if (keys.Right) currentSpeed += 1.5;
+        if (keys.Left) currentSpeed = Math.max(1.5, currentSpeed - 1.5);
+      }
+      player.distance += currentSpeed * 0.05;
+
+      let shouldCrouch = false;
+      if (controlMode === 'modeA' && keys.Down) shouldCrouch = true;
+
+      if (shouldCrouch) {
+        player.isCrouching = true;
+        player.height = CROUCH_HEIGHT;
+      } else {
+        player.isCrouching = false;
+        player.height = NORMAL_HEIGHT;
+      }
+
+      if (controlMode === 'modeA' && keys.Up && player.isGrounded) {
+        player.vy = player.jumpForce;
+        player.isGrounded = false;
+      }
+
+      player.vy += player.gravity;
+      player.y += player.vy;
+
+      const currentGround = player.groundY - player.height;
+      if (player.y >= currentGround) {
+        player.y = currentGround;
+        player.vy = 0;
+        player.isGrounded = true;
+      }
+
+      obstacleSpawnTimer++;
+      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 75);
+      if (obstacleSpawnTimer > spawnInterval) {
+        spawnObstacle();
+        obstacleSpawnTimer = 0;
+      }
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const obs = obstacles[i];
+        obs.x -= currentSpeed;
+
+        if (!obs.cleared && obs.x + obs.width < player.x) {
+          obs.cleared = true;
+          player.clearedObstacles++;
+        }
+
+        if (obs.x + obs.width < -50) {
+          obstacles.splice(i, 1);
+          continue;
+        }
+
+        if (player.invincibleTimer <= 0) {
+          if (checkCollision(player, obs)) {
+            triggerFail();
+            return;
+          }
+        }
+      }
+    }
+
+    function checkCollision(p, o) {
+      return (
+        p.x < o.x + o.width &&
+        p.x + p.width > o.x &&
+        p.y < o.y + o.height &&
+        p.y + p.height > o.y
+      );
+    }
+
+    function triggerFail() {
+      gameState = 'GAMEOVER';
+      totalFails++;
+
+      const distMeters = Math.floor(player.distance);
+      const score = Math.min(100, Math.max(40, distMeters * 2 + player.clearedObstacles * 5 - totalFails * 10));
+
+      document.getElementById('res-distance').innerText = `${distMeters} m`;
+      document.getElementById('res-cleared').innerText = `${player.clearedObstacles} 個`;
+      document.getElementById('res-fails').innerText = `${totalFails} 次`;
+      document.getElementById('res-score').innerText = `${score} 分`;
+
+      const evalBox = document.getElementById('ai-eval-text');
+      if (score >= 80) {
+        evalBox.innerHTML = `<strong>💡 AI 復健診斷：</strong> 避障反應速度非常敏捷！關節肌肉協調流暢。建議挑戰更高難度。`;
+      } else if (score >= 60) {
+        evalBox.innerHTML = `<strong>💡 AI 復健診斷：</strong> 表現良好。穿越低廊時肢體控制時間精準，請維持節奏。`;
+      } else {
+        evalBox.innerHTML = `<strong>💡 AI 復健診斷：</strong> 建議切換至「單鍵模式」加強基礎應變速度訓練。`;
+      }
+
+      saveScoreToFirebase(score);
+      document.getElementById('dashboard-overlay').style.display = 'flex';
+    }
+
+    function restartGame() {
+      document.getElementById('dashboard-overlay').style.display = 'none';
+      initGameVars();
+      gameState = 'PLAYING';
+    }
+
+    function render() {
+      ctx.fillStyle = '#081B24';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ff4757';
-      ctx.font = 'bold 18px sans-serif';
-      ctx.fillText('測試結束，再試一次！', 110, 95);
 
-      renderAIDashboard(score, "反應時間稍緩，建議再接再厲。");
-      saveScoreToUSDB(score);
-    }
+      ctx.strokeStyle = '#0E3746';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < canvas.width; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+      }
 
-    function gameWin() {
-      gameRunning = false;
-      ctx.fillStyle = 'rgba(0,0,0,0.75)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00f5d4';
-      ctx.font = 'bold 18px sans-serif';
-      ctx.fillText('恭喜完成專注力測試！', 110, 95);
+      ctx.fillStyle = '#103947';
+      ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
 
-      renderAIDashboard(score, "專注力與神經反應力極佳！");
-      saveScoreToUSDB(score);
-    }
+      ctx.strokeStyle = '#00F2FE';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(0, player.groundY);
+      ctx.lineTo(canvas.width, player.groundY);
+      ctx.stroke();
 
-    function renderAIDashboard(finalScore, evalMsg) {
-      const dash = document.getElementById('dashboard-content');
-      dash.innerHTML = `
-        <p style="margin-bottom:6px;"><strong>最終得分：</strong> ${finalScore} / 100</p>
-        <p style="margin-bottom:6px;"><strong>臨床評價：</strong> ${evalMsg}</p>
-        <p style="color:#00b4d8; font-size:12px; margin-top:8px;">* 數據已同步至美國雲端資料庫。</p>
-      `;
+      ctx.save();
+      if (player.invincibleTimer > 0 && Math.floor(player.invincibleTimer / 6) % 2 === 0) {
+        ctx.globalAlpha = 0.4;
+      }
+
+      if (player.isCrouching) {
+        ctx.fillStyle = '#00F2FE';
+        ctx.beginPath();
+        ctx.roundRect(player.x, player.y, player.width, player.height, 8);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = '#38BDF8';
+        ctx.beginPath();
+        ctx.roundRect(player.x, player.y, player.width, player.height, 10);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(player.x + 24, player.y + 16, 8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      for (let obs of obstacles) {
+        if (obs.type === 'overhang') {
+          ctx.fillStyle = '#F59E0B';
+          ctx.beginPath();
+          ctx.roundRect(obs.x, obs.y, obs.width, obs.height, 6);
+          ctx.fill();
+
+          ctx.fillStyle = '#78350F';
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillText('▼ 低廊請下蹲', obs.x + 24, obs.y + 34);
+        } else {
+          ctx.fillStyle = '#EF4444';
+          ctx.beginPath();
+          ctx.moveTo(obs.x, obs.y + obs.height);
+          ctx.lineTo(obs.x + obs.width / 2, obs.y);
+          ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillText(`移動距離: ${Math.floor(player.distance)} m`, 20, 36);
+      ctx.fillText(`通過數量: ${player.clearedObstacles}`, 180, 36);
+
+      if (player.invincibleTimer > 0) {
+        ctx.fillStyle = '#00F2FE';
+        ctx.fillText('🛡️ 開局無敵保護中', 320, 36);
+      }
     }
   </script>
 </body>
