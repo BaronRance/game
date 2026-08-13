@@ -52,7 +52,13 @@
       z-index: 30;
     }
 
-    .btn-auth {
+    .top-left-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-auth, .btn-pause {
       background: #0284C7;
       color: white;
       border: none;
@@ -63,7 +69,13 @@
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .btn-auth:hover { background: #0369A1; }
+    .btn-auth:hover, .btn-pause:hover { background: #0369A1; }
+    
+    .btn-pause {
+      display: none;
+      background: #475569;
+    }
+    .btn-pause:hover { background: #334155; }
 
     .user-status {
       font-size: 13px;
@@ -78,7 +90,7 @@
       position: absolute;
       inset: 0;
       background: #F0F9FF;
-      padding: 60px 40px 40px 40px;
+      padding: 40px 40px 30px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -86,46 +98,68 @@
       overflow-y: auto;
     }
 
+    .lang-container {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #0369A1;
+    }
+
+    .lang-select {
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid #0284C7;
+      background: #FFFFFF;
+      color: #0F172A;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
     .icon-header {
-      width: 64px;
-      height: 64px;
+      width: 54px;
+      height: 54px;
       background: #E0F2FE;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       border: 2px solid #0284C7;
       flex-shrink: 0;
     }
 
-    .icon-header svg { width: 34px; height: 34px; fill: #0284C7; }
+    .icon-header svg { width: 28px; height: 28px; fill: #0284C7; }
 
-    h1 { font-size: 30px; color: #0F172A; letter-spacing: 2px; margin-bottom: 4px; }
-    .subtitle { font-size: 14px; color: #64748B; margin-bottom: 20px; }
-    .section-title { width: 100%; font-size: 14px; color: #334155; margin-bottom: 10px; text-align: left; font-weight: bold; }
+    h1 { font-size: 26px; color: #0F172A; letter-spacing: 2px; margin-bottom: 2px; }
+    .subtitle { font-size: 13px; color: #64748B; margin-bottom: 14px; }
+    .section-title { width: 100%; font-size: 13px; color: #334155; margin-bottom: 8px; text-align: left; font-weight: bold; }
 
     .grid-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 12px;
       width: 100%;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .grid-container-2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      gap: 12px;
       width: 100%;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .option-card {
       background: #FFFFFF;
       border: 2px solid #CBD5E1;
-      border-radius: 16px;
-      padding: 14px;
+      border-radius: 14px;
+      padding: 10px 12px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -137,30 +171,30 @@
       box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
     }
 
-    .card-title { font-size: 16px; font-weight: bold; color: #0F172A; margin-bottom: 4px; }
-    .card-desc { font-size: 12px; color: #64748B; line-height: 1.4; }
+    .card-title { font-size: 15px; font-weight: bold; color: #0F172A; margin-bottom: 2px; }
+    .card-desc { font-size: 11px; color: #64748B; line-height: 1.3; }
 
     .info-box {
       width: 100%;
       background: #FEF3C7;
       border-left: 4px solid #F59E0B;
       border-radius: 6px;
-      padding: 10px 14px;
-      font-size: 13px;
+      padding: 8px 12px;
+      font-size: 12px;
       color: #92400E;
-      margin-bottom: 18px;
-      line-height: 1.4;
+      margin-bottom: 14px;
+      line-height: 1.3;
     }
 
     .btn-start {
-      width: 260px;
-      height: 50px;
+      width: 240px;
+      height: 46px;
       background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
       color: white;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: bold;
       border: none;
-      border-radius: 25px;
+      border-radius: 23px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
       transition: transform 0.1s;
@@ -168,11 +202,11 @@
     }
     .btn-start:hover { transform: translateY(-2px); }
 
-    .footer-text { margin-top: 14px; font-size: 12px; color: #94A3B8; margin-bottom: 20px; }
+    .footer-text { margin-top: 10px; font-size: 11px; color: #94A3B8; }
 
     #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
 
-    #dashboard-overlay {
+    .overlay-screen {
       position: absolute;
       inset: 0;
       background: rgba(15, 23, 42, 0.85);
@@ -183,8 +217,8 @@
       z-index: 40;
     }
 
-    .dashboard-card {
-      width: 560px;
+    .modal-card {
+      width: 480px;
       background: #FFFFFF;
       border: 3px solid #0284C7;
       border-radius: 20px;
@@ -193,18 +227,18 @@
       text-align: center;
     }
 
-    .dash-header { font-size: 20px; font-weight: bold; color: #0F172A; margin-bottom: 12px; }
+    .modal-header { font-size: 20px; font-weight: bold; color: #0F172A; margin-bottom: 16px; }
 
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 12px;
     }
 
     .metric-item { background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 10px; padding: 8px; }
-    .metric-value { font-size: 16px; font-weight: bold; color: #0284C7; }
-    .metric-label { font-size: 11px; color: #64748B; margin-top: 2px; }
+    .metric-value { font-size: 15px; font-weight: bold; color: #0284C7; }
+    .metric-label { font-size: 10px; color: #64748B; margin-top: 2px; }
 
     .ai-eval-box {
       background: #F0FDF4;
@@ -231,12 +265,12 @@
     .leaderboard-list { list-style: none; font-size: 11px; color: #334155; }
     .leaderboard-list li { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #E2E8F0; }
 
-    .btn-restart {
+    .btn-action {
       width: 100%;
       height: 42px;
       background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
       color: white;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       border: none;
       border-radius: 21px;
@@ -244,115 +278,270 @@
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
       margin-bottom: 8px;
     }
+    .btn-action:hover { opacity: 0.95; }
 
-    .btn-home {
+    .btn-secondary {
       width: 100%;
       height: 42px;
       background: #64748B;
       color: white;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       border: none;
       border-radius: 21px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(100, 116, 139, 0.3);
       transition: background 0.1s;
+      margin-bottom: 8px;
     }
-    .btn-home:hover { background: #475569; }
+    .btn-secondary:hover { background: #475569; }
   </style>
 </head>
 <body>
 
   <div id="app-container">
     <div id="top-bar">
-      <button class="btn-auth" onclick="loginGoogle()">👤 Google 帳戶登入</button>
+      <div class="top-left-group">
+        <button class="btn-auth" onclick="loginGoogle()" id="ui-login-btn">👤 Google 帳戶登入</button>
+        <button class="btn-pause" id="btn-pause-ing" onclick="togglePause()">⏸ 暫停</button>
+      </div>
       <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
     </div>
 
+    <!-- 首頁選單 -->
     <div id="menu-screen">
+      <div class="lang-container">
+        <label id="ui-lang-label" for="langSelect">🌍 語言：</label>
+        <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+          <option value="zh-TW">繁體中文</option>
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+        </select>
+      </div>
+
       <div class="icon-header">
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
       </div>
-      <h1>復健迷宮</h1>
-      <p class="subtitle">身心障礙者的遠距體感復健與都市適應系統（3D立體角色與單鍵放開鎖定版）</p>
+      <h1 id="ui-title">復健迷宮</h1>
+      <p class="subtitle" id="ui-subtitle">身心障礙者的遠距體感復健與都市適應系統</p>
 
-      <div class="section-title">請選擇關卡難度</div>
+      <div class="section-title" id="ui-diff-title">請選擇關卡難度</div>
       <div class="grid-container">
         <div class="option-card active" onclick="selectDifficulty('easy', this)">
-          <div class="card-title">輕度復健</div>
-          <div class="card-desc">平緩步調、障礙極少</div>
+          <div class="card-title" id="ui-easy-title">輕度復健</div>
+          <div class="card-desc" id="ui-easy-desc">平緩步調、障礙極少</div>
         </div>
         <div class="option-card" onclick="selectDifficulty('medium', this)">
-          <div class="card-title">中度挑戰</div>
-          <div class="card-desc">適中節奏、反應訓練</div>
+          <div class="card-title" id="ui-med-title">中度挑戰</div>
+          <div class="card-desc" id="ui-med-desc">適中節奏、反應訓練</div>
         </div>
         <div class="option-card" onclick="selectDifficulty('hard', this)">
-          <div class="card-title">重度適應</div>
-          <div class="card-desc">高密度都市障礙挑戰</div>
+          <div class="card-title" id="ui-hard-title">重度適應</div>
+          <div class="card-desc" id="ui-hard-desc">高密度都市障礙挑戰</div>
         </div>
       </div>
 
-      <div class="section-title">選擇操作方式</div>
+      <div class="section-title" id="ui-mode-title">選擇操作方式</div>
       <div class="grid-container-2">
         <div class="option-card active" onclick="selectMode('modeA', this)">
-          <div class="card-title">傳統鍵盤</div>
-          <div class="card-desc">↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速</div>
+          <div class="card-title" id="ui-moda-title">傳統鍵盤</div>
+          <div class="card-desc" id="ui-moda-desc">↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速</div>
         </div>
         <div class="option-card" onclick="selectMode('modeB', this)">
-          <div class="card-title">單鍵模式 (須放開才能觸發下一個動作)</div>
-          <div class="card-desc">自動前進，每次動作後必須先放開空白鍵，才能執行下一個障礙的對應動作</div>
+          <div class="card-title" id="ui-modb-title">單鍵模式</div>
+          <div class="card-desc" id="ui-modb-desc">自動前進，每次動作後必須先放開空白鍵</div>
         </div>
       </div>
 
-      <div class="info-box" id="mode-desc">
-        提示：傳統模式下按住 ↓ 鍵即可蹲下，放開 ↓ 鍵就會自動恢復站立！
+      <div class="info-box" id="ui-mode-desc">
+        提示：傳統模式下按住 ↓ 鍵即可安全蹲下，放開 ↓ 鍵就會自動恢復站立！
       </div>
 
-      <button class="btn-start" onclick="startGame()">開始都市復健</button>
-      <div class="footer-text">立體質感角色引擎 · 單鍵放開觸發機制</div>
+      <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
+      <div class="footer-text" id="ui-footer">立體質感角色引擎 · 暫停與多國語系支援</div>
     </div>
 
     <canvas id="gameCanvas" width="900" height="600"></canvas>
 
-    <div id="dashboard-overlay">
-      <div class="dashboard-card">
-        <div class="dash-header">📊 AI 臨床復健數據分析</div>
+    <!-- 暫停選單 Overlay -->
+    <div id="pause-overlay" class="overlay-screen">
+      <div class="modal-card">
+        <div class="modal-header" id="ui-pause-header">遊戲暫停</div>
+        <button class="btn-action" id="ui-resume-btn" onclick="togglePause()">繼續遊戲</button>
+        <button class="btn-secondary" id="ui-restart-btn" onclick="restartGameFromPause()">重新開始</button>
+        <button class="btn-secondary" id="ui-home-btn" onclick="returnToMenu()">返回首頁</button>
+      </div>
+    </div>
+
+    <!-- 結算儀表板 Overlay -->
+    <div id="dashboard-overlay" class="overlay-screen">
+      <div class="modal-card">
+        <div class="modal-header" id="ui-dash-header">📊 AI 臨床復健數據分析</div>
 
         <div class="metrics-grid">
           <div class="metric-item">
             <div class="metric-value" id="res-distance">0 m</div>
-            <div class="metric-label">移動總距離</div>
+            <div class="metric-label" id="ui-m-dist">移動總距離</div>
           </div>
           <div class="metric-item">
             <div class="metric-value" id="res-cleared">0 個</div>
-            <div class="metric-label">成功通行廊道</div>
+            <div class="metric-label" id="ui-m-clear">成功通行廊道</div>
           </div>
           <div class="metric-item">
             <div class="metric-value" id="res-fails">1 次</div>
-            <div class="metric-label">累積碰撞次數</div>
+            <div class="metric-label" id="ui-m-fail">累積碰撞次數</div>
           </div>
           <div class="metric-item">
             <div class="metric-value" id="res-score">85 分</div>
-            <div class="metric-label">肢體適應指數</div>
+            <div class="metric-label" id="ui-m-score">肢體適應指數</div>
           </div>
         </div>
 
         <div class="ai-eval-box" id="ai-eval-text">AI 診斷數據生成中...</div>
 
         <div class="leaderboard-box">
-          <h4>🏆 伺服器即時排行榜 Top 3</h4>
+          <h4 id="ui-lb-title">🏆 伺服器即時排行榜 Top 3</h4>
           <ul id="leaderboard-list" class="leaderboard-list">
             <li>尚未載入數據</li>
           </ul>
         </div>
 
-        <button class="btn-restart" onclick="restartGame()">重新開始（再試一次）</button>
-        <button class="btn-home" onclick="returnToMenu()">返回首頁</button>
+        <button class="btn-action" id="ui-retry-btn" onclick="restartGame()">重新開始（再試一次）</button>
+        <button class="btn-secondary" id="ui-backhome-btn" onclick="returnToMenu()">返回首頁</button>
       </div>
     </div>
   </div>
 
   <script>
+    const i18n = {
+      'zh-TW': {
+        login: "👤 Google 帳戶登入",
+        logout: "登出帳戶",
+        unlogged: "狀態：未登入雲端帳戶",
+        logged: "已登入：",
+        langLabel: "🌍 語言：",
+        title: "復健迷宮",
+        subtitle: "身心障礙者的遠距體感復健與都市適應系統",
+        diffTitle: "請選擇關卡難度",
+        easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少",
+        medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練",
+        hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
+        modeTitle: "選擇操作方式",
+        modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速",
+        modbTitle: "單鍵模式", modbDesc: "自動前進，每次動作後必須先放開空白鍵",
+        modeDesc: "提示：傳統模式下按住 ↓ 鍵即可安全蹲下，放開 ↓ 鍵就會自動恢復站立！",
+        startBtn: "開始都市復健",
+        footer: "立體質感角色引擎 · 暫停與多國語系支援",
+        pauseBtn: "⏸ 暫停",
+        pauseHeader: "遊戲暫停",
+        resumeBtn: "繼續遊戲",
+        restartBtn: "重新開始",
+        homeBtn: "返回首頁",
+        dashHeader: "📊 AI 臨床復健數據分析",
+        mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
+        lbTitle: "🏆 伺服器即時排行榜 Top 3",
+        retryBtn: "重新開始（再試一次）",
+        backHomeBtn: "返回首頁"
+      },
+      'en': {
+        login: "👤 Google Login",
+        logout: "Logout",
+        unlogged: "Status: Not logged in",
+        logged: "Logged in: ",
+        langLabel: "🌍 Language: ",
+        title: "Rehab Maze",
+        subtitle: "Remote Tele-rehab & Urban Adaptation System",
+        diffTitle: "Select Difficulty",
+        easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles",
+        medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training",
+        hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
+        modeTitle: "Select Control Mode",
+        modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up",
+        modbTitle: "Single-Key", modbDesc: "Auto-advance, release space to trigger actions",
+        modeDesc: "Tip: Hold ↓ to crouch safely, release to stand up!",
+        startBtn: "Start Rehabilitation",
+        footer: "3D Character Engine · Pause & Multi-language Support",
+        pauseBtn: "⏸ Pause",
+        pauseHeader: "Game Paused",
+        resumeBtn: "Resume",
+        restartBtn: "Restart",
+        homeBtn: "Return Home",
+        dashHeader: "📊 AI Clinical Rehabilitation Analytics",
+        mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
+        lbTitle: "🏆 Live Leaderboard Top 3",
+        retryBtn: "Restart (Try Again)",
+        backHomeBtn: "Return Home"
+      },
+      'ja': {
+        login: "👤 Google ログイン",
+        logout: "ログアウト",
+        unlogged: "ステータス：未ログイン",
+        logged: "ログイン中：",
+        langLabel: "🌍 言語：",
+        title: "リハビリ迷宮",
+        subtitle: "障害者向け遠隔体感リハビリ・都市適応システム",
+        diffTitle: "難易度を選択",
+        easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ",
+        medTitle: "中度チャレンジ", easyDesc: "適度なリズム、反応トレーニング",
+        hardTitle: "重度適応", easyDesc: "高密度都市障害物チャレンジ",
+        modeTitle: "操作方法を選択",
+        modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速",
+        modbTitle: "単一キーモード", modbDesc: "自動前進、スペースキーを離して次のアクション",
+        modeDesc: "ヒント：↓ を押し続けると安全に屈み、離すと立ち上がります！",
+        startBtn: "リハビリ開始",
+        footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
+        pauseBtn: "⏸ 一時停止",
+        pauseHeader: "ポーズ中",
+        resumeBtn: "ゲームに戻る",
+        restartBtn: "やり直す",
+        homeBtn: "ホームに戻る",
+        dashHeader: "📊 AI臨床リハビリデータ分析",
+        mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
+        lbTitle: "🏆 リアルタイムランキング Top 3",
+        retryBtn: "もう一度挑戦",
+        backHomeBtn: "ホームに戻る"
+      }
+    };
+
+    let currentLang = 'zh-TW';
+
+    function changeLanguage(lang) {
+      currentLang = lang;
+      const t = i18n[lang];
+      document.getElementById('ui-login-btn').innerText = t.login;
+      document.getElementById('ui-lang-label').innerText = t.langLabel;
+      document.getElementById('ui-title').innerText = t.title;
+      document.getElementById('ui-subtitle').innerText = t.subtitle;
+      document.getElementById('ui-diff-title').innerText = t.diffTitle;
+      document.getElementById('ui-easy-title').innerText = t.easyTitle;
+      document.getElementById('ui-easy-desc').innerText = t.easyDesc;
+      document.getElementById('ui-med-title').innerText = t.medTitle;
+      document.getElementById('ui-med-desc').innerText = t.medDesc;
+      document.getElementById('ui-hard-title').innerText = t.hardTitle;
+      document.getElementById('ui-hard-desc').innerText = t.hardDesc;
+      document.getElementById('ui-mode-title').innerText = t.modeTitle;
+      document.getElementById('ui-moda-title').innerText = t.modaTitle;
+      document.getElementById('ui-moda-desc').innerText = t.modaDesc;
+      document.getElementById('ui-modb-title').innerText = t.modbTitle;
+      document.getElementById('ui-modb-desc').innerText = t.modbDesc;
+      document.getElementById('ui-mode-desc').innerText = t.modeDesc;
+      document.getElementById('ui-start-btn').innerText = t.startBtn;
+      document.getElementById('ui-footer').innerText = t.footer;
+      document.getElementById('btn-pause-ing').innerText = t.pauseBtn;
+      document.getElementById('ui-pause-header').innerText = t.pauseHeader;
+      document.getElementById('ui-resume-btn').innerText = t.resumeBtn;
+      document.getElementById('ui-restart-btn').innerText = t.restartBtn;
+      document.getElementById('ui-home-btn').innerText = t.homeBtn;
+      document.getElementById('ui-dash-header').innerText = t.dashHeader;
+      document.getElementById('ui-m-dist').innerText = t.mDist;
+      document.getElementById('ui-m-clear').innerText = t.mClear;
+      document.getElementById('ui-m-fail').innerText = t.mFail;
+      document.getElementById('ui-m-score').innerText = t.mScore;
+      document.getElementById('ui-lb-title').innerText = t.lbTitle;
+      document.getElementById('ui-retry-btn').innerText = t.retryBtn;
+      document.getElementById('ui-backhome-btn').innerText = t.backHomeBtn;
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyB_yVtrLHKEVPuWVXk6OQqnZdbhel0yKWM",
       authDomain: "rehab-maze-cc483.firebaseapp.com",
@@ -373,15 +562,21 @@
       db = firebase.firestore();
       auth.onAuthStateChanged(user => {
         const statusEl = document.getElementById('user-status-text');
+        const loginBtn = document.getElementById('ui-login-btn');
+        const t = i18n[currentLang];
         if (user) {
           currentUser = user;
-          statusEl.innerText = `已登入：${user.displayName || user.email}`;
+          statusEl.innerText = `${t.logged}${user.displayName || user.email}`;
           statusEl.style.color = '#16A34A';
+          loginBtn.innerText = t.logout;
+          loginBtn.onclick = () => auth.signOut();
           loadLeaderboard();
         } else {
           currentUser = null;
-          statusEl.innerText = '狀態：未登入雲端帳戶';
+          statusEl.innerText = t.unlogged;
           statusEl.style.color = '#0284C7';
+          loginBtn.innerText = t.login;
+          loginBtn.onclick = loginGoogle;
         }
       });
     } catch (e) {
@@ -474,11 +669,28 @@
       osc.stop(audioCtx.currentTime + 0.12);
     }
 
+    function playOhSound() {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch(e) {}
+    }
+
     function speakText(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-TW';
+        utterance.lang = currentLang === 'en' ? 'en-US' : (currentLang === 'ja' ? 'ja-JP' : 'zh-TW');
         utterance.rate = 1.0;
         window.speechSynthesis.speak(utterance);
       }
@@ -497,7 +709,7 @@
     let animationFrameId = null;
 
     const NORMAL_HEIGHT = 65;
-    const CROUCH_HEIGHT = 35;
+    const CROUCH_HEIGHT = 28;
 
     const player = {
       x: 100, y: 0, width: 52, height: NORMAL_HEIGHT,
@@ -542,7 +754,7 @@
             if (player.isGrounded) {
               player.y = player.groundY - NORMAL_HEIGHT;
             }
-          }, 550);
+          }, 600);
           playSound('jump');
         } else if (nearestObs.type === 'traffic_light') {
           singleKeyStopTimer = 55;
@@ -567,6 +779,9 @@
             handleSingleKeyAction();
           }
         }
+      }
+      if (e.code === 'Escape' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
+        togglePause();
       }
     });
 
@@ -603,17 +818,26 @@
       controlMode = mode;
       document.querySelectorAll('.grid-container-2 .option-card').forEach(c => c.classList.remove('active'));
       elem.classList.add('active');
-      const descBox = document.getElementById('mode-desc');
-      if (mode === 'modeA') {
-        descBox.innerText = '傳統模式：按 ← 停止，→ 加速，↑ 跳躍，按住 ↓ 蹲下（放開後自動站立）。';
-      } else {
-        descBox.innerText = '單鍵模式：自動前進，每次動作後必須先放開空白鍵，才能執行下一個障礙的對應動作！';
+    }
+
+    function togglePause() {
+      if (gameState === 'PLAYING') {
+        gameState = 'PAUSED';
+        stopBgm();
+        document.getElementById('pause-overlay').style.display = 'flex';
+        document.getElementById('btn-pause-ing').style.display = 'none';
+      } else if (gameState === 'PAUSED') {
+        document.getElementById('pause-overlay').style.display = 'none';
+        document.getElementById('btn-pause-ing').style.display = 'block';
+        gameState = 'PLAYING';
+        startBgm();
       }
     }
 
     function startGame() {
       initAudioContext();
       document.getElementById('menu-screen').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'block';
       totalFails = 0;
       initGameVars();
       gameState = 'PLAYING';
@@ -622,10 +846,20 @@
       gameLoop();
     }
 
+    function restartGameFromPause() {
+      document.getElementById('pause-overlay').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'block';
+      initGameVars();
+      gameState = 'PLAYING';
+      startBgm();
+    }
+
     function returnToMenu() {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       stopBgm();
+      document.getElementById('pause-overlay').style.display = 'none';
       document.getElementById('dashboard-overlay').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'none';
       document.getElementById('menu-screen').style.display = 'flex';
       gameState = 'MENU';
     }
@@ -651,8 +885,8 @@
       const rand = Math.random();
       if (rand < 0.35) {
         obstacles.push({
-          type: 'overhang', x: canvas.width + 50, y: player.groundY - 100,
-          width: 120, height: 40, cleared: false, hint: '⚠️ 遮雨棚！請按住向下蹲下'
+          type: 'overhang', x: canvas.width + 50, y: player.groundY - 110,
+          width: 120, height: 45, cleared: false, hint: '⚠️ 遮雨棚！請按住向下蹲下'
         });
       } else if (rand < 0.70) {
         obstacles.push({
@@ -670,6 +904,8 @@
     function gameLoop() {
       if (gameState === 'PLAYING') {
         update();
+        render();
+      } else if (gameState === 'PAUSED') {
         render();
       }
       animationFrameId = requestAnimationFrame(gameLoop);
@@ -761,6 +997,12 @@
       if (o.type === 'traffic_light') {
         return o.isRed && (p.x + p.width > o.x) && (p.x < o.x + o.width) && speed > 0.5;
       }
+      
+      // 修復：如果遇到遮雨棚且玩家已經成功蹲下，直接判定安全通過，不發生碰撞
+      if (o.type === 'overhang' && p.isCrouching) {
+        return false;
+      }
+
       return (
         p.x < o.x + o.width &&
         p.x + p.width > o.x &&
@@ -773,7 +1015,9 @@
       gameState = 'GAMEOVER';
       stopBgm();
       totalFails++;
-      playSound('fail');
+      document.getElementById('btn-pause-ing').style.display = 'none';
+      
+      playOhSound();
 
       const distMeters = Math.floor(player.distance);
       const score = Math.min(100, Math.max(40, distMeters * 2 + player.clearedObstacles * 5 - totalFails * 10));
@@ -783,9 +1027,15 @@
       document.getElementById('res-fails').innerText = `${totalFails} 次`;
       document.getElementById('res-score').innerText = `${score} 分`;
 
-      let textDiagnosis = score >= 80 ? "AI 診斷：節奏控制精準，反應流暢！" : "AI 診斷：注意障礙物切換時機。";
+      let textDiagnosis = score >= 80 ? "AI 診斷：節奏控制精準，反應流暢！" : "AI 診斷：注意障礙物切換時機，保持重心穩定。";
       document.getElementById('ai-eval-text').innerHTML = `<strong>💡 ${textDiagnosis}</strong>`;
-      speakText(`復健結束。移動 ${distMeters} 公尺，得分 ${score} 分。`);
+      
+      let speechTextContent = currentLang === 'en' ? 
+        `Oh! Game over. Distance: ${distMeters} meters, score: ${score} points. ${textDiagnosis}` :
+        (currentLang === 'ja' ? `Oh! ゲームオーバー。移動距離 ${distMeters} メートル、スコア ${score} 点。${textDiagnosis}` :
+        `Oh！遊戲結束。移動 ${distMeters} 公尺，得分 ${score} 分。${textDiagnosis}`);
+      
+      speakText(speechTextContent);
       saveScoreToFirebase(score);
       document.getElementById('dashboard-overlay').style.display = 'flex';
     }
@@ -793,6 +1043,7 @@
     function restartGame() {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       document.getElementById('dashboard-overlay').style.display = 'none';
+      document.getElementById('btn-pause-ing').style.display = 'block';
       initGameVars();
       gameState = 'PLAYING';
       startBgm();
@@ -837,7 +1088,7 @@
       for (let obs of obstacles) {
         if (obs.type === 'overhang') {
           ctx.fillStyle = '#64748B';
-          ctx.fillRect(obs.x, obs.y - 80, 10, obs.y + obs.height);
+          ctx.fillRect(obs.x, obs.y - 80, 10, obs.y + 120);
           ctx.fillStyle = '#F59E0B';
           ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
           ctx.fillStyle = '#DC2626';
@@ -872,7 +1123,7 @@
         }
       }
 
-      if (nearestPrompt) {
+      if (nearestPrompt && gameState === 'PLAYING') {
         ctx.fillStyle = 'rgba(2, 132, 199, 0.9)';
         ctx.beginPath();
         ctx.roundRect(canvas.width / 2 - 175, 14, 350, 34, 17);
@@ -901,7 +1152,7 @@
 
       const wheelX = x + 14;
       const wheelY = y + h - 14;
-      const wheelRadius = 15;
+      const wheelRadius = isCrouching ? 12 : 15;
 
       ctx.beginPath();
       ctx.arc(wheelX, wheelY, wheelRadius, 0, Math.PI * 2);
@@ -912,7 +1163,7 @@
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(wheelX, wheelY, wheelRadius - 4, 0, Math.PI * 2);
+      ctx.arc(wheelX, wheelY, wheelRadius - 3, 0, Math.PI * 2);
       ctx.strokeStyle = '#94A3B8';
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -920,13 +1171,13 @@
       for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
         ctx.beginPath();
         ctx.moveTo(wheelX, wheelY);
-        ctx.lineTo(wheelX + Math.cos(angle + player.distance * 0.1) * (wheelRadius - 4), wheelY + Math.sin(angle + player.distance * 0.1) * (wheelRadius - 4));
+        ctx.lineTo(wheelX + Math.cos(angle + player.distance * 0.1) * (wheelRadius - 3), wheelY + Math.sin(angle + player.distance * 0.1) * (wheelRadius - 3));
         ctx.strokeStyle = '#CBD5E1';
         ctx.stroke();
       }
 
       ctx.beginPath();
-      ctx.arc(x + w - 6, y + h - 6, 6, 0, Math.PI * 2);
+      ctx.arc(x + w - 6, y + h - 6, isCrouching ? 4 : 6, 0, Math.PI * 2);
       ctx.fillStyle = '#64748B';
       ctx.fill();
       ctx.strokeStyle = '#0F172A';
@@ -943,7 +1194,7 @@
 
       ctx.fillStyle = '#FBBF24';
       ctx.beginPath();
-      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 12 : 18), isCrouching ? 6 : 8, 0, Math.PI * 2);
+      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 8 : 18), isCrouching ? 5 : 8, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#D97706';
       ctx.lineWidth = 1.5;
@@ -951,20 +1202,14 @@
 
       ctx.fillStyle = '#EF4444';
       ctx.beginPath();
-      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 10 : 15), isCrouching ? 6 : 8, Math.PI, Math.PI * 2);
+      ctx.arc(x + w / 2 + 2, y + (isCrouching ? 6 : 15), isCrouching ? 5 : 8, Math.PI, Math.PI * 2);
       ctx.fill();
 
       const shirtGrad = ctx.createLinearGradient(x, y, x, y + h);
       shirtGrad.addColorStop(0, '#38BDF8');
       shirtGrad.addColorStop(1, '#0284C7');
       ctx.fillStyle = shirtGrad;
-      ctx.fillRect(x + w / 2 - 8, y + (isCrouching ? 18 : 26), 18, isCrouching ? 14 : 22);
-
-      ctx.beginPath();
-      ctx.arc(wheelX, wheelY, wheelRadius + 2, -Math.PI / 2, Math.PI / 2);
-      ctx.strokeStyle = '#E2E8F0';
-      ctx.lineWidth = 2;
-      ctx.stroke();
+      ctx.fillRect(x + w / 2 - 8, y + (isCrouching ? 13 : 26), 18, isCrouching ? 10 : 22);
 
       ctx.restore();
     }
