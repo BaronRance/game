@@ -302,7 +302,7 @@
       </div>
 
       <div class="info-box" id="mode-desc">
-        傳統模式：按 ← 停止避讓紅綠燈（紅燈最多 3 秒變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！
+        傳統模式：按 ← 停止避讓紅綠燈（停住時立即變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！
       </div>
 
       <button class="btn-start" onclick="startGame()">開始都市復健</button>
@@ -418,7 +418,7 @@
       });
     }
 
-    // --- 音效與背景音樂系統 ---
+    // --- 音效與背景音樂系統 (完整保留 BGM) ---
     let audioCtx = null;
     let isBgmPlaying = false;
     let bgmTimer = null;
@@ -432,10 +432,10 @@
       }
     }
 
-    // 播放連續輕快的背景音樂 (BGM)
+    // 播放連續輕快背景音樂 (BGM)
     function startBgm() {
       initAudioContext();
-      stopBgm(); // 確保不重複播放
+      stopBgm();
 
       isBgmPlaying = true;
       const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63, 440.00, 493.88];
@@ -448,7 +448,7 @@
           const gain = audioCtx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
@@ -456,9 +456,9 @@
           osc.stop(audioCtx.currentTime + 0.28);
           step++;
         } catch (e) {
-          console.warn("BGM 播放出錯:", e);
+          console.warn("BGM 播放中斷:", e);
         }
-      }, 320);
+      }, 300);
     }
 
     function stopBgm() {
@@ -593,7 +593,7 @@
 
       const descBox = document.getElementById('mode-desc');
       if (mode === 'modeA') {
-        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈（紅燈最多 3 秒變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
+        descBox.innerText = '傳統模式：按 ← 停止避讓紅綠燈（停住時立即變綠燈），→ 加速，↑ 跳躍施工護欄，↓ 蹲下通過都市低矮遮雨棚。靠近障礙物時畫面會顯示智導提示！';
       } else {
         descBox.innerText = '單鍵模式：輪椅自動前進。請在接近都市障礙物時按下單鍵觸發應變！';
       }
@@ -630,11 +630,11 @@
       else if (difficulty === 'hard') player.baseSpeed = 6.2;
     }
 
-    // 隨機生成都市專屬障礙物（低矮遮雨棚、道路施工護欄、紅燈最多3秒自動變綠燈的行人號誌）
+    // 隨機生成都市專屬障礙物（確保障礙物間保持一定安全距離）
     function spawnObstacle() {
       const rand = Math.random();
       if (rand < 0.35) {
-        // 都市低矮遮雨棚 / 限高警示桿 (按 ↓ 蹲下)
+        // 都市低矮遮雨棚 / 限高桿 (按 ↓ 蹲下)
         obstacles.push({
           type: 'overhang',
           x: canvas.width + 50,
@@ -645,7 +645,7 @@
           hint: '⚠️ 低矮遮雨棚/限高桿！【按 ↓ 蹲下】'
         });
       } else if (rand < 0.70) {
-        // 道路施工護欄 / 警示錐 (按 ↑ 跳躍)
+        // 道路施工護欄 (按 ↑ 跳躍)
         obstacles.push({
           type: 'ground',
           x: canvas.width + 50,
@@ -656,7 +656,7 @@
           hint: '🚧 道路施工護欄！【按 ↑ 跳躍】'
         });
       } else {
-        // 都市行人紅綠燈 (按 ← 停止，紅燈最多倒數 3 秒自動變綠燈)
+        // 都市行人紅綠燈 (按 ← 停住時應立即變綠燈)
         obstacles.push({
           type: 'traffic_light',
           x: canvas.width + 50,
@@ -664,9 +664,8 @@
           width: 24,
           height: 140,
           isRed: true,
-          redTimer: 180, // 60 FPS * 3 秒 = 180 幀 (最多 3 秒變綠燈)
           cleared: false,
-          hint: '🚦 行人紅綠燈！【按 ← 停止，最多等 3 秒變綠燈】'
+          hint: '🚦 行人紅綠燈！【按 ← 停住立即變綠燈】'
         });
       }
     }
@@ -685,7 +684,7 @@
       let currentSpeed = player.baseSpeed;
       if (controlMode === 'modeA') {
         if (keys.Left) {
-          currentSpeed = 0; // ← 按住即完全停止或減速避讓
+          currentSpeed = 0; // ← 按住即完全停止
         } else if (keys.Right) {
           currentSpeed += 2.8; // → 加速
         }
@@ -720,9 +719,22 @@
         player.isGrounded = true;
       }
 
+      // --- 保持每個障礙物之間的最小距離（340 像素） ---
       obstacleSpawnTimer++;
-      const spawnInterval = difficulty === 'easy' ? 160 : (difficulty === 'medium' ? 120 : 90);
-      if (obstacleSpawnTimer > spawnInterval) {
+      const spawnInterval = difficulty === 'easy' ? 140 : (difficulty === 'medium' ? 100 : 70);
+      const minDistanceBetweenObstacles = 340; 
+
+      let canSpawn = false;
+      if (obstacles.length === 0) {
+        canSpawn = true;
+      } else {
+        const lastObstacle = obstacles[obstacles.length - 1];
+        if ((canvas.width + 50 - lastObstacle.x) >= minDistanceBetweenObstacles) {
+          canSpawn = true;
+        }
+      }
+
+      if (obstacleSpawnTimer > spawnInterval && canSpawn) {
         spawnObstacle();
         obstacleSpawnTimer = 0;
       }
@@ -731,13 +743,10 @@
         const obs = obstacles[i];
         obs.x -= currentSpeed;
 
-        // 紅綠燈邏輯：最多等待 3 秒（180 幀）必自動切換為綠燈
+        // 紅綠燈邏輯：玩家靠近並【完全停住】（車速為 0）時，立即變成綠燈！
         if (obs.type === 'traffic_light') {
-          if (obs.isRed) {
-            obs.redTimer--;
-            if (obs.redTimer <= 0) {
-              obs.isRed = false; // 最多 3 秒後轉換為綠燈
-            }
+          if (obs.isRed && (obs.x - player.x < 240) && (obs.x + obs.width > player.x - 20) && currentSpeed === 0) {
+            obs.isRed = false; // 停住即刻切換為綠燈
           }
         }
 
@@ -793,9 +802,9 @@
 
       let textDiagnosis = "";
       if (score >= 80) {
-        textDiagnosis = "AI 診斷：都市街道應變極佳！紅綠燈與施工避障反應敏捷，肢體協調度優異。";
+        textDiagnosis = "AI 診斷：都市街道應變極佳！紅綠燈停等反應即時，肢體協調度優異。";
       } else if (score >= 60) {
-        textDiagnosis = "AI 診斷：表現良好。注意靠近低矮遮雨棚時提前下蹲，並於紅燈時停等最多 3 秒。";
+        textDiagnosis = "AI 診斷：表現良好。注意靠近紅綠燈時及時按 ← 停住，即可立即變為綠燈。";
       } else {
         textDiagnosis = "AI 診斷：建議多利用方向鍵左鍵於紅綠燈前完全停止，以提升都市適應能力。";
       }
@@ -912,7 +921,7 @@
           ctx.fillText('施工', obs.x + 12, obs.y + 24);
 
         } else if (obs.type === 'traffic_light') {
-          // 【都市行人紅綠燈 - 倒數最多3秒】
+          // 【都市行人紅綠燈】
           ctx.fillStyle = '#64748B';
           ctx.fillRect(obs.x + 8, obs.y, 8, obs.height);
 
@@ -944,14 +953,6 @@
           ctx.arc(obs.x + 12, obs.y + 46, 10, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0;
-
-          // 若為紅燈且未切換，顯示秒數提示
-          if (obs.isRed) {
-            const secLeft = Math.ceil(obs.redTimer / 60);
-            ctx.fillStyle = '#FF4444';
-            ctx.font = 'bold 12px sans-serif';
-            ctx.fillText(`${secLeft}s`, obs.x + 34, obs.y + 22);
-          }
         }
 
         // 前方智導提示
