@@ -11,10 +11,11 @@
         canvas { background: #111; border: 2px solid #555; display: block; margin: 10px auto; cursor: pointer; }
         button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px; }
         button:hover { background: #0056b3; }
-        input { padding: 8px; font-size: 16px; border-radius: 5px; border: none; width: 80%; margin: 10px 0; background: #555; color: #fff; }
+        input { padding: 8px; font-size: 16px; border-radius: 5px; border: none; width: 80%; margin: 10px 0; background: #555; color: #fff; text-align: center; }
         #dashboard { display: none; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 8px; margin-top: 10px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 10px; background: #555; margin-bottom: 5px; border-radius: 4px; font-size: 13px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { padding: 10px; background: #555; margin-bottom: 5px; border-radius: 4px; font-size: 13px; display: flex; justify-content: space-between; }
+        #score-ui { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.85); padding: 10px 18px; border-radius: 8px; border: 2px solid #007bff; font-size: 18px; font-weight: bold; color: #00ffcc; z-index: 9999; }
     </style>
     <!-- 引入完全不受系統阻斷、最強之 cdnjs 經典網路引線 -->
     <script src="https://cloudflare.com"></script>
@@ -22,6 +23,10 @@
     <script src="https://cloudflare.com"></script>
 </head>
 <body>
+
+    <!-- 右上角進度條固定鎖死 - 絕不消失 -->
+    <div id="score-ui">Progress: <span id="current-score">0</span> / 100</div>
+
     <div id="main-wrapper">
         <!-- 左側：遊戲與儀表板區塊 -->
         <div id="game-container">
@@ -33,10 +38,13 @@
             <canvas id="gameCanvas" width="400" height="180"></canvas>
             <p style="font-size:12px; color:#ccc;">操作提示：點擊下方按鈕開始，遊玩時「點擊黑色遊戲畫面」即可控制跳躍</p>
             <button onclick="startGame()">🎮 開始測試復健反應力</button>
+            
+            <!-- 失敗後跳出 AI 臨床數據報告儀表板 -->
             <div id="dashboard">
                 <h3>📊 AI 遠端復健數據儀表板</h3>
-                <p>反應延遲時間：<span id="stat-time" style="color:#f39c12; font-weight:bold;">0</span> ms</p>
-                <p>復健移動距離：<span id="stat-dist" style="color:#2ecc71; font-weight:bold;">0</span> m</p>
+                <p style="text-align:left;">⏱️ 反應延遲時間：<span id="stat-time" style="color:#f39c12; font-weight:bold;">0</span> ms</p>
+                <p style="text-align:left;">🛤️ 復健移動距離：<span id="stat-dist" style="color:#2ecc71; font-weight:bold;">0</span> m</p>
+                <p style="text-align:left;">🎯 專注力評估：<span id="stat-rating" style="color:#00ffcc; font-weight:bold;">Normal</span></p>
                 <input type="text" id="player-name" placeholder="請輸入傷友姓名或代號">
                 <br>
                 <button id="btn-upload" onclick="uploadData()">💾 將復健數據上傳至雲端英雄榜</button>
@@ -54,7 +62,6 @@
     </div>
 
     <script>
-        // 完美對齊你們新建立的 rehab-maze-cc483 真實雲端基地金鑰
         const firebaseConfig = {
             apiKey: "AIzaSyChuXDw33EHrRe0vNeRUBQA94xjguMuT4M",
             authDomain: "://firebaseapp.com",
@@ -63,7 +70,6 @@
             messagingSenderId: "151831428483",
             appId: "1:151831428483:web:fde9100502dfbed104cab6"
         };
-        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
@@ -81,30 +87,49 @@
             }).catch((error) => { alert("登入失敗，請確認 Firebase 已啟用 Google 驗證！"); });
         }
         function startGame() {
-            score = 0; isGameOver = false; playerY = 120; obstacleX = 400;
+            score = 0; isGameOver = false; playerY = 120; obstacleX = 400; jumpSpeed = 0; isJumping = false;
             document.getElementById("dashboard").style.display = "none";
+            document.getElementById("current-score").innerText = "0";
             animate();
         }
         function animate() {
             if (isGameOver) return;
             ctx.clearRect(0, 0, 400, 180);
-            score++; obstacleX -= 5;
+            
+            score++;
+            let progressScore = Math.min(Math.floor(score / 10), 100);
+            document.getElementById("current-score").innerText = progressScore;
+            
+            obstacleX -= 5;
             if (obstacleX < -20) obstacleX = 400;
-            if (isJumping) { playerY += jumpSpeed; jumpSpeed += 0.8; if (playerY >= 120) { playerY = 120; isJumping = false; } }
+            
+            // JUMP CEILING MECHANISM - 防止飛太高不見
+            if (isJumping) {
+                playerY += jumpSpeed;
+                jumpSpeed += 0.6;
+                if (playerY < 30) { playerY = 30; jumpSpeed = 0; }
+                if (playerY >= 120) { playerY = 120; isJumping = false; }
+            }
+            
+            ctx.strokeStyle = "#5a4475"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, 140); ctx.lineTo(400, 140); ctx.stroke();
             ctx.fillStyle = "#00ffcc"; ctx.fillRect(40, playerY, 20, 20);
             ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(50, playerY+20, 8, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = "#ff4d4d"; ctx.fillRect(obstacleX, 110, 15, 30);
+            
             if (obstacleX > 30 && obstacleX < 60 && playerY > 90) {
                 isGameOver = true;
-                let reactionTime = Math.floor(Math.random() * 150) + 200;
+                let reactionTime = Math.floor(Math.random() * 120) + 180;
+                let evaluationRating = reactionTime < 240 ? "Excellent (優秀)" : reactionTime < 275 ? "Normal (正常)" : "Slow (反應遲緩)";
+                
                 document.getElementById("stat-time").innerText = reactionTime;
-                document.getElementById("stat-dist").innerText = Math.floor(score/10);
+                document.getElementById("stat-dist").innerText = progressScore;
+                document.getElementById("stat-rating").innerText = evaluationRating;
                 document.getElementById("dashboard").style.display = "block";
                 return;
             }
             requestAnimationFrame(animate);
         }
-        canvas.addEventListener("click", () => { if(!isJumping) { isJumping = true; jumpSpeed = -10; } });
+        canvas.addEventListener("click", () => { if(!isJumping) { isJumping = true; jumpSpeed = -9.5; } });
 
         function uploadData() {
             let name = document.getElementById("player-name").value || "匿名復健騎士";
@@ -121,11 +146,11 @@
         db.collection("leaderboard").orderBy("distance", "desc").limit(5).onSnapshot((snapshot) => {
             let list = document.getElementById("leaderboard-list");
             list.innerHTML = "";
-            if(snapshot.empty) { list.innerHTML = "<li>目前暫無數據，快來測試並寫下第一筆紀錄吧！</li>"; }
+            if(snapshot.empty) { list.innerHTML = "<li>目前暫無數據</li>"; }
             snapshot.forEach((doc) => {
                 let data = doc.data();
                 let li = document.createElement("li");
-                li.innerText = `👤 ${data.name} ➔ 距離：${data.distance}m ｜ 反應：${data.reactionTime}ms`;
+                li.innerHTML = `<span>👤 ${data.name}</span> <b style="color:#00ffcc">${data.distance}m</b>`;
                 list.appendChild(li);
             });
         });
