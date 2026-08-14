@@ -331,7 +331,7 @@
       <div class="top-left-group">
         <button class="btn-auth" onclick="loginGoogle()" id="ui-login-btn">👤 Google 帳戶登入</button>
         <button class="btn-about-top" id="ui-about-btn" onclick="toggleAbout()">關於本系統</button>
-        <button class="btn-pause" id="btn-pause-ing" onclick="togglePause()">⏸ 暫停</button>
+        <button class="btn-pause" id="btn-pause-ing" onclick="togglePause()">⏸ 暫停 (方向鍵模式按空白鍵 / 單鍵模式按G鍵)</button>
       </div>
       <div class="top-right-group">
         <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
@@ -377,11 +377,11 @@
       <div class="grid-container-2">
         <div class="option-card active" onclick="selectMode('modeA', this)">
           <div class="card-title" id="ui-moda-title">傳統鍵盤</div>
-          <div class="card-desc" id="ui-moda-desc">↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速</div>
+          <div class="card-desc" id="ui-moda-desc">↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速 (按空白鍵可暫停)</div>
         </div>
         <div class="option-card" onclick="selectMode('modeB', this)">
           <div class="card-title" id="ui-modb-title">單鍵模式</div>
-          <div class="card-desc" id="ui-modb-desc">自動前進；遇站立牌需「按住空白鍵」蹲下通過</div>
+          <div class="card-desc" id="ui-modb-desc">自動前進；遇站立牌需「按住空白鍵」蹲下通過 (按G鍵可暫停)</div>
         </div>
       </div>
 
@@ -460,7 +460,7 @@
         login: "👤 Google 帳戶登入", logout: "登出帳戶", unlogged: "狀態：未登入雲端帳戶", logged: "已登入：", langLabel: "🌍 語言：",
         title: "復健迷宮", subtitle: "身心障礙者的遠距體感復健與都市適應系統",
         diffTitle: "請選擇關卡難度", easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少", medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練", hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
-        modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過",
+        modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速 (按空白鍵可暫停)", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過 (按G鍵可暫停)",
         modeDesc: "提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
         startBtn: "開始都市復健", aboutBtn: "關於本系統",
         pauseBtn: "⏸ 暫停", pauseHeader: "遊戲暫停", resumeBtn: "繼續遊戲", restartBtn: "重新開始", homeBtn: "返回首頁",
@@ -473,7 +473,7 @@
         login: "👤 Google 账户登录", logout: "登出账户", unlogged: "状态：未登录云端账户", logged: "已登录：", langLabel: "🌍 语言：",
         title: "康复迷宫", subtitle: "身心障碍者远程体感康复与城市适应系统",
         diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
-        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需“按住空格”下蹲通过",
+        modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速 (按空格键可暂停)", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需“按住空格”下蹲通过 (按G键可暂停)",
         modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按下下蹲”让高度低于站牌才能安全通过！",
         startBtn: "开始城市康复", aboutBtn: "关于本系统",
         pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
@@ -486,7 +486,7 @@
         login: "👤 Google Login", logout: "Logout", unlogged: "Status: Not logged in", logged: "Logged in: ", langLabel: "🌍 Language: ",
         title: "Rehab Maze", subtitle: "Remote Tele-rehab & Urban Adaptation System",
         diffTitle: "Select Difficulty", easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles", medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training", hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
-        modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs",
+        modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up (Press Space to Pause)", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs (Press G to Pause)",
         modeDesc: "Tip: In both modes, standing hits the sign. You must hold crouch to pass safely!",
         startBtn: "Start Rehabilitation", aboutBtn: "About System",
         pauseBtn: "⏸ Pause", pauseHeader: "Game Paused", resumeBtn: "Resume", restartBtn: "Restart", homeBtn: "Return Home",
@@ -499,7 +499,7 @@
         login: "👤 Google ログイン", logout: "ログアウト", unlogged: "ステータス：未ログイン", logged: "ログイン中：", langLabel: "🌍 言語：",
         title: "リハビリ迷宮", subtitle: "障害者向け遠隔体感リハビリ・都市適応システム",
         diffTitle: "難易度を選択", easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ", medTitle: "中度チャレンジ", medDesc: "適度なリズム、反応トレーニング", hardTitle: "重度適応", hardDesc: "高密度都市障害物チャレンジ",
-        modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける",
+        modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速 (スペースキーで一時停止)", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける (Gキーで一時停止)",
         modeDesc: "ヒント：どちらのモードでも立っていると衝突します。しゃがんで通過してください！",
         startBtn: "リハビリ開始", aboutBtn: "システム概要",
         pauseBtn: "⏸ 一時停止", pauseHeader: "ポーズ中", resumeBtn: "ゲームに戻る", restartBtn: "やり直す", homeBtn: "ホームに戻る",
@@ -512,7 +512,7 @@
         login: "👤 구글 로그인", logout: "로그아웃", unlogged: "상태: 로그인되지 않음", logged: "로그인됨: ", langLabel: "🌍 언어: ",
         title: "재활 미로", subtitle: "장애인을 위한 원격 체감 재활 및 도시 적응 시스템",
         diffTitle: "난이도 선택", easyTitle: "경증 재활", easyDesc: "완만한 페이스, 최소한의 장애물", medTitle: "중등도 도전", medDesc: "적당한 리듬, 반응 훈련", hardTitle: "고도 적응", hardDesc: "고밀도 도시 장애물 도전",
-        modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기",
+        modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속 (스페이스바로 일시정지)", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기 (G키로 일시정지)",
         modeDesc: "팁: 두 모드 모두 서 있으면 충돌합니다. 숙여서 통과하세요!",
         startBtn: "재활 시작", aboutBtn: "시스템 정보",
         pauseBtn: "⏸ 일시 정지", pauseHeader: "게임 일시 정지", resumeBtn: "게임 재개", restartBtn: "다시 시작", homeBtn: "홈으로",
@@ -525,7 +525,7 @@
         login: "👤 Iniciar sesión en Google", logout: "Cerrar sesión", unlogged: "Estado: No conectado", logged: "Conectado: ", langLabel: "🌍 Idioma: ",
         title: "Laberinto de Rehabilitación", subtitle: "Sistema de rehabilitación y adaptación urbana a distancia",
         diffTitle: "Seleccionar Dificultad", easyTitle: "Rehabilitación Leve", easyDesc: "Ritmo suave, obstáculos mínimos", medTitle: "Desafío Medio", medDesc: "Ritmo moderado, entrenamiento de reacción", hardTitle: "Adaptación Avanzada", hardDesc: "Desafío de obstáculos urbanos densos",
-        modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte",
+        modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar (Presiona Espacio para Pausar)", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte (Presiona G para Pausar)",
         modeDesc: "Consejo: En ambos modes, estar de pie colisiona con el cartel. ¡Debes agacharte para pasar!",
         startBtn: "Iniciar Rehabilitación", aboutBtn: "Acerca del Sistema",
         pauseBtn: "⏸ Pausa", pauseHeader: "Juego Pausado", resumeBtn: "Reanudar", restartBtn: "Reiniciar", homeBtn: "Volver al Inicio",
@@ -844,6 +844,17 @@
           if (controlMode === 'modeB' && gameState === 'PLAYING') {
             handleSingleKeyAction();
           }
+        }
+        // 方向鍵模式 (modeA) 下，按空白鍵可暫停/繼續
+        if (controlMode === 'modeA' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
+          e.preventDefault();
+          togglePause();
+        }
+      }
+      // 單鍵模式 (modeB) 下，按 G 鍵可暫停/繼續
+      if (e.code === 'KeyG') {
+        if (controlMode === 'modeB' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
+          togglePause();
         }
       }
       if (e.code === 'Escape' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
@@ -1165,7 +1176,7 @@
         clinicalReportHTML = `
           <strong>【模擬輔助分析報告：神經動作表現模擬需加強 (參考指標)】</strong><br>
           • <strong>本體感覺與動作協調模擬 (Simulation)：</strong> 遊戲中遭遇較多阻礙，反應時間模擬顯示尚處於適應學習階段。<br>
-          • <strong>重要系統免責聲明：</strong> 本系統<strong>純屬休閒與輔助訓練模擬參考，絕非醫療器材或正式醫學診斷</strong>，無任何醫療欺騙行為。初學者難免遭遇挫折。<br>
+          • <strong>重要系統免責聲明：</strong> 本系統<strong>純屬休閒與輔助訓練模擬參考，絕非醫療器材或者正式醫學診斷</strong>，無任何醫療欺騙行為。初學者難免遭遇挫折。<br>
           • <strong>建議：</strong> 建議切換至「輕度復健」與「單鍵模式」進行輕鬆的模擬訓練逐步熟悉。
         `;
         speechTextContent = `測驗結束。模擬輔助分析表現需加強。適應指數 ${score} 分。本系統純屬輔助訓練模擬參考，並非醫療器材。建議切換至輕度復健與單鍵模式重新嘗試。`;
