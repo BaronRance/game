@@ -845,13 +845,11 @@
             handleSingleKeyAction();
           }
         }
-        // 方向鍵模式 (modeA) 下，按空白鍵可暫停/繼續
         if (controlMode === 'modeA' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
           e.preventDefault();
           togglePause();
         }
       }
-      // 單鍵模式 (modeB) 下，按 G 鍵可暫停/繼續
       if (e.code === 'KeyG') {
         if (controlMode === 'modeB' && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
           togglePause();
