@@ -144,8 +144,8 @@
     #menu-screen {
       position: absolute;
       inset: 0;
-      background: #F0F9FF;
-      padding: 24px 40px 24px 40px;
+      background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+      padding: 24px 40px 50px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -157,14 +157,17 @@
 
     /* 美化首頁滾動軸 */
     #menu-screen::-webkit-scrollbar {
-      width: 6px;
+      width: 10px;
+    }
+    #menu-screen::-webkit-scrollbar-track {
+      background: #E0F2FE;
     }
     #menu-screen::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 3px;
+      background: #38BDF8;
+      border-radius: 5px;
     }
     #menu-screen::-webkit-scrollbar-thumb:hover {
-      background: #94A3B8;
+      background: #0284C7;
     }
 
     .icon-header {
@@ -233,31 +236,87 @@
       line-height: 1.2;
     }
 
-    .menu-graphics {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin-top: 12px;
-      margin-bottom: 10px;
-      flex-shrink: 0;
-    }
-
     .btn-start {
-      width: 200px;
-      height: 38px;
+      width: 220px;
+      height: 42px;
       background: linear-gradient(180deg, #38BDF8 0%, #0284C7 100%);
       color: white;
       font-size: 15px;
       font-weight: bold;
       border: none;
-      border-radius: 19px;
+      border-radius: 21px;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
       transition: transform 0.1s;
       flex-shrink: 0;
+      margin-top: 6px;
+      margin-bottom: 20px;
     }
     .btn-start:hover { transform: translateY(-2px); }
+
+    /* ========================================================
+       開始按鈕下方：又大又精緻、充滿豐富遊戲特色的裝飾展現區
+       ======================================================== */
+    .rich-graphics-showcase {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .showcase-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 2px solid #BAE6FD;
+      border-radius: 16px;
+      padding: 14px 12px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-4px);
+      border-color: #0284C7;
+      background: #FFFFFF;
+      box-shadow: 0 12px 25px rgba(2, 132, 199, 0.15);
+    }
+
+    .showcase-icon-box {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 10px auto;
+      border: 2px solid #0284C7;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.6);
+    }
+
+    .showcase-icon-box svg {
+      width: 28px;
+      height: 28px;
+      fill: #0284C7;
+    }
+
+    .showcase-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #0F172A;
+      margin-bottom: 4px;
+    }
+
+    .showcase-desc {
+      font-size: 9.5px;
+      color: #64748B;
+      line-height: 1.4;
+    }
 
     #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
 
@@ -384,7 +443,7 @@
       </div>
     </div>
 
-    <!-- 首頁選單 (支援滾輪上下滑動) -->
+    <!-- 首頁選單 (支援全域滑鼠滾輪順暢瀏覽) -->
     <div id="menu-screen">
       <div class="icon-header">
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
@@ -427,26 +486,34 @@
       <!-- 開始按鈕 -->
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
 
-      <!-- 開始按鈕下方增加更大、更豐富的遊戲相關裝飾圖樣 -->
-      <div class="menu-graphics">
-        <svg width="240" height="48" viewBox="0 0 240 48">
-          <!-- 背景裝飾底線 -->
-          <line x1="10" y1="42" x2="230" y2="42" stroke="#CBD5E1" stroke-width="2" stroke-dasharray="4 4"/>
-          <!-- 輪椅與訓練圖樣 (放大) -->
-          <circle cx="35" cy="28" r="14" fill="none" stroke="#0284C7" stroke-width="3"/>
-          <circle cx="65" cy="34" r="7" fill="#64748B"/>
-          <path d="M35 28 L50 12 L60 28" fill="none" stroke="#0284C7" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="50" cy="8" r="5" fill="#FBBF24"/>
-          <!-- 都市大樓與號誌圖樣 (放大與豐富) -->
-          <rect x="95" y="14" width="22" height="28" fill="#BAE6FD"/>
-          <rect x="122" y="6" width="26" height="36" fill="#38BDF8"/>
-          <rect x="153" y="18" width="20" height="24" fill="#7DD3FC"/>
-          <rect x="178" y="10" width="24" height="32" fill="#0284C7" opacity="0.7"/>
-          <!-- 紅綠燈小圖示 -->
-          <rect x="210" y="12" width="12" height="30" fill="#475569" rx="3"/>
-          <circle cx="216" cy="19" r="3.5" fill="#EF4444"/>
-          <circle cx="216" cy="35" r="3.5" fill="#22C55E"/>
-        </svg>
+      <!-- 開始按鈕下方：又大又精緻、充滿豐富遊戲特色的裝飾展現區 -->
+      <div class="rich-graphics-showcase">
+        <!-- 卡片 1：遠距體感模擬 -->
+        <div class="showcase-card">
+          <div class="showcase-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M10,17L5,12L6.41,10.59L10,14.17L17.59,6.58L19,8L10,17Z"/></svg>
+          </div>
+          <div class="showcase-title">遠距體感模擬</div>
+          <div class="showcase-desc">結合動作捕捉與本體感覺訓練，在家也能安全進行上肢與下肢協調互動。</div>
+        </div>
+
+        <!-- 卡片 2：智慧都市適應 -->
+        <div class="showcase-card">
+          <div class="showcase-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M15,11H13V8H15M15,15H13V13H15M19,7H5V19H19V7M19,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3Z"/></svg>
+          </div>
+          <div class="showcase-title">都市障礙適應</div>
+          <div class="showcase-desc">模擬輪椅通行、行人號誌與過街防護，提升日常出行安全意識與應變能力。</div>
+        </div>
+
+        <!-- 卡片 3：神經適應指數 -->
+        <div class="showcase-card">
+          <div class="showcase-icon-box">
+            <svg viewBox="0 0 24 24"><path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12.5,7H11V13L16.25,16.15L17,14.92L12.5,12.25V7Z"/></svg>
+          </div>
+          <div class="showcase-title">即時表現評估</div>
+          <div class="showcase-desc">透過雲端數據與多維度演算法生成量化分析報告，追蹤復健與適應成長曲線。</div>
+        </div>
       </div>
     </div>
 
@@ -656,6 +723,14 @@
         overlay.style.display = 'flex';
       }
     }
+
+    // 全域滑鼠滾輪監聽（支援首頁順暢滑動）
+    window.addEventListener('wheel', (e) => {
+      if (gameState === 'MENU') {
+        const menuScreen = document.getElementById('menu-screen');
+        menuScreen.scrollTop += e.deltaY;
+      }
+    }, { passive: true });
 
     const firebaseConfig = {
       apiKey: "AIzaSyB_yVtrLHKEVPuWVXk6OQqnZdbhel0yKWM",
@@ -1002,7 +1077,6 @@
       document.getElementById('menu-screen').style.display = 'none';
       document.getElementById('btn-pause-ing').style.display = 'block';
       
-      // 切換右上角顯示：隱藏語言選擇，顯示1分鐘計時器
       document.getElementById('lang-container-wrapper').style.display = 'none';
       document.getElementById('timer-container-wrapper').style.display = 'flex';
 
@@ -1011,7 +1085,6 @@
       gameState = 'PLAYING';
       startBgm();
 
-      // 啟動 1 分鐘計時器
       if (countdownInterval) clearInterval(countdownInterval);
       gameTimeRemaining = 60;
       updateTimerDisplay();
@@ -1044,7 +1117,6 @@
       stopBgm();
       if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
       
-      // 恢復右上角顯示：顯示語言選擇，隱藏計時器
       document.getElementById('lang-container-wrapper').style.display = 'flex';
       document.getElementById('timer-container-wrapper').style.display = 'none';
 
@@ -1349,7 +1421,6 @@
       document.getElementById('dashboard-overlay').style.display = 'none';
       document.getElementById('btn-pause-ing').style.display = 'block';
       
-      // 切換右上角顯示計時器
       document.getElementById('lang-container-wrapper').style.display = 'none';
       document.getElementById('timer-container-wrapper').style.display = 'flex';
 
