@@ -1,8 +1,6 @@
 <!--
   ================================================================
   專案名稱：復健迷宮 - 身心障礙者遠距體感與都市適應系統
-  著作權所有 © 2026 劉秉祐、潘睿熙 (Liu Bing-You, Pan Rui-Xi)
-  本程式碼為原創開發，享有完整著作權。
   免責聲明：本系統僅供輔助訓練與模擬參考，並非醫療器材。
   ================================================================
 -->
@@ -229,8 +227,6 @@
     }
     .btn-start:hover { transform: translateY(-2px); }
 
-    .footer-text { font-size: 11px; color: #94A3B8; }
-
     #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
 
     .overlay-screen {
@@ -392,7 +388,6 @@
       </div>
 
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
-      <div class="footer-text" id="ui-footer">立體質感角色引擎 · 暫停與多國語系支援</div>
     </div>
 
     <canvas id="gameCanvas" width="900" height="600"></canvas>
@@ -465,7 +460,7 @@
         diffTitle: "請選擇關卡難度", easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少", medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練", hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
         modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過",
         modeDesc: "提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
-        startBtn: "開始都市復健", aboutBtn: "關於本系統", footer: "立體質感角色引擎 · 暫停與多國語系支援",
+        startBtn: "開始都市復健", aboutBtn: "關於本系統",
         pauseBtn: "⏸ 暫停", pauseHeader: "遊戲暫停", resumeBtn: "繼續遊戲", restartBtn: "重新開始", homeBtn: "返回首頁",
         dashHeader: "📊 模擬輔助分析與表現評估", mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
         lbTitle: "🏆 伺服器即時排行榜 Top 3", retryBtn: "重新開始（再試一次）", backHomeBtn: "返回首頁",
@@ -477,8 +472,8 @@
         title: "康复迷宫", subtitle: "身心障碍者远程体感康复与城市适应系统",
         diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
         modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需“按住空格”下蹲通过",
-        modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按住下蹲”让高度低于站牌才能安全通过！",
-        startBtn: "开始城市康复", aboutBtn: "关于本系统", footer: "立体质感角色引擎 · 暂停与多语言支持",
+        modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按下下蹲”让高度低于站牌才能安全通过！",
+        startBtn: "开始城市康复", aboutBtn: "关于本系统",
         pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
         dashHeader: "📊 模拟辅助分析与表现评估", mDist: "移动总距离", mClear: "成功通行", mFail: "碰撞次数", mScore: "适应指数",
         lbTitle: "🏆 服务器实时排行榜 Top 3", retryBtn: "重新开始（再试一次）", backHomeBtn: "返回首页",
@@ -491,7 +486,7 @@
         diffTitle: "Select Difficulty", easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles", medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training", hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
         modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs",
         modeDesc: "Tip: In both modes, standing hits the sign. You must hold crouch to pass safely!",
-        startBtn: "Start Rehabilitation", aboutBtn: "About System", footer: "3D Character Engine · Pause & Multi-language Support",
+        startBtn: "Start Rehabilitation", aboutBtn: "About System",
         pauseBtn: "⏸ Pause", pauseHeader: "Game Paused", resumeBtn: "Resume", restartBtn: "Restart", homeBtn: "Return Home",
         dashHeader: "📊 Simulation Analytics & Evaluation", mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
         lbTitle: "🏆 Live Leaderboard Top 3", retryBtn: "Restart (Try Again)", backHomeBtn: "Return Home",
@@ -504,7 +499,7 @@
         diffTitle: "難易度を選択", easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ", medTitle: "中度チャレンジ", medDesc: "適度なリズム、反応トレーニング", hardTitle: "重度適応", hardDesc: "高密度都市障害物チャレンジ",
         modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける",
         modeDesc: "ヒント：どちらのモードでも立っていると衝突します。しゃがんで通過してください！",
-        startBtn: "リハビリ開始", aboutBtn: "システム概要", footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
+        startBtn: "リハビリ開始", aboutBtn: "システム概要",
         pauseBtn: "⏸ 一時停止", pauseHeader: "ポーズ中", resumeBtn: "ゲームに戻る", restartBtn: "やり直す", homeBtn: "ホームに戻る",
         dashHeader: "📊 シミュレーション分析と評価", mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
         lbTitle: "🏆 リアルタイムランキング Top 3", retryBtn: "もう一度挑戦", backHomeBtn: "ホームに戻る",
@@ -517,7 +512,7 @@
         diffTitle: "난이도 선택", easyTitle: "경증 재활", easyDesc: "완만한 페이스, 최소한의 장애물", medTitle: "중등도 도전", medDesc: "적당한 리듬, 반응 훈련", hardTitle: "고도 적응", hardDesc: "고밀도 도시 장애물 도전",
         modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기",
         modeDesc: "팁: 두 모드 모두 서 있으면 충돌합니다. 숙여서 통과하세요!",
-        startBtn: "재활 시작", aboutBtn: "시스템 정보", footer: "3D 캐릭터 엔진 · 일시 정지 및 다국어 지원",
+        startBtn: "재활 시작", aboutBtn: "시스템 정보",
         pauseBtn: "⏸ 일시 정지", pauseHeader: "게임 일시 정지", resumeBtn: "게임 재개", restartBtn: "다시 시작", homeBtn: "홈으로",
         dashHeader: "📊 시뮬레이션 분석 및 평가", mDist: "이동 거리", mClear: "통과 수", mFail: "충돌 횟수", mScore: "적응 지수",
         lbTitle: "🏆 실시간 순위 Top 3", retryBtn: "다시 시도", backHomeBtn: "홈으로",
@@ -530,7 +525,7 @@
         diffTitle: "Seleccionar Dificultad", easyTitle: "Rehabilitación Leve", easyDesc: "Ritmo suave, obstáculos mínimos", medTitle: "Desafío Medio", medDesc: "Ritmo moderado, entrenamiento de reacción", hardTitle: "Adaptación Avanzada", hardDesc: "Desafío de obstáculos urbanos densos",
         modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte",
         modeDesc: "Consejo: En ambos modes, estar de pie colisiona con el cartel. ¡Debes agacharte para pasar!",
-        startBtn: "Iniciar Rehabilitación", aboutBtn: "Acerca del Sistema", footer: "Motor de personajes 3D · Pausa y soporte multilingüe",
+        startBtn: "Iniciar Rehabilitación", aboutBtn: "Acerca del Sistema",
         pauseBtn: "⏸ Pausa", pauseHeader: "Juego Pausado", resumeBtn: "Reanudar", restartBtn: "Reiniciar", homeBtn: "Volver al Inicio",
         dashHeader: "📊 Análisis y Evaluación de Simulación", mDist: "Distancia Total", mClear: "Superados", mFail: "Fallos", mScore: "Índice de Adaptación",
         lbTitle: "🏆 Top 3 de Clasificación en Vivo", retryBtn: "Reiniciar (Intentar de nuevo)", backHomeBtn: "Volver al Inicio",
@@ -563,7 +558,6 @@
       document.getElementById('ui-modb-desc').innerText = t.modbDesc;
       document.getElementById('ui-mode-desc').innerText = t.modeDesc;
       document.getElementById('ui-start-btn').innerText = t.startBtn;
-      document.getElementById('ui-footer').innerText = t.footer;
       document.getElementById('btn-pause-ing').innerText = t.pauseBtn;
       document.getElementById('ui-pause-header').innerText = t.pauseHeader;
       document.getElementById('ui-resume-btn').innerText = t.resumeBtn;
