@@ -74,7 +74,7 @@
       pointer-events: auto;
     }
 
-    .btn-auth, .btn-pause {
+    .btn-auth, .btn-pause, .btn-about-top {
       background: #0284C7;
       color: white;
       border: none;
@@ -87,6 +87,13 @@
     }
     .btn-auth:hover, .btn-pause:hover { background: #0369A1; }
     
+    .btn-about-top {
+      background: #64748B;
+    }
+    .btn-about-top:hover {
+      background: #475569;
+    }
+
     .btn-pause {
       display: none;
       background: #475569;
@@ -222,23 +229,6 @@
     }
     .btn-start:hover { transform: translateY(-2px); }
 
-    .btn-about-menu {
-      width: 220px;
-      height: 36px;
-      background: #64748B;
-      color: white;
-      font-size: 13px;
-      font-weight: bold;
-      border: none;
-      border-radius: 18px;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
-      transition: background 0.1s;
-      flex-shrink: 0;
-      margin-bottom: 6px;
-    }
-    .btn-about-menu:hover { background: #475569; }
-
     .footer-text { font-size: 11px; color: #94A3B8; }
 
     #gameCanvas { width: 100%; height: 100%; display: block; background: #E0F2FE; }
@@ -342,6 +332,7 @@
     <div id="top-bar">
       <div class="top-left-group">
         <button class="btn-auth" onclick="loginGoogle()" id="ui-login-btn">👤 Google 帳戶登入</button>
+        <button class="btn-about-top" id="ui-about-btn" onclick="toggleAbout()">關於本系統</button>
         <button class="btn-pause" id="btn-pause-ing" onclick="togglePause()">⏸ 暫停</button>
       </div>
       <div class="top-right-group">
@@ -401,7 +392,6 @@
       </div>
 
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市復健</button>
-      <button class="btn-about-menu" id="ui-about-btn" onclick="toggleAbout()">關於本系統與著作權</button>
       <div class="footer-text" id="ui-footer">立體質感角色引擎 · 暫停與多國語系支援</div>
     </div>
 
@@ -475,12 +465,12 @@
         diffTitle: "請選擇關卡難度", easyTitle: "輕度復健", easyDesc: "平緩步調、障礙極少", medTitle: "中度挑戰", medDesc: "適中節奏、反應訓練", hardTitle: "重度適應", hardDesc: "高密度都市障礙挑戰",
         modeTitle: "選擇操作方式", modaTitle: "傳統鍵盤", modaDesc: "↑ 跳躍 ↓ 按住蹲下(放開站立) ← 停止/減速 → 加速", modbTitle: "單鍵模式", modbDesc: "自動前進；遇站立牌需「按住空白鍵」蹲下通過",
         modeDesc: "提示：不管哪個模式，站立時高度均高於站立牌（會碰撞）；必須「按住蹲下」讓高度低於站立牌才能安全通過！",
-        startBtn: "開始都市復健", aboutBtn: "關於本系統與著作權", footer: "立體質感角色引擎 · 暫停與多國語系支援",
+        startBtn: "開始都市復健", aboutBtn: "關於本系統", footer: "立體質感角色引擎 · 暫停與多國語系支援",
         pauseBtn: "⏸ 暫停", pauseHeader: "遊戲暫停", resumeBtn: "繼續遊戲", restartBtn: "重新開始", homeBtn: "返回首頁",
         dashHeader: "📊 模擬輔助分析與表現評估", mDist: "移動總距離", mClear: "成功通行", mFail: "碰撞次數", mScore: "適應指數",
         lbTitle: "🏆 伺服器即時排行榜 Top 3", retryBtn: "重新開始（再試一次）", backHomeBtn: "返回首頁",
         aboutHeader: "關於本系統與重要免責聲明", aboutClose: "關閉",
-        aboutContent: "<strong>【著作權與原創宣告】</strong><br>本系統原創開發與著作權人：<strong>劉秉祐、潘睿熙</strong>。<br><br><strong>【重要免責聲明：非醫療器材說明】</strong><br>本系統僅作為身心障礙者遠距體感與都市適應之<strong>輔助訓練與趣味模擬參考</strong>工具，<strong>並非醫療器材</strong>，亦不具備任何正式醫療診斷、治療或預防疾病之效能。系統內產出之 AI 分析與表現評估僅供日常參考與互動模擬，絕非醫療診斷證明，亦無任何醫療欺騙或偽造醫療行為之意圖。如有身體不適或醫療需求，請務必尋求專業合格醫師之診斷與協助。"
+        aboutContent: "<strong>【重要免責聲明：非醫療器材說明】</strong><br>本系統僅作為身心障礙者遠距體感與都市適應之<strong>輔助訓練與趣味模擬參考</strong>工具，<strong>並非醫療器材</strong>，亦不具備任何正式醫療診斷、治療或預防疾病之效能。系統內產出之 AI 分析與表現評估僅供日常參考與互動模擬，絕非醫療診斷證明，亦無任何醫療欺騙或偽造醫療行為之意圖。如有身體不適或醫療需求，請務必尋求專業合格醫師之診斷與協助。"
       },
       'zh-CN': {
         login: "👤 Google 账户登录", logout: "登出账户", unlogged: "状态：未登录云端账户", logged: "已登录：", langLabel: "🌍 语言：",
@@ -488,12 +478,12 @@
         diffTitle: "请选择关卡难度", easyTitle: "轻度康复", easyDesc: "平缓步调、障碍极少", medTitle: "中度挑战", medDesc: "适中节奏、反应训练", hardTitle: "重度适应", hardDesc: "高密度城市障碍挑战",
         modeTitle: "选择操作方式", modaTitle: "传统键盘", modaDesc: "↑ 跳跃 ↓ 按下下蹲(松开站立) ← 停止/减速 → 加速", modbTitle: "单键模式", modbDesc: "自动前进；遇站牌需“按住空格”下蹲通过",
         modeDesc: "提示：不管哪个模式，站立时高度均高于站牌（会碰撞）；必须“按住下蹲”让高度低于站牌才能安全通过！",
-        startBtn: "开始城市康复", aboutBtn: "关于本系统与著作权", footer: "立体质感角色引擎 · 暂停与多语言支持",
+        startBtn: "开始城市康复", aboutBtn: "关于本系统", footer: "立体质感角色引擎 · 暂停与多语言支持",
         pauseBtn: "⏸ 暂停", pauseHeader: "游戏暂停", resumeBtn: "继续游戏", restartBtn: "重新开始", homeBtn: "返回首页",
         dashHeader: "📊 模拟辅助分析与表现评估", mDist: "移动总距离", mClear: "成功通行", mFail: "碰撞次数", mScore: "适应指数",
         lbTitle: "🏆 服务器实时排行榜 Top 3", retryBtn: "重新开始（再试一次）", backHomeBtn: "返回首页",
         aboutHeader: "关于本系统与重要免责声明", aboutClose: "关闭",
-        aboutContent: "<strong>【著作权与原创声明】</strong><br>本系统原创开发与著作权人：<strong>刘秉祐、潘睿熙</strong>。<br><br><strong>【重要免责声明：非医疗器材说明】</strong><br>本系统仅作为身心障碍者远程体感与城市适应之<strong>辅助训练与趣味模拟参考</strong>工具，<strong>并非医疗器材</strong>，亦不具备任何正式医疗诊断、治疗或预防疾病之效能。系统内产出的 AI 分析与表现评估仅供日常参考与互动模拟，绝非医疗诊断证明，亦无任何医疗欺骗或伪造医疗行为之意图。如有身体不适或医疗需求，请务必寻求专业合格医师之诊断与协助。"
+        aboutContent: "<strong>【重要免责声明：非医疗器材说明】</strong><br>本系统仅作为身心障碍者远程体感与城市适应之<strong>辅助训练与趣味模拟参考</strong>工具，<strong>并非医疗器材</strong>，亦不具备任何正式医疗诊断、治疗或预防疾病之效能。系统内产出的 AI 分析与表现评估仅供日常参考与互动模拟，绝非医疗诊断证明，亦无任何医疗欺骗或伪造医疗行为之意图。如有身体不适或医疗需求，请务必寻求专业合格医师之诊断与协助。"
       },
       'en': {
         login: "👤 Google Login", logout: "Logout", unlogged: "Status: Not logged in", logged: "Logged in: ", langLabel: "🌍 Language: ",
@@ -501,12 +491,12 @@
         diffTitle: "Select Difficulty", easyTitle: "Light Rehab", easyDesc: "Gentle pace, minimal obstacles", medTitle: "Medium Challenge", medDesc: "Moderate rhythm, reaction training", hardTitle: "Heavy Adaptation", hardDesc: "High-density urban obstacle challenge",
         modeTitle: "Select Control Mode", modaTitle: "Traditional", modaDesc: "↑ Jump ↓ Hold Crouch ← Stop/Slow → Speed up", modbTitle: "Single-Key", modbDesc: "Auto-advance; hold Space to crouch under overhangs",
         modeDesc: "Tip: In both modes, standing hits the sign. You must hold crouch to pass safely!",
-        startBtn: "Start Rehabilitation", aboutBtn: "About System & Copyright", footer: "3D Character Engine · Pause & Multi-language Support",
+        startBtn: "Start Rehabilitation", aboutBtn: "About System", footer: "3D Character Engine · Pause & Multi-language Support",
         pauseBtn: "⏸ Pause", pauseHeader: "Game Paused", resumeBtn: "Resume", restartBtn: "Restart", homeBtn: "Return Home",
         dashHeader: "📊 Simulation Analytics & Evaluation", mDist: "Total Distance", mClear: "Cleared", mFail: "Fails", mScore: "Adapt Index",
         lbTitle: "🏆 Live Leaderboard Top 3", retryBtn: "Restart (Try Again)", backHomeBtn: "Return Home",
         aboutHeader: "About & Important Disclaimer", aboutClose: "Close",
-        aboutContent: "<strong>[Copyright & Originality Notice]</strong><br>Original developers and copyright owners: <strong>Liu Bing-You, Pan Rui-Xi</strong>.<br><br><strong>[Important Disclaimer: Non-Medical Device Notice]</strong><br>This system is designed purely as an <strong>auxiliary training and recreational simulation reference</strong> tool for tele-rehab and urban adaptation. It is <strong>not a medical device</strong> and does not constitute formal medical diagnosis, treatment, or prevention of any disease. All AI evaluations and analytics provided are for daily reference and interaction simulation only, and do not represent professional medical diagnosis, nor do they involve any medical misrepresentation. If you have medical needs, please consult a qualified healthcare professional."
+        aboutContent: "<strong>[Important Disclaimer: Non-Medical Device Notice]</strong><br>This system is designed purely as an <strong>auxiliary training and recreational simulation reference</strong> tool for tele-rehab and urban adaptation. It is <strong>not a medical device</strong> and does not constitute formal medical diagnosis, treatment, or prevention of any disease. All AI evaluations and analytics provided are for daily reference and interaction simulation only, and do not represent professional medical diagnosis, nor do they involve any medical misrepresentation. If you have medical needs, please consult a qualified healthcare professional."
       },
       'ja': {
         login: "👤 Google ログイン", logout: "ログアウト", unlogged: "ステータス：未ログイン", logged: "ログイン中：", langLabel: "🌍 言語：",
@@ -514,12 +504,12 @@
         diffTitle: "難易度を選択", easyTitle: "軽度リハビリ", easyDesc: "緩やかなペース、障害物少なめ", medTitle: "中度チャレンジ", medDesc: "適度なリズム、反応トレーニング", hardTitle: "重度適応", hardDesc: "高密度都市障害物チャレンジ",
         modeTitle: "操作方法を選択", modaTitle: "従来型キーボード", modaDesc: "↑ ジャンプ ↓ 押し続けで屈む ← 停止 → 加速", modbTitle: "単一キーモード", modbDesc: "自動前進；看板ではスペースキーを押し続ける",
         modeDesc: "ヒント：どちらのモードでも立っていると衝突します。しゃがんで通過してください！",
-        startBtn: "リハビリ開始", aboutBtn: "システム概要と著作権", footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
+        startBtn: "リハビリ開始", aboutBtn: "システム概要", footer: "3Dキャラクターエンジン · 一時停止・多言語対応",
         pauseBtn: "⏸ 一時停止", pauseHeader: "ポーズ中", resumeBtn: "ゲームに戻る", restartBtn: "やり直す", homeBtn: "ホームに戻る",
         dashHeader: "📊 シミュレーション分析と評価", mDist: "移動距離", mClear: "クリア数", mFail: "衝突回数", mScore: "適応指数",
         lbTitle: "🏆 リアルタイムランキング Top 3", retryBtn: "もう一度挑戦", backHomeBtn: "ホームに戻る",
         aboutHeader: "システム概要と重要免責事項", aboutClose: "閉じる",
-        aboutContent: "<strong>【著作権・オリジナル宣言】</strong><br>オリジナル開発および著作権者：<strong>劉秉祐、潘睿熙</strong>。<br><br><strong>【重要免責事項：非医療機器の宣言】</strong><br>本システムは、障害者向け遠隔体感・都市適応の<strong>補助トレーニングおよび趣味のシミュレーション参考</strong>ツールであり、<strong>医療機器ではありません</strong>。正式な医療診断、治療、予防の効果を持つものではありません。AI分析結果は日常の参考およびインタラクティブなシミュレーション用であり、医療診断証明書ではなく、医療詐称の意図も一切ありません。医療上の必要性がある場合は必ず専門医にご相談ください。"
+        aboutContent: "<strong>【重要免責事項：非医療機器の宣言】</strong><br>本システムは、障害者向け遠隔体感・都市適応の<strong>補助トレーニングおよび趣味のシミュレーション参考</strong>ツールであり、<strong>医療機器ではありません</strong>。正式な医療診断、治療、予防の効果を持つものではありません。AI分析結果は日常の参考およびインタラクティブなシミュレーション用であり、医療診断証明書ではなく、医療詐称の意図も一切ありません。医療上の必要性がある場合は必ず専門医にご相談ください。"
       },
       'ko': {
         login: "👤 구글 로그인", logout: "로그아웃", unlogged: "상태: 로그인되지 않음", logged: "로그인됨: ", langLabel: "🌍 언어: ",
@@ -527,12 +517,12 @@
         diffTitle: "난이도 선택", easyTitle: "경증 재활", easyDesc: "완만한 페이스, 최소한의 장애물", medTitle: "중등도 도전", medDesc: "적당한 리듬, 반응 훈련", hardTitle: "고도 적응", hardDesc: "고밀도 도시 장애물 도전",
         modeTitle: "조작 방식 선택", modaTitle: "기존 키보드", modaDesc: "↑ 점프 ↓ 누르고 있기(숙이기) ← 정지/감속 → 가속", modbTitle: "단일 키 모드", modbDesc: "자동 전진; 표지판 통과 시 스페이스바 누르고 있기",
         modeDesc: "팁: 두 모드 모두 서 있으면 충돌합니다. 숙여서 통과하세요!",
-        startBtn: "재활 시작", aboutBtn: "시스템 정보 및 저작권", footer: "3D 캐릭터 엔진 · 일시 정지 및 다국어 지원",
+        startBtn: "재활 시작", aboutBtn: "시스템 정보", footer: "3D 캐릭터 엔진 · 일시 정지 및 다국어 지원",
         pauseBtn: "⏸ 일시 정지", pauseHeader: "게임 일시 정지", resumeBtn: "게임 재개", restartBtn: "다시 시작", homeBtn: "홈으로",
         dashHeader: "📊 시뮬레이션 분석 및 평가", mDist: "이동 거리", mClear: "통과 수", mFail: "충돌 횟수", mScore: "적응 지수",
         lbTitle: "🏆 실시간 순위 Top 3", retryBtn: "다시 시도", backHomeBtn: "홈으로",
         aboutHeader: "시스템 정보 및 중요 면책 조항", aboutClose: "닫기",
-        aboutContent: "<strong>[저작권 및 오리지널 선언]</strong><br>원창 개발 및 저작권자: <strong>류빙유(劉秉祐), 판루이시(潘睿熙)</strong>.<br><br><strong>[중요 면책 조항: 비의료 기기 안내]</strong><br>본 시스템은 장애인 원격 체감 및 도시 적응을 위한 <strong>보조 훈련 및 재미있는 시뮬레이션 참고</strong> 도구일 뿐이며, <strong>의료 기기가 아닙니다</strong>. 정식 의료 진단이나 치료의 효능이 없습니다. 시스템의 AI 분석 결과는 일상적 참고 및 시뮬레이션 용도로만 제공되며, 의료 진단서가 아니며 의료적 기만 의도가 없습니다. 의료적 요구가 있는 경우 반드시 전문 의료진의 진단을 받으시기 바랍니다."
+        aboutContent: "<strong>[중요 면책 조항: 비의료 기기 안내]</strong><br>본 시스템은 장애인 원격 체감 및 도시 적응을 위한 <strong>보조 훈련 및 재미있는 시뮬레이션 참고</strong> 도구일 뿐이며, <strong>의료 기기가 아닙니다</strong>. 정식 의료 진단이나 치료의 효능이 없습니다. 시스템의 AI 분석 결과는 일상적 참고 및 시뮬레이션 용도로만 제공되며, 의료 진단서가 아니며 의료적 기만 의도가 없습니다. 의료적 요구가 있는 경우 반드시 전문 의료진의 진단을 받으시기 바랍니다."
       },
       'es': {
         login: "👤 Iniciar sesión en Google", logout: "Cerrar sesión", unlogged: "Estado: No conectado", logged: "Conectado: ", langLabel: "🌍 Idioma: ",
@@ -540,12 +530,12 @@
         diffTitle: "Seleccionar Dificultad", easyTitle: "Rehabilitación Leve", easyDesc: "Ritmo suave, obstáculos mínimos", medTitle: "Desafío Medio", medDesc: "Ritmo moderado, entrenamiento de reacción", hardTitle: "Adaptación Avanzada", hardDesc: "Desafío de obstáculos urbanos densos",
         modeTitle: "Seleccionar Modo", modaTitle: "Teclado Tradicional", modaDesc: "↑ Saltar ↓ Mantener agachado ← Parar/Reducir → Acelerar", modbTitle: "Monotecla", modbDesc: "Avance automático; mantén espacio para agacharte",
         modeDesc: "Consejo: En ambos modes, estar de pie colisiona con el cartel. ¡Debes agacharte para pasar!",
-        startBtn: "Iniciar Rehabilitación", aboutBtn: "Acerca del Sistema y Copyright", footer: "Motor de personajes 3D · Pausa y soporte multilingüe",
+        startBtn: "Iniciar Rehabilitación", aboutBtn: "Acerca del Sistema", footer: "Motor de personajes 3D · Pausa y soporte multilingüe",
         pauseBtn: "⏸ Pausa", pauseHeader: "Juego Pausado", resumeBtn: "Reanudar", restartBtn: "Reiniciar", homeBtn: "Volver al Inicio",
         dashHeader: "📊 Análisis y Evaluación de Simulación", mDist: "Distancia Total", mClear: "Superados", mFail: "Fallos", mScore: "Índice de Adaptación",
         lbTitle: "🏆 Top 3 de Clasificación en Vivo", retryBtn: "Reiniciar (Intentar de nuevo)", backHomeBtn: "Volver al Inicio",
         aboutHeader: "Acerca del Sistema y Aviso Importante", aboutClose: "Cerrar",
-        aboutContent: "<strong>[Aviso de Copyright y Originalidad]</strong><br>Desarrolladores originales y titulares de derechos: <strong>Liu Bing-You, Pan Rui-Xi</strong>.<br><br><strong>[Aviso Importante: No es un Dispositivo Médico]</strong><br>Este sistema está diseñado puramente como una herramienta de <strong>entrenamiento auxiliar y simulación recreativa</strong> para la rehabilitación a distancia y la adaptación urbana. <strong>No es un dispositivo médico</strong> y no constituye un diagnóstico, tratamiento o prevención de enfermedades. Los análisis de IA son solo para referencia de simulación e interacción, y no representan un diagnóstico médico profesional. Si tiene necesidades médicas, consulte a un profesional calificado."
+        aboutContent: "<strong>[Aviso Importante: No es un Dispositivo Médico]</strong><br>Este sistema está diseñado puramente como una herramienta de <strong>entrenamiento auxiliar y simulación recreativa</strong> para la rehabilitación a distancia y la adaptación urbana. <strong>No es un dispositivo médico</strong> y no constituye un diagnóstico, tratamiento o prevención de enfermedades. Los análisis de IA son solo para referencia de simulación e interacción, y no representan un diagnóstico médico profesional. Si tiene necesidades médicas, consulte a un profesional calificado."
       }
     };
 
@@ -555,6 +545,7 @@
       currentLang = lang;
       const t = i18n[lang];
       document.getElementById('ui-login-btn').innerText = t.login;
+      document.getElementById('ui-about-btn').innerText = t.aboutBtn;
       document.getElementById('ui-lang-label').innerText = t.langLabel;
       document.getElementById('ui-title').innerText = t.title;
       document.getElementById('ui-subtitle').innerText = t.subtitle;
@@ -572,7 +563,6 @@
       document.getElementById('ui-modb-desc').innerText = t.modbDesc;
       document.getElementById('ui-mode-desc').innerText = t.modeDesc;
       document.getElementById('ui-start-btn').innerText = t.startBtn;
-      document.getElementById('ui-about-btn').innerText = t.aboutBtn;
       document.getElementById('ui-footer').innerText = t.footer;
       document.getElementById('btn-pause-ing').innerText = t.pauseBtn;
       document.getElementById('ui-pause-header').innerText = t.pauseHeader;
@@ -1159,9 +1149,6 @@
       let clinicalReportHTML = "";
       let speechTextContent = "";
 
-      // -------------------------------------------------------------
-      // 非醫療器材免責聲明與趣味模擬輔助分析報告 (劉秉祐、潘睿熙原創系統)
-      // -------------------------------------------------------------
       if (cleared >= 8 && score >= 85) {
         clinicalReportHTML = `
           <strong>【模擬輔助分析報告：神經動作表現模擬良好 (參考指標)】</strong><br>
