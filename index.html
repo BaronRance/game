@@ -5,7 +5,10 @@
   著作權所有：Copyright © 2026 復健跑酷專案開發團隊 (保留所有權利)
   免責聲明：本系統僅供輔助訓練與模擬參考，並非醫療器材。
   ================================================================
---><!DOCTYPE html><html lang="zh-TW"><head>
+-->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>復健跑酷 - 身心障礙者遠距體感與都市適應系統</title>
@@ -154,7 +157,6 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* 美化首頁滾動軸 */
     #menu-screen::-webkit-scrollbar {
       width: 10px;
     }
@@ -235,7 +237,6 @@
       line-height: 1.2;
     }
 
-    /* 新增遊戲介紹面板樣式 */
     .intro-showcase-box {
       width: 100%;
       background: #F0FDF4;
@@ -277,7 +278,6 @@
     }
     .btn-start:hover { transform: translateY(-2px); }
 
-    /* 開始按鈕下方：又大又精緻、充滿豐富遊戲特色的裝飾展現區 */
     .rich-graphics-showcase {
       width: 100%;
       display: grid;
@@ -432,7 +432,9 @@
       margin-bottom: 5px;
     }
     .btn-secondary:hover { background: #475569; }
-  </style></head><body>
+  </style>
+</head>
+<body>
 
   <div id="app-container">
     <div id="top-bar">
@@ -443,7 +445,6 @@
       </div>
       <div class="top-right-group">
         <div class="user-status" id="user-status-text">狀態：未登入雲端帳戶</div>
-        <!-- 語言選擇器 (預設顯示) -->
         <div class="lang-container-top" id="lang-container-wrapper">
           <span id="ui-lang-label">🌍 語言：</span>
           <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -455,22 +456,19 @@
             <option value="es">Español</option>
           </select>
         </div>
-        <!-- 1分鐘倒數顯示 (遊戲開始後取代語言選擇位置) -->
         <div class="timer-container-top" id="timer-container-wrapper" style="display: none;">
           <span id="ui-timer-prefix">⏱️ 剩餘時間：</span><span id="countdown-timer-text">01:00</span>
         </div>
       </div>
     </div>
 
-    <!-- 首頁選單 (支援全域滑鼠滾輪順暢瀏覽) -->
     <div id="menu-screen">
       <div class="icon-header">
         <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6Z"/></svg>
       </div>
       <h1 id="ui-title">復健跑酷</h1>
-      <p class="subtitle" id="ui-subtitle">身心障礙者的遠距體感復健與都市適應系統</p>
+      <p class="subtitle" id="ui-subtitle">身心障礙者遠距體感復健與都市適應系統</p>
 
-      <!-- 新增：遊戲介紹面板 -->
       <div class="intro-showcase-box" id="ui-intro-box">
         <h3 id="ui-intro-header">📖 遊戲介紹與玩法說明</h3>
         <span id="ui-intro-text">
@@ -514,12 +512,9 @@
         提示：站立時高度高於站立牌（會碰撞）；必須「按住蹲下」或使用「滾輪滾翻機制」讓高度降低才能安全通過！
       </div>
 
-      <!-- 開始按鈕 -->
       <button class="btn-start" id="ui-start-btn" onclick="startGame()">開始都市跑酷</button>
 
-      <!-- 開始按鈕下方：又大又精緻、充滿豐富遊戲特色的裝飾展現區 -->
       <div class="rich-graphics-showcase">
-        <!-- 卡片 1：遠距體感模擬 -->
         <div class="showcase-card">
           <div class="showcase-icon-box">
             <svg viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M10,17L5,12L6.41,10.59L10,14.17L17.59,6.58L19,8L10,17Z"/></svg>
@@ -528,7 +523,6 @@
           <div class="showcase-desc">結合動作捕捉與本體感覺訓練，在家也能安全進行上肢與下肢協調互動。</div>
         </div>
 
-        <!-- 卡片 2：智慧都市適應 -->
         <div class="showcase-card">
           <div class="showcase-icon-box">
             <svg viewBox="0 0 24 24"><path d="M15,11H13V8H15M15,15H13V13H15M19,7H5V19H19V7M19,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3Z"/></svg>
@@ -537,7 +531,6 @@
           <div class="showcase-desc">模擬輪椅通行、行人號誌與過街防護，提升日常出行安全意識與應變能力。</div>
         </div>
 
-        <!-- 卡片 3：神經適應指數 -->
         <div class="showcase-card">
           <div class="showcase-icon-box">
             <svg viewBox="0 0 24 24"><path d="M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12.5,7H11V13L16.25,16.15L17,14.92L12.5,12.25V7Z"/></svg>
@@ -550,18 +543,14 @@
 
     <canvas id="gameCanvas" width="900" height="600"></canvas>
 
-    <!-- 關於本系統 Overlay -->
     <div id="about-overlay" class="overlay-screen">
       <div class="modal-card">
         <div class="modal-header" id="ui-about-header">關於本系統與免責聲明</div>
-        <div class="ai-eval-box" id="ui-about-content" style="max-height: 230px;">
-          <!-- 動態多國語系文字 -->
-        </div>
+        <div class="ai-eval-box" id="ui-about-content" style="max-height: 230px;"></div>
         <button class="btn-action" id="ui-about-close" onclick="toggleAbout()">關閉</button>
       </div>
     </div>
 
-    <!-- 暫停選單 Overlay -->
     <div id="pause-overlay" class="overlay-screen">
       <div class="modal-card">
         <div class="modal-header" id="ui-pause-header">遊戲暫停</div>
@@ -571,7 +560,6 @@
       </div>
     </div>
 
-    <!-- 結算儀表板 Overlay -->
     <div id="dashboard-overlay" class="overlay-screen">
       <div class="modal-card">
         <div class="modal-header" id="ui-dash-header">📊 模擬輔助分析與表現評估</div>
@@ -769,18 +757,15 @@
       }
     }
 
-    // 全域滑鼠滾輪監聽（支援首頁順暢滑動與遊戲中滾輪滾翻機制）
     window.addEventListener('wheel', (e) => {
       if (gameState === 'MENU') {
         const menuScreen = document.getElementById('menu-screen');
         menuScreen.scrollTop += e.deltaY;
       } else if (gameState === 'PLAYING') {
         e.preventDefault();
-        // 滾輪機制：向下滾動觸發滾翻閃避動作
         if (e.deltaY > 0) {
           triggerRoll();
         } else {
-          // 向上滾動觸發跳躍
           if (player.isGrounded && controlMode === 'modeA') {
             player.vy = player.jumpForce;
             player.isGrounded = false;
@@ -917,7 +902,7 @@
       osc.stop(audioCtx.currentTime + 0.12);
     }
 
-    // 需求 3：為跳躍障礙與蹲下障礙設置截然不同的提示音效
+    // 需求修改：放大跳躍障礙物的提示音效 (將原先音量 gain 0.15 提升至 0.35)
     function playJumpObstacleWarning() {
       if (!audioCtx) return;
       try {
@@ -926,7 +911,7 @@
         osc.type = 'sine';
         osc.frequency.setValueAtTime(440, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(660, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -950,6 +935,11 @@
         osc.start();
         osc.stop(audioCtx.currentTime + 0.12);
       } catch(e) {}
+    }
+
+    // 新增：補上原本缺失的 playObstacleWarning 函式，避免遇到紅綠燈時因未定義而當掉
+    function playObstacleWarning() {
+      playRedLightAlarm();
     }
 
     function playRedLightAlarm() {
@@ -1028,7 +1018,7 @@
 
     const NORMAL_HEIGHT = 65;
     const CROUCH_HEIGHT = 30;
-    const ROLL_HEIGHT = 38; // 滾輪機制：滾翻高度
+    const ROLL_HEIGHT = 38;
 
     const player = {
       x: 100, y: 0, width: 52, height: NORMAL_HEIGHT,
@@ -1038,7 +1028,7 @@
     };
 
     let rollTimer = 0;
-    const ROLL_DURATION = 35; // 滾翻持續影格數
+    const ROLL_DURATION = 35;
 
     function triggerRoll() {
       if (gameState !== 'PLAYING' || player.isRolling) return;
@@ -1286,7 +1276,6 @@
 
       player.distance += currentSpeed * 0.05;
 
-      // 滾輪機制：更新滾翻計時器
       if (player.isRolling) {
         rollTimer--;
         if (rollTimer <= 0) {
@@ -1376,7 +1365,6 @@
 
         let distToPlayer = obs.x - player.x;
         if (!obs.hasWarned && distToPlayer > 0 && distToPlayer < 250) {
-          // 需求 3：根據障礙物類型播放不同的提示音效
           if (obs.type === 'ground') {
             playJumpObstacleWarning();
           } else if (obs.type === 'overhang') {
@@ -1666,7 +1654,6 @@
       ctx.save();
       if (isInvincible) ctx.globalAlpha = 0.6;
 
-      // 滾輪機制：若正在滾翻，增加旋轉效果以展現跑酷滾翻動感
       if (isRolling) {
         ctx.translate(x + w / 2, y + h / 2);
         ctx.rotate((player.distance * 0.2) % (Math.PI * 2));
@@ -1690,6 +1677,10 @@
       ctx.strokeStyle = '#94A3B8';
       ctx.lineWidth = 1;
       ctx.stroke();
+
+      ctx.fillStyle = '#0284C7';
+      ctx.fillRect(wheelX - 1.5, wheelY - wheelRadius + 2, 3, wheelRadius * 2 - 4);
+      ctx.fillRect(wheelX - wheelRadius + 2, wheelY - 1.5, wheelRadius * 2 - 4, 3);
 
       for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
         ctx.beginPath();
@@ -1736,4 +1727,6 @@
 
       ctx.restore();
     }
-  </script></body></html>
+  </script>
+</body>
+</html>
